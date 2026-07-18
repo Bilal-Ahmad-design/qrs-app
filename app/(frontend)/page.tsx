@@ -131,40 +131,38 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="bg-cream-50 rounded-lg p-8 mb-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <DataCard variant="light">
-                <div className="mb-3">
-                  <div className="text-3xl font-bold text-teal-600">$10B+</div>
-                </div>
-                <p className="text-sm text-text-muted">Insured Losses</p>
-                <p className="text-xs text-text-muted mt-2">2023-2024 catastrophic events driving capital constraints</p>
-              </DataCard>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8 py-12 mb-16">
+            <DataCard variant="light">
+              <div className="mb-3">
+                <div className="text-3xl font-bold text-teal-600">$10B+</div>
+              </div>
+              <p className="text-sm text-text-muted">Insured Losses</p>
+              <p className="text-xs text-text-muted mt-2">2023-2024 catastrophic events driving capital constraints</p>
+            </DataCard>
 
-              <DataCard variant="light">
-                <div className="mb-3">
-                  <div className="text-3xl font-bold text-teal-600">$8-12B</div>
-                </div>
-                <p className="text-sm text-text-muted">Excess Capital Trapped</p>
-                <p className="text-xs text-text-muted mt-2">Reinsurance capital unable to deploy due to model uncertainty</p>
-              </DataCard>
+            <DataCard variant="light">
+              <div className="mb-3">
+                <div className="text-3xl font-bold text-teal-600">$8-12B</div>
+              </div>
+              <p className="text-sm text-text-muted">Excess Capital Trapped</p>
+              <p className="text-xs text-text-muted mt-2">Reinsurance capital unable to deploy due to model uncertainty</p>
+            </DataCard>
 
-              <DataCard variant="light">
-                <div className="mb-3">
-                  <div className="text-3xl font-bold text-teal-600">300%</div>
-                </div>
-                <p className="text-sm text-text-muted">FAIR Plan Surge</p>
-                <p className="text-xs text-text-muted mt-2">State insurance of last resort reaching capacity limits</p>
-              </DataCard>
+            <DataCard variant="light">
+              <div className="mb-3">
+                <div className="text-3xl font-bold text-teal-600">300%</div>
+              </div>
+              <p className="text-sm text-text-muted">FAIR Plan Surge</p>
+              <p className="text-xs text-text-muted mt-2">State insurance of last resort reaching capacity limits</p>
+            </DataCard>
 
-              <DataCard variant="light">
-                <div className="mb-3">
-                  <div className="text-3xl font-bold text-teal-600">14x</div>
-                </div>
-                <p className="text-sm text-text-muted">Model Divergence</p>
-                <p className="text-xs text-text-muted mt-2">Vendor modeling outputs diverge by factor of 14 on same exposure</p>
-              </DataCard>
-            </div>
+            <DataCard variant="light">
+              <div className="mb-3">
+                <div className="text-3xl font-bold text-teal-600">14x</div>
+              </div>
+              <p className="text-sm text-text-muted">Model Divergence</p>
+              <p className="text-xs text-text-muted mt-2">Vendor modeling outputs diverge by factor of 14 on same exposure</p>
+            </DataCard>
           </div>
 
           <p className="text-base text-text-muted max-w-2xl">
@@ -223,41 +221,39 @@ export default function HomePage() {
             QRS models are independently verified by leading academic and industry experts
           </p>
 
-          <div className="bg-cream-50 rounded-lg p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-              <a
-                href="https://ssrn.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group"
-              >
-                <DataCard variant="light" className="h-full">
-                  <h3 className="text-lg font-semibold text-ink-900 mb-3 group-hover:text-teal-600 transition-colors">
-                    SSRN Validation Study
-                  </h3>
-                  <p className="text-sm text-text-muted mb-4">
-                    Peer-reviewed quantitative validation of QRS portfolio analytics methodology
-                  </p>
-                  <span className="text-teal-600 font-semibold inline-flex items-center group-hover:translate-x-1 transition-transform">
-                    Learn more →
-                  </span>
-                </DataCard>
-              </a>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto px-8 py-12">
+            <a
+              href="https://ssrn.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <DataCard variant="light" className="h-full">
+                <h3 className="text-lg font-semibold text-ink-900 mb-3 group-hover:text-teal-600 transition-colors">
+                  SSRN Validation Study
+                </h3>
+                <p className="text-sm text-text-muted mb-4">
+                  Peer-reviewed quantitative validation of QRS portfolio analytics methodology
+                </p>
+                <span className="text-teal-600 font-semibold inline-flex items-center group-hover:translate-x-1 transition-transform">
+                  Learn more →
+                </span>
+              </DataCard>
+            </a>
 
-              <a href="/validation/" className="group">
-                <DataCard variant="light" className="h-full">
-                  <h3 className="text-lg font-semibold text-ink-900 mb-3 group-hover:text-teal-600 transition-colors">
-                    Third-Party Audit
-                  </h3>
-                  <p className="text-sm text-text-muted mb-4">
-                    Independent verification of model assumptions, calculation integrity, and reproducibility
-                  </p>
-                  <span className="text-teal-600 font-semibold inline-flex items-center group-hover:translate-x-1 transition-transform">
-                    Learn more →
-                  </span>
-                </DataCard>
-              </a>
-            </div>
+            <a href="/validation/" className="group">
+              <DataCard variant="light" className="h-full">
+                <h3 className="text-lg font-semibold text-ink-900 mb-3 group-hover:text-teal-600 transition-colors">
+                  Third-Party Audit
+                </h3>
+                <p className="text-sm text-text-muted mb-4">
+                  Independent verification of model assumptions, calculation integrity, and reproducibility
+                </p>
+                <span className="text-teal-600 font-semibold inline-flex items-center group-hover:translate-x-1 transition-transform">
+                  Learn more →
+                </span>
+              </DataCard>
+            </a>
           </div>
         </div>
       </section>
