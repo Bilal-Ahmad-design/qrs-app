@@ -68,7 +68,7 @@ export default function HomePage() {
       {/* Section 2b: Verifiable by Design */}
       <section className="bg-white py-24 lg:py-40">
         <div className="max-w-screen-xl mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <h2 className="text-4xl lg:text-5xl font-bold text-ink-900 mb-6">
               Verifiable by Design
             </h2>
@@ -76,8 +76,10 @@ export default function HomePage() {
               Every calculation is cryptographically signed and independently verifiable. Built-in reproducibility, not an afterthought.
             </p>
           </div>
-          <div className="flex justify-center">
-            <TrustBadgeCluster />
+          <div className="flex justify-center px-4">
+            <div className="w-full">
+              <TrustBadgeCluster />
+            </div>
           </div>
         </div>
       </section>
@@ -120,7 +122,7 @@ export default function HomePage() {
       {/* Section 3: The Crisis */}
       <section className="bg-white py-24 lg:py-40">
         <div className="max-w-screen-xl mx-auto px-6">
-          <div className="mb-16">
+          <div className="mb-20">
             <h2 className="text-3xl lg:text-4xl font-semibold text-ink-900 mb-4">
               The Crisis
             </h2>
@@ -129,7 +131,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             <DataCard variant="light">
               <div className="mb-3">
                 <div className="text-3xl font-bold text-teal-600">$10B+</div>
@@ -215,11 +217,11 @@ export default function HomePage() {
           <h2 className="text-3xl lg:text-4xl font-semibold text-ink-900 mb-4 text-center">
             Independently Validated
           </h2>
-          <p className="text-lg text-text-muted text-center mb-16 max-w-2xl mx-auto">
+          <p className="text-lg text-text-muted text-center mb-20 max-w-2xl mx-auto">
             QRS models are independently verified by leading academic and industry experts
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
             <a
               href="https://ssrn.com"
               target="_blank"

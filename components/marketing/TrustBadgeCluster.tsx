@@ -37,13 +37,13 @@ export function TrustBadgeCluster() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8">
       {badges.map((badge) => {
         const Icon = badge.icon;
         return (
           <div
             key={badge.label}
-            className={`group flex flex-col items-start gap-space-4 px-space-6 py-space-6 rounded-xl border backdrop-blur-sm transition-all duration-300 ${
+            className={`group flex flex-col items-start gap-4 px-6 py-8 rounded-xl border backdrop-blur-sm transition-all duration-300 ${
               badge.highlight
                 ? 'border-teal-500/50 bg-teal-500/15 hover:bg-teal-500/25 shadow-lg shadow-teal-500/20'
                 : 'border-teal-700/30 bg-ink-800/50 hover:border-teal-600/50 hover:bg-ink-800/80 hover:shadow-lg hover:shadow-teal-500/10'
@@ -57,7 +57,7 @@ export function TrustBadgeCluster() {
               strokeWidth={1.5}
             />
             <div className="flex-1">
-              <p className={`font-semibold text-sm leading-tight mb-space-2 ${
+              <p className={`font-semibold text-sm leading-tight mb-2 ${
                 badge.highlight ? 'text-teal-200' : 'text-white'
               }`}>
                 {badge.label}
