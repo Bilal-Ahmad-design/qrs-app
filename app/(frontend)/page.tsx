@@ -31,12 +31,14 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
+                href="/admin"
                 variant="primary"
                 className="px-8 py-4 text-lg"
               >
                 Request Demo
               </Button>
               <Button
+                href="https://ssrn.com"
                 variant="secondary"
                 className="px-8 py-4 text-lg"
               >
