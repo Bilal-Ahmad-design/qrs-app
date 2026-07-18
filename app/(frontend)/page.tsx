@@ -131,41 +131,41 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8 py-12 mb-16">
-            <DataCard variant="light" className="h-full block">
-              <div className="mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-1 py-12 mb-16">
+            <DataCard variant="light" className="h-full p-8">
+              <div className="mb-4">
                 <div className="text-3xl font-bold text-teal-600">$10B+</div>
               </div>
-              <p className="text-sm text-text-muted">Insured Losses</p>
-              <p className="text-xs text-text-muted mt-2">2023-2024 catastrophic events driving capital constraints</p>
+              <p className="text-sm font-semibold text-ink-900 mb-3">Insured Losses</p>
+              <p className="text-xs text-text-muted leading-relaxed">2023-2024 catastrophic events driving capital constraints</p>
             </DataCard>
 
-            <DataCard variant="light">
-              <div className="mb-3">
+            <DataCard variant="light" className="h-full p-8">
+              <div className="mb-4">
                 <div className="text-3xl font-bold text-teal-600">$8-12B</div>
               </div>
-              <p className="text-sm text-text-muted">Excess Capital Trapped</p>
-              <p className="text-xs text-text-muted mt-2">Reinsurance capital unable to deploy due to model uncertainty</p>
+              <p className="text-sm font-semibold text-ink-900 mb-3">Excess Capital Trapped</p>
+              <p className="text-xs text-text-muted leading-relaxed">Reinsurance capital unable to deploy due to model uncertainty</p>
             </DataCard>
 
-            <DataCard variant="light">
-              <div className="mb-3">
+            <DataCard variant="light" className="h-full p-8">
+              <div className="mb-4">
                 <div className="text-3xl font-bold text-teal-600">300%</div>
               </div>
-              <p className="text-sm text-text-muted">FAIR Plan Surge</p>
-              <p className="text-xs text-text-muted mt-2">State insurance of last resort reaching capacity limits</p>
+              <p className="text-sm font-semibold text-ink-900 mb-3">FAIR Plan Surge</p>
+              <p className="text-xs text-text-muted leading-relaxed">State insurance of last resort reaching capacity limits</p>
             </DataCard>
 
-            <DataCard variant="light">
-              <div className="mb-3">
+            <DataCard variant="light" className="h-full p-8">
+              <div className="mb-4">
                 <div className="text-3xl font-bold text-teal-600">14x</div>
               </div>
-              <p className="text-sm text-text-muted">Model Divergence</p>
-              <p className="text-xs text-text-muted mt-2">Vendor modeling outputs diverge by factor of 14 on same exposure</p>
+              <p className="text-sm font-semibold text-ink-900 mb-3">Model Divergence</p>
+              <p className="text-xs text-text-muted leading-relaxed">Vendor modeling outputs diverge by factor of 14 on same exposure</p>
             </DataCard>
           </div>
 
-          <p className="text-base text-text-muted max-w-2xl">
+          <p className="text-base text-text-muted max-w-xxl">
             Institutional capital remains on the sidelines. Every model shows different results. No two institutions agree on pricing. QRS eliminates model uncertainty through cryptographically verified calculations and independent reproducibility.
           </p>
         </div>
