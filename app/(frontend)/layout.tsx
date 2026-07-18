@@ -38,7 +38,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       lang="en"
       className={`${outfit.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="font-body bg-cream-50 text-text-strong">
+      <body className="font-body bg-cream-50 text-text-strong" suppressHydrationWarning>
         <CookieConsentProvider>
           <SiteChrome>{children}</SiteChrome>
         </CookieConsentProvider>
