@@ -132,7 +132,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8 py-12 mb-16">
-            <DataCard variant="light">
+            <DataCard variant="light" className="h-full block">
               <div className="mb-3">
                 <div className="text-3xl font-bold text-teal-600">$10B+</div>
               </div>
@@ -226,13 +226,13 @@ export default function HomePage() {
               href="https://ssrn.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group"
+              className="group block"
             >
-              <DataCard variant="light" className="h-full">
-                <h3 className="text-lg font-semibold text-ink-900 mb-3 group-hover:text-teal-600 transition-colors">
+              <DataCard variant="light" className="h-full p-8">
+                <h3 className="text-lg font-semibold text-ink-900 mb-4 group-hover:text-teal-600 transition-colors">
                   SSRN Validation Study
                 </h3>
-                <p className="text-sm text-text-muted mb-4">
+                <p className="text-sm text-text-muted mb-6 leading-relaxed">
                   Peer-reviewed quantitative validation of QRS portfolio analytics methodology
                 </p>
                 <span className="text-teal-600 font-semibold inline-flex items-center group-hover:translate-x-1 transition-transform">
@@ -241,12 +241,12 @@ export default function HomePage() {
               </DataCard>
             </a>
 
-            <a href="/validation/" className="group">
-              <DataCard variant="light" className="h-full">
-                <h3 className="text-lg font-semibold text-ink-900 mb-3 group-hover:text-teal-600 transition-colors">
+            <a href="/validation/" className="group block">
+              <DataCard variant="light" className="h-full p-8">
+                <h3 className="text-lg font-semibold text-ink-900 mb-4 group-hover:text-teal-600 transition-colors">
                   Third-Party Audit
                 </h3>
-                <p className="text-sm text-text-muted mb-4">
+                <p className="text-sm text-text-muted mb-6 leading-relaxed">
                   Independent verification of model assumptions, calculation integrity, and reproducibility
                 </p>
                 <span className="text-teal-600 font-semibold inline-flex items-center group-hover:translate-x-1 transition-transform">
