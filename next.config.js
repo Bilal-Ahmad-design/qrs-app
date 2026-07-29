@@ -4,7 +4,7 @@ const nextConfig = {
   headers: async () => {
     return [
       {
-        source: '/:path*',
+        source: '/((?!api/admin|admin).*)',
         headers: [
           {
             key: 'Content-Security-Policy',
