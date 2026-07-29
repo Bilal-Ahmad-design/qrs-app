@@ -377,3 +377,6 @@ Three rules:
 ---
 
 *Last updated: 2026-06-25 · Jordan Markwith · QRS Quantum Risk Systems*
+
+
+postgresql://neondb_owner:npg_JkuPtB1MWK7U@ep-cool-block-at41gwhk-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require

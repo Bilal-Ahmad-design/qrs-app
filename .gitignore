@@ -32,3 +32,6 @@ payload-types.ts
 .idea
 *.swp
 *.swo
+
+.vercel
+.env*
