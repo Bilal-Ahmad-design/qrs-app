@@ -1,28 +1,32 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { NAV_LINKS } from '@/lib/constants';
+import { MobileNav } from './MobileNav';
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-ink-800 border-b border-teal-700">
-      <nav className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-display text-h4 text-white font-semibold">
+      <nav className="max-w-screen-xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <Link href="/" className="font-display text-h4 sm:text-h4 text-white font-semibold flex-shrink-0">
           QRS
         </Link>
 
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden md:flex gap-6 lg:gap-8 items-center flex-1 justify-center">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-body text-white hover:text-teal-500 transition-colors duration-base"
+              className="text-sm lg:text-body text-white hover:text-teal-500 transition-colors duration-base whitespace-nowrap"
             >
               {link.label}
             </Link>
           ))}
         </div>
 
-        <Button variant="primary">Request Demo</Button>
+        <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+          <Button variant="primary" className="hidden sm:inline-block text-sm sm:text-base">Request Demo</Button>
+          <MobileNav />
+        </div>
       </nav>
     </header>
   );
