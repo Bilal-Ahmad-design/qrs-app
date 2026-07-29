@@ -2,14 +2,14 @@ import type { NextConfig } from 'next';
 
 const isProd = process.env.NODE_ENV === 'production';
 
-// Baseline CSP: no 'unsafe-eval', minimal 'unsafe-inline' (style-src only for
-// Next/React inline style injection like image blur placeholders; script-src is
-// strict and will be tightened further in a follow-up milestone to move to
-// nonce-based style-src once the site's actual inline-style surface is audited).
-// Satisfies SOC2 checklist B6 exactly.
+// CSP: strict script-src (no unsafe-eval, no unsafe-inline). Style-src uses
+// 'unsafe-inline' only for Next/React-injected styles (image blur, etc.); this
+// is the narrowest possible exception and will be further tightened via nonce-based
+// style-src in a future milestone once the site's actual inline-style surface is
+// audited. Satisfies SOC2 checklist B6.
 const csp = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
+  `script-src 'self'`,
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: blob:`,
   `font-src 'self' data:`,
