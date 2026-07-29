@@ -1,5 +1,6 @@
 import { buildMetadata } from '@/lib/metadata';
 import { DataCard } from '@/components/marketing/DataCard';
+import { getPageBySlug } from '@/lib/payload-fetch';
 
 export const metadata = buildMetadata({
   title: 'About',
@@ -7,7 +8,13 @@ export const metadata = buildMetadata({
   path: '/about/',
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  let aboutContent = null;
+  try {
+    aboutContent = await getPageBySlug('about');
+  } catch (error) {
+    console.log('CMS not available for about page, using fallback content');
+  }
   return (
     <main>
       {/* Hero Section */}

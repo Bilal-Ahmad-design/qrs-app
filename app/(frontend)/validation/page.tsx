@@ -1,5 +1,6 @@
 import { buildMetadata } from '@/lib/metadata';
 import { DataCard } from '@/components/marketing/DataCard';
+import { getPageBySlug } from '@/lib/payload-fetch';
 
 export const metadata = buildMetadata({
   title: 'Validation & Verification',
@@ -7,7 +8,14 @@ export const metadata = buildMetadata({
   path: '/validation/',
 });
 
-export default function ValidationPage() {
+export default async function ValidationPage() {
+  let validationContent = null;
+
+  try {
+    validationContent = await getPageBySlug('validation');
+  } catch (error) {
+    console.log('CMS not available for validation page, using fallback content');
+  }
   return (
     <main>
       {/* Hero Section */}

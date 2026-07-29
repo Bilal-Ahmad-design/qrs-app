@@ -4,6 +4,7 @@ import { DataCard } from '@/components/marketing/DataCard';
 import { DeviceFrame } from '@/components/marketing/DeviceFrame';
 import { TrustBadgeCluster } from '@/components/marketing/TrustBadgeCluster';
 import { buildMetadata } from '@/lib/metadata';
+import { getPageBySlug } from '@/lib/payload-fetch';
 
 export const metadata = buildMetadata({
   title: 'QRS',
@@ -11,7 +12,13 @@ export const metadata = buildMetadata({
   path: '/',
 });
 
-export default function HomePage() {
+export default async function HomePage() {
+  let heroContent = null;
+  try {
+    heroContent = await getPageBySlug('home');
+  } catch (error) {
+    console.log('CMS not available, using fallback content');
+  }
   return (
     <main>
       {/* Section 1: Hero */}

@@ -2,6 +2,7 @@ import { buildMetadata } from '@/lib/metadata';
 import { TrustBadgeCluster } from '@/components/marketing/TrustBadgeCluster';
 import { VerifiedSealBadge } from '@/components/marketing/VerifiedSealBadge';
 import { DataCard } from '@/components/marketing/DataCard';
+import { getPageBySlug } from '@/lib/payload-fetch';
 
 export const metadata = buildMetadata({
   title: 'Trust & Security',
@@ -9,7 +10,13 @@ export const metadata = buildMetadata({
   path: '/trust/',
 });
 
-export default function TrustPage() {
+export default async function TrustPage() {
+  let trustContent = null;
+  try {
+    trustContent = await getPageBySlug('trust');
+  } catch (error) {
+    console.log('CMS not available for trust page, using fallback content');
+  }
   return (
     <main>
       {/* Hero Section */}

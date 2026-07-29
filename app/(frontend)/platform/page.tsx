@@ -1,5 +1,6 @@
 import { DataCard } from '@/components/marketing/DataCard';
 import { buildMetadata } from '@/lib/metadata';
+import { getPageBySlug } from '@/lib/payload-fetch';
 
 export const metadata = buildMetadata({
   title: 'Platform',
@@ -7,7 +8,13 @@ export const metadata = buildMetadata({
   path: '/platform/',
 });
 
-export default function PlatformPage() {
+export default async function PlatformPage() {
+  let platformContent = null;
+  try {
+    platformContent = await getPageBySlug('platform');
+  } catch (error) {
+    console.log('CMS not available for platform page, using fallback content');
+  }
   return (
     <main>
       {/* Hero Section */}
