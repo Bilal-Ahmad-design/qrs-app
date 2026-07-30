@@ -26,7 +26,7 @@ export default async function TrustPage() {
             Built for Trust
           </h1>
           <p className="text-lg lg:text-xl text-cream-100 leading-relaxed">
-            Enterprise-grade security, cryptographic verification, and independent audit trails at every step.
+            Enterprise-grade security, cryptographic verification, and independent audit trails at every step — designed for institutional review and continuous assurance.
           </p>
         </div>
       </section>
@@ -63,7 +63,7 @@ export default async function TrustPage() {
                 <TrustBadgeCluster />
               </div>
               <p className="text-sm text-teal-100 text-center leading-relaxed">
-                SOC 2 audit in progress via Vanta. Comprehensive security assessment and compliance verification framework for institutional deployment.
+                SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.
               </p>
             </DataCard>
           </div>
@@ -74,12 +74,12 @@ export default async function TrustPage() {
             </h3>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 text-white">
               {[
-                'End-to-end encryption',
-                'Multi-factor authentication',
-                'Role-based access control',
-                'Audit logging',
-                'API key management',
-                'SOC 2 compliance'
+                'Encrypted transport and hardened headers',
+                'Multi-factor authentication and least-privilege access',
+                'Role-based access control and audit logging',
+                'Structured change management and deployment evidence',
+                'Privacy request and vulnerability disclosure workflows',
+                'SOC 2 compliance readiness'
               ].map((feature) => (
                 <div key={feature} className="flex items-center gap-3">
                   <span className="text-teal-400">✓</span>
