@@ -38,6 +38,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       lang="en"
       className={`${outfit.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
     >
+      {/* suppressHydrationWarning suppresses browser extension attribute mismatches (e.g., cz-shortcut-listen) */}
       <body className="font-body bg-cream-50 text-text-strong" suppressHydrationWarning>
         <CookieConsentProvider>
           <SiteChrome>{children}</SiteChrome>
