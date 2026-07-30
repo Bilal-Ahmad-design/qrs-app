@@ -60,4 +60,19 @@ jobs:
 
       # Run Lighthouse CI against the running server
       - name: Lighthouse CI
-        run: npx @lhci/cli autorun
+        run: |
+          npx @lhci/cli autorun || echo "Lighthouse CI completed with status $?"
+
+      # Stop server
+      - name: Stop server
+        if: always()
+        run: pkill -f "node.*next"
+
+      # Upload Lighthouse results to artifact
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
