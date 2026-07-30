@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { NAV_LINKS } from '@/lib/constants';
@@ -6,9 +7,16 @@ import { MobileNav } from './MobileNav';
 export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-ink-800 border-b border-teal-700">
-      <nav className="max-w-screen-xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-        <Link href="/" className="font-display text-h4 sm:text-h4 text-white font-semibold flex-shrink-0">
-          QRS
+      <nav className="max-w-screen-xl mx-auto px-4 sm:px-6 py-2 sm:py-3 flex items-center justify-between">
+        <Link href="/" className="flex-shrink-0 w-20 sm:w-28 h-auto">
+          <Image
+            src="/qrs-wordmark.webp"
+            alt="QRS - Quantitative Risk Systems"
+            width={112}
+            height={32}
+            priority
+            className="w-full h-auto"
+          />
         </Link>
 
         <div className="hidden md:flex gap-6 lg:gap-8 items-center flex-1 justify-center">
