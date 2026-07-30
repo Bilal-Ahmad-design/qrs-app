@@ -17,7 +17,10 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
     });
 
     if (!response.ok) {
-      console.error(`Failed to fetch page: ${response.statusText}`);
+      // API unavailable - fallback content will be used
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[Payload API] Using fallback content (${response.statusText})`);
+      }
       return null;
     }
 
@@ -36,7 +39,10 @@ export async function getAllPages(): Promise<PageData[]> {
     });
 
     if (!response.ok) {
-      console.error(`Failed to fetch pages: ${response.statusText}`);
+      // API unavailable - fallback content will be used
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[Payload API] Using fallback content (${response.statusText})`);
+      }
       return [];
     }
 
