@@ -1,0 +1,11 @@
+node_modules/
+.env.local
+.env.local.backup
+dist/
+build/
+*.log
+.DS_Store
+.cache/
+.tmp/
+.strapi
+coverage/
