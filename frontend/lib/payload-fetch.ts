@@ -1,31 +1,53 @@
-// Fetch content from Payload CMS via REST API
-const PAYLOAD_API = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000';
+// Fetch content from the dedicated CMS app.
+const CMS_API = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001';
 
 interface PageData {
   id: string;
   slug: string;
   title: string;
-  content?: any;
+  content?: unknown;
   seoTitle?: string;
   seoDescription?: string;
 }
 
+function normalizePage(doc: any): PageData | null {
+  if (!doc) {
+    return null;
+  }
+
+  const attributes = doc?.attributes ?? doc;
+
+  return {
+    id: String(doc?.id ?? attributes?.id ?? ''),
+    slug: attributes?.slug ?? '',
+    title: attributes?.title ?? '',
+    content: attributes?.content ?? attributes?.body ?? '',
+    seoTitle: attributes?.seoTitle ?? '',
+    seoDescription: attributes?.seoDescription ?? '',
+  };
+}
+
 export async function getPageBySlug(slug: string): Promise<PageData | null> {
   try {
-    const response = await fetch(`${PAYLOAD_API}/api/pages?where[slug][equals]=${slug}`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+    const params = new URLSearchParams({
+      'filters[slug][$eq]': slug,
+      populate: '*',
+    });
+
+    const response = await fetch(`${CMS_API}/api/pages?${params.toString()}`, {
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
-      // API unavailable - fallback content will be used
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Payload API] Using fallback content (${response.statusText})`);
+        console.log(`[CMS API] Using fallback content (${response.statusText})`);
       }
       return null;
     }
 
     const data = await response.json();
-    return data.docs?.[0] || null;
+    const docs = Array.isArray(data?.docs) ? data.docs : Array.isArray(data?.data) ? data.data : [];
+    return normalizePage(docs[0]) ?? null;
   } catch (error) {
     console.error('Error fetching page:', error);
     return null;
@@ -34,20 +56,27 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
 
 export async function getAllPages(): Promise<PageData[]> {
   try {
-    const response = await fetch(`${PAYLOAD_API}/api/pages?limit=100`, {
+    const params = new URLSearchParams({
+      'pagination[pageSize]': '100',
+      populate: '*',
+    });
+
+    const response = await fetch(`${CMS_API}/api/pages?${params.toString()}`, {
       next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
-      // API unavailable - fallback content will be used
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Payload API] Using fallback content (${response.statusText})`);
+        console.log(`[CMS API] Using fallback content (${response.statusText})`);
       }
       return [];
     }
 
     const data = await response.json();
-    return data.docs || [];
+    const docs = Array.isArray(data?.docs) ? data.docs : Array.isArray(data?.data) ? data.data : [];
+    return docs
+      .map((doc: unknown) => normalizePage(doc as Record<string, unknown>))
+      .filter((page: PageData | null): page is PageData => Boolean(page));
   } catch (error) {
     console.error('Error fetching pages:', error);
     return [];

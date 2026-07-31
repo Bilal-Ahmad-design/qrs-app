@@ -1,123 +1,70 @@
-import type { Payload } from 'payload';
-import config from '@/cms/payload.config';
+const CMS_API = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001';
 
-// Singleton instance to avoid re-initialization
-let payloadInstance: Payload | null = null;
-
-// Lazy-load Payload client (same pattern as M1)
-export async function getPayloadClient(): Promise<Payload> {
-  if (payloadInstance) {
-    return payloadInstance;
+function normalizeDoc(doc: any) {
+  if (!doc) {
+    return null;
   }
 
-  try {
-    const { getPayload } = await import('payload');
-    payloadInstance = await getPayload({ config });
-    return payloadInstance;
-  } catch (error) {
-    console.error('Failed to initialize Payload client:', error);
-    throw error;
-  }
+  const attributes = doc?.attributes ?? doc;
+  return {
+    id: doc?.id ?? attributes?.id ?? '',
+    slug: attributes?.slug ?? '',
+    title: attributes?.title ?? '',
+    content: attributes?.content ?? '',
+  };
 }
 
-// Fetch a page by slug
 export async function getPageBySlug(slug: string) {
   try {
-    const payload = await getPayloadClient();
-    const result = await payload.find({
-      collection: 'pages',
-      where: {
-        slug: {
-          equals: slug,
-        },
-      },
-      limit: 1,
+    const params = new URLSearchParams({
+      'filters[slug][$eq]': slug,
+      populate: '*',
     });
 
-    return result.docs?.[0] || null;
+    const response = await fetch(`${CMS_API}/api/pages?${params.toString()}`, {
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    const docs = Array.isArray(data?.data) ? data.data : [];
+    return normalizeDoc(docs[0]) ?? null;
   } catch (error) {
     console.error(`Error fetching page "${slug}":`, error);
     return null;
   }
 }
 
-// Fetch all published pages
 export async function getAllPages() {
   try {
-    const payload = await getPayloadClient();
-    const result = await payload.find({
-      collection: 'pages',
-      where: {
-        status: {
-          equals: 'published',
-        },
-      },
-      limit: 100,
+    const response = await fetch(`${CMS_API}/api/pages?pagination[pageSize]=100&populate=*`, {
+      next: { revalidate: 3600 },
     });
 
-    return result.docs || [];
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = await response.json();
+    const docs = Array.isArray(data?.data) ? data.data : [];
+    return docs.map(normalizeDoc).filter(Boolean);
   } catch (error) {
     console.error('Error fetching pages:', error);
     return [];
   }
 }
 
-// Fetch peril status for active models display
 export async function getPerilStatus() {
-  try {
-    const payload = await getPayloadClient();
-    const result = await payload.find({
-      collection: 'peril-status',
-      limit: 100,
-      sort: 'order',
-    });
-
-    return result.docs || [];
-  } catch (error) {
-    console.error('Error fetching peril status:', error);
-    return [];
-  }
+  return [];
 }
 
-// Fetch validation reports
 export async function getValidationReports() {
-  try {
-    const payload = await getPayloadClient();
-    const result = await payload.find({
-      collection: 'validation-reports',
-      where: {
-        status: {
-          equals: 'published',
-        },
-      },
-      limit: 100,
-    });
-
-    return result.docs || [];
-  } catch (error) {
-    console.error('Error fetching validation reports:', error);
-    return [];
-  }
+  return [];
 }
 
-// Resolve a redirect
 export async function resolveRedirect(sourcePath: string) {
-  try {
-    const payload = await getPayloadClient();
-    const result = await payload.find({
-      collection: 'redirects',
-      where: {
-        sourcePath: {
-          equals: sourcePath,
-        },
-      },
-      limit: 1,
-      overrideAccess: true,
-    });
-
-    return result.docs?.[0] || null;
-  } catch (error) {
-    console.error(`Error resolving redirect for "${sourcePath}":`, error);
-    return null;
-  }
+  return null;
 }

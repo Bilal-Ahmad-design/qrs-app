@@ -1,15 +1,18 @@
 # QRS - Quantitative Risk Systems
 
-Monorepo structure with separate frontend and CMS (Strapi) applications.
+Separate frontend and standalone Payload CMS applications.
 
 ## Project Structure
 
 ```
 qrs-app/
 ├── frontend/        # Next.js frontend application (port 3000)
-│                    # Fetches content from Strapi via REST API
-├── cms/             # Strapi Headless CMS (port 3001)
-│                    # Manages content and provides REST API
+│                    # Marketing website
+│                    # Fetches content from qrs-cms via REST API
+├── qrs-cms/         # Standalone Payload CMS (port 3001)
+│                    # Content management admin panel
+│                    # REST API endpoints
+│                    # PostgreSQL database management
 ├── scripts/         # Shared scripts
 └── .github/         # CI/CD configuration
 ```
@@ -20,7 +23,7 @@ qrs-app/
 
 ```bash
 cd frontend && npm install
-cd ../cms && npm install
+cd ../qrs-cms && npm install
 ```
 
 ### 2. Start Both Applications
@@ -34,7 +37,7 @@ npm run dev
 
 **Terminal 2 - Strapi CMS:**
 ```bash
-cd cms
+cd qrs-cms
 npm run develop
 # Admin UI: http://localhost:3001/admin
 # API: http://localhost:3001/api

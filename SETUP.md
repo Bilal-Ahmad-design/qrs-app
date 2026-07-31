@@ -6,21 +6,19 @@ Your project is now organized as:
 
 ```
 qrs-app/
-├── frontend/           # Next.js marketing site (port 3000)
+├── frontend/              # Next.js frontend (port 3000)
 │   ├── app/
 │   ├── components/
 │   ├── public/
 │   ├── package.json
 │   ├── .env.local
 │   └── ...
-├── cms/               # Strapi Headless CMS (port 3001)
-│   ├── src/
-│   │   └── api/       # Content Types & API endpoints
-│   ├── config/        # Strapi configuration
-│   ├── public/        # Static files
+├── qrs-cms/              # Standalone Payload CMS (port 3001)
+│   ├── payload.config.ts # Payload configuration
 │   ├── package.json
 │   ├── .env.local
-│   └── tsconfig.json
+│   ├── tsconfig.json
+│   └── README.md
 ├── scripts/
 ├── .github/
 └── README.md
@@ -29,8 +27,8 @@ qrs-app/
 ## Getting Started (Local Development)
 
 ### Prerequisites
-- Node.js 18+
-- PostgreSQL (via Neon Cloud)
+- Node.js 22 LTS (or 18+)
+- PostgreSQL via Neon Cloud
 
 ### Step 1: Install Dependencies
 
@@ -40,15 +38,15 @@ cd frontend
 npm install
 ```
 
-**CMS (Strapi):**
+**CMS (Payload):**
 ```bash
-cd cms
+cd qrs-cms
 npm install
 ```
 
 ### Step 2: Start Both Applications
 
-Open **two terminal windows** (or use a terminal multiplexer like tmux):
+Open **two terminal windows**:
 
 **Terminal 1 - Frontend (port 3000):**
 ```bash
@@ -57,113 +55,116 @@ npm run dev
 ```
 Access: http://localhost:3000
 
-**Terminal 2 - CMS Strapi (port 3001):**
+**Terminal 2 - CMS Payload (port 3001):**
 ```bash
-cd cms
-npm run develop
+cd qrs-cms
+npm run dev
 ```
 Access: http://localhost:3001/admin
 
-### Step 3: Verify Setup
+### Step 3: Create Admin User
 
-1. **Frontend** should load at http://localhost:3000
-2. **Strapi Admin** should be accessible at http://localhost:3001/admin
-3. Frontend fetches content from Strapi API at http://localhost:3001/api
+1. Visit http://localhost:3001/admin
+2. Create your admin account
+3. Start managing content!
 
-### Step 4: Create Strapi Admin User
+### Step 4: Add Test Content
 
-When Strapi starts for the first time, visit http://localhost:3001/admin and create an admin account.
-
-### Step 5: Add Test Content
-
-1. Go to http://localhost:3001/admin
-2. Create a Page entry with:
+1. Go to Collections → Pages
+2. Create a page:
    - **title**: "Platform"
    - **slug**: "platform"
-   - **content**: "Test content"
+   - **content**: Add rich text content
    - **Publish** it
-3. Verify frontend can fetch it via http://localhost:3001/api/pages
+3. Frontend will fetch from http://localhost:3001/api/pages
 
 ## Environment Variables
 
 Already configured in:
-- `frontend/.env.local` - Points to `NEXT_PUBLIC_CMS_URL=http://localhost:3001`
-- `cms/.env.local` - Strapi configuration
+- `frontend/.env.local` - Points to `NEXT_PUBLIC_PAYLOAD_URL=http://localhost:3001`
+- `qrs-cms/.env.local` - Payload CMS configuration
 
-Both connect to the same Neon PostgreSQL database.
+Both connect to the same Neon PostgreSQL database:
+```
+DATABASE_URL=postgresql://neondb_owner:npg_JkuPtB1MWK7U@ep-cool-block-at41gwhk-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+```
 
 ## Deployment Strategy
 
 ### Frontend → Vercel
 ```bash
 cd frontend
-# Deploy the frontend folder to Vercel
+npm run build
+# Deploy via Vercel
 ```
+- Env vars: `NEXT_PUBLIC_PAYLOAD_URL`, `DATABASE_URL`
 - Current: https://qrs-app-eight.vercel.app
-- Env vars: `NEXT_PUBLIC_CMS_URL` (point to Strapi domain), `DATABASE_URL`
 
-### CMS (Strapi) → Hostinger (Node.js Hosting)
+### CMS (Payload) → Hostinger (Node.js Hosting)
 ```bash
-cd cms
+cd qrs-cms
 npm run build
 npm run start
 ```
-- Set env vars: `DATABASE_URL`, `APP_KEYS`, `ADMIN_JWT_SECRET`, `PORT=3001`
+- Set env vars: `DATABASE_URL`, `PAYLOAD_SECRET`, `PORT=3001`
 - Admin UI: `https://cms.yourdomain.com/admin`
 - API: `https://cms.yourdomain.com/api`
 
-## API Endpoints (Strapi)
+## API Endpoints
 
-Frontend fetches from CMS using standard Strapi REST API:
+Frontend fetches from Payload CMS REST API:
 
 ```javascript
 // Development
-const API_URL = 'http://localhost:3001';
+const API = 'http://localhost:3001';
 
 // Production
-const API_URL = 'https://cms.yourdomain.com';
+const API = 'https://cms.yourdomain.com';
 
 // Fetch published pages
-const response = await fetch(`${API_URL}/api/pages?filters[slug][$eq]=platform&populate=*`);
+const res = await fetch(`${API}/api/pages?where[slug][equals]=platform`);
+const data = await res.json();
+console.log(data.docs); // Array of pages
 ```
 
 ## Troubleshooting
 
 ### Port 3000 or 3001 Already in Use
 
-If you get "port already in use" error:
-
-```bash
-# Windows:
+Windows:
+```powershell
 netstat -ano | findstr :3000
 taskkill /PID <PID> /F
+```
 
-# Mac/Linux:
+Mac/Linux:
+```bash
 lsof -ti:3000 | xargs kill -9
 ```
 
 ### Database Connection Issues
 
-Ensure your PostgreSQL connection string is correct:
+Verify `.env.local` has correct connection string in both folders:
 ```
-DATABASE_URL=postgresql://neondb_owner:npg_JkuPtB1MWK7U@ep-cool-block-at41gwhk-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+DATABASE_URL=postgresql://neondb_owner:npg_JkuPtB1MWK7U@...
 ```
 
-### Strapi Admin Not Loading
+### Payload Admin Not Loading
 
-1. Make sure Strapi is running on port 3001: `npm run develop`
-2. Admin UI URL: http://localhost:3001/admin
-3. Database is accessible
-4. Clear browser cache if needed
+1. Check qrs-cms is running: `npm run dev` on port 3001
+2. Admin URL: http://localhost:3001/admin
+3. Verify database connection
+4. Check browser console for errors
 
 ## Next Steps
 
-1. ✅ Install dependencies: `npm install` in both folders
+1. ✅ Install: `npm install` in frontend and qrs-cms
 2. ✅ Start frontend: `cd frontend && npm run dev`
-3. ✅ Start Strapi: `cd cms && npm run develop`
-4. ✅ Create admin user in Strapi
-5. ✅ Add content to Pages collection
-6. ✅ Test frontend loads content from Strapi API
-7. 🚀 Deploy to Vercel (frontend) and Hostinger (CMS)
+3. ✅ Start CMS: `cd qrs-cms && npm run dev`
+4. ✅ Create admin user at http://localhost:3001/admin
+5. ✅ Create Pages collection content
+6. ✅ Test API: http://localhost:3001/api/pages
+7. ✅ Update frontend to fetch from CMS API
+8. 🚀 Deploy to production
 
-See [README.md](README.md) for more details.
+See [README.md](README.md) for architecture details.

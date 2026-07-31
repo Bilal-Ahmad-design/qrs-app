@@ -6,6 +6,6 @@ build/
 *.log
 .DS_Store
 .cache/
-.tmp/
-.strapi
+payload-types.ts
 coverage/
+media/

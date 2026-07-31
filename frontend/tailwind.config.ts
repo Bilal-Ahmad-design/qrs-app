@@ -67,36 +67,13 @@ export default {
         'small': ['0.875rem', { lineHeight: '1.25rem' }],
         'body': ['1rem', { lineHeight: '1.5rem' }],
         'body-lg': ['1.125rem', { lineHeight: '1.75rem' }],
-        'h5': [
-          ['1.125rem', { lineHeight: '1.5rem', fontWeight: '600' }],
-          { '@screen sm': { fontSize: '1.25rem', lineHeight: '1.75rem' } },
-        ],
-        'h4': [
-          ['1.25rem', { lineHeight: '1.75rem', fontWeight: '600' }],
-          { '@screen sm': { fontSize: '1.5rem', lineHeight: '2rem' } },
-        ],
-        'h3': [
-          ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
-          { '@screen sm': { fontSize: '1.875rem', lineHeight: '2.25rem' } },
-        ],
-        'h2': [
-          ['1.75rem', { lineHeight: '2.25rem', fontWeight: '700' }],
-          { '@screen sm': { fontSize: '2.25rem', lineHeight: '2.5rem' } },
-        ],
-        'h1': [
-          ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
-          { '@screen sm': { fontSize: '2.5rem', lineHeight: '3rem' } },
-          { '@screen lg': { fontSize: '3rem', lineHeight: '3.5rem' } },
-        ],
-        'display': [
-          ['2rem', { lineHeight: '2.5rem', fontWeight: '900' }],
-          { '@screen sm': { fontSize: '2.5rem', lineHeight: '3rem' } },
-          { '@screen lg': { fontSize: '3.75rem', lineHeight: '4.5rem' } },
-        ],
-        'kpi': [
-          ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
-          { '@screen sm': { fontSize: '2.5rem', lineHeight: '3rem' } },
-        ],
+        'h5': ['1.125rem', { lineHeight: '1.5rem', fontWeight: '600' }],
+        'h4': ['1.25rem', { lineHeight: '1.75rem', fontWeight: '600' }],
+        'h3': ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
+        'h2': ['1.75rem', { lineHeight: '2.25rem', fontWeight: '700' }],
+        'h1': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
+        'display': ['2rem', { lineHeight: '2.5rem', fontWeight: '900' }],
+        'kpi': ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
       },
       borderRadius: {
         'pill': '9999px',

@@ -1,4 +1,4 @@
-// Typed environment variable access with validation
+// Typed environment variable access with validation.
 export function getEnv(key: string, defaultValue?: string): string {
   const value = process.env[key];
   if (!value && !defaultValue) {
@@ -9,7 +9,6 @@ export function getEnv(key: string, defaultValue?: string): string {
 
 export const env = {
   NEXT_PUBLIC_SITE_URL: getEnv('NEXT_PUBLIC_SITE_URL', 'https://qrsrisk.com'),
+  NEXT_PUBLIC_CMS_URL: getEnv('NEXT_PUBLIC_CMS_URL', 'http://localhost:3001'),
   NODE_ENV: getEnv('NODE_ENV', 'development'),
-  PAYLOAD_SECRET: getEnv('PAYLOAD_SECRET'),
-  DATABASE_URL: getEnv('DATABASE_URL'),
 };
