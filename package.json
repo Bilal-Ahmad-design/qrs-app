@@ -1,0 +1,17 @@
+{
+  "name": "qrs-app-monorepo",
+  "version": "1.0.0",
+  "description": "QRS App - Frontend + CMS",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "qrs-cms"
+  ],
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:cms": "cd qrs-cms && node server.js",
+    "build:frontend": "cd frontend && npm run build",
+    "build:cms": "echo 'CMS server does not require build'",
+    "build": "npm run build:frontend"
+  }
+}

@@ -299,7 +299,7 @@
       submitBtn.textContent = 'Creating account...';
 
       try {
-        const res = await fetch('http://localhost:3001/auth/signup', {
+        const res = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
