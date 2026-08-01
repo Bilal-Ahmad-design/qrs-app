@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRS Admin - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-ink-900: #0C0D0E;
+      --color-ink-800: #1B3B3A;
+      --color-ink-700: #1f2124;
+      --color-teal-700: #29908A;
+      --color-teal-600: #3C8481;
+      --color-teal-500: #5BBAB5;
+      --color-white: #FFFFFF;
+      --color-text-muted: #69727d;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --radius-md: 8px;
+      --motion-base: 240ms;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--color-ink-900) 0%, var(--color-ink-800) 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--color-white);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--color-ink-800);
+      padding: 48px 40px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--color-teal-700);
+      backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo img {
+      height: 48px;
+      width: auto;
+      margin-bottom: 16px;
+      filter: brightness(0.95);
+    }
+
+    .logo p {
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--color-white);
+    }
+
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--color-ink-900);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 4px;
+      color: var(--color-white);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--color-teal-500);
+      box-shadow: 0 0 0 3px rgba(91, 186, 181, 0.15);
+      background: rgba(91, 186, 181, 0.05);
+    }
+
+    input::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--color-teal-500);
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .password-toggle:hover {
+      color: var(--color-teal-600);
+      transform: scale(1.1);
+    }
+
+    .password-toggle:active {
+      transform: scale(0.95);
+    }
+
+    button.submit-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      min-height: 44px;
+    }
+
+    button.submit-btn:hover:not(:disabled) {
+      background: var(--color-teal-600);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(91, 186, 181, 0.25);
+    }
+
+    button.submit-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button.submit-btn:disabled {
+      background: var(--color-teal-700);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      border-left: 3px solid;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border-left-color: #ef4444;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #86efac;
+      border-left-color: #22c55e;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .link a {
+      color: var(--color-teal-500);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .link a:hover {
+      color: var(--color-teal-600);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 32px 24px;
+      }
+
+      .logo img {
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <img src="/qrs-wordmark.webp" alt="QRS Logo">
+        <p>Admin Portal</p>
+      </div>
+
+      <div id="message" class="message hidden"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="admin@qrs.com">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="password" name="password" required placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Login</button>
+      </form>
+
+      <div class="link">
+        Don't have an account? <a href="/signup">Create account</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      const isPassword = field.type === 'password';
+      field.type = isPassword ? 'text' : 'password';
+    }
+
+    const form = document.getElementById('loginForm');
+    const messageEl = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function showMessage(text, type = 'error') {
+      messageEl.textContent = text;
+      messageEl.className = `message ${type}`;
+      messageEl.classList.remove('hidden');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging in...';
+
+      try {
+        const res = await fetch('http://localhost:3001/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showMessage('Login successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = '/admin';
+          }, 1000);
+        } else {
+          showMessage(data.error || 'Login failed', 'error');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Login';
+        }
+      } catch (error) {
+        showMessage('Error: ' + error.message, 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login';
+      }
+    });
+  </script>
+</body>
+</html>

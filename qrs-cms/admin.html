@@ -1,0 +1,694 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRS Admin - Content Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-ink-900: #0C0D0E;
+      --color-ink-800: #1B3B3A;
+      --color-ink-700: #1f2124;
+      --color-teal-700: #29908A;
+      --color-teal-600: #3C8481;
+      --color-teal-500: #5BBAB5;
+      --color-white: #FFFFFF;
+      --color-text-muted: #69727d;
+      --color-cream-50: #F4F6F6;
+      --color-status-ok: #22c55e;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --motion-base: 240ms;
+      --motion-slow: 480ms;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--color-ink-900);
+      color: var(--color-white);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    header {
+      background: var(--color-ink-800);
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 40px;
+      border: 1px solid var(--color-teal-700);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .header-left h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--color-teal-500);
+    }
+
+    .header-left p {
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--color-ink-900);
+      border-radius: 4px;
+      border: 1px solid var(--color-teal-700);
+    }
+
+    .user-menu span {
+      color: var(--color-teal-500);
+      font-size: 13px;
+      font-weight: 500;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-menu a, .user-menu button {
+      color: var(--color-teal-500);
+      text-decoration: none;
+      font-size: 13px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      transition: color var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .user-menu a:hover, .user-menu button:hover {
+      color: var(--color-teal-600);
+    }
+
+    .user-menu button {
+      color: #ef4444;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+    }
+
+    .sidebar {
+      background: var(--color-ink-800);
+      padding: 24px;
+      border-radius: 8px;
+      height: fit-content;
+      border: 1px solid var(--color-teal-700);
+      position: sticky;
+      top: 24px;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: transparent;
+      color: var(--color-teal-500);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .sidebar button:hover {
+      background: var(--color-teal-700);
+      color: var(--color-white);
+    }
+
+    .sidebar button.active {
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+      border-color: var(--color-teal-500);
+    }
+
+    .content {
+      background: var(--color-ink-800);
+      padding: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--color-teal-700);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .pages-list {
+      margin-bottom: 24px;
+    }
+
+    .page-item {
+      background: var(--color-ink-900);
+      padding: 18px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border-left: 3px solid var(--color-teal-500);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .page-item:hover {
+      background: rgba(91, 186, 181, 0.05);
+    }
+
+    .page-info h3 {
+      margin-bottom: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-white);
+    }
+
+    .page-info p {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .page-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .page-actions button {
+      padding: 8px 14px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    .btn-edit {
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+    }
+
+    .btn-edit:hover {
+      background: var(--color-teal-600);
+      transform: translateY(-1px);
+    }
+
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--color-teal-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--color-ink-900);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 4px;
+      color: var(--color-white);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--color-teal-500);
+      box-shadow: 0 0 0 3px rgba(91, 186, 181, 0.15);
+      background: rgba(91, 186, 181, 0.03);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn-submit {
+      padding: 14px 28px;
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      min-height: 44px;
+    }
+
+    .btn-submit:hover {
+      background: var(--color-teal-600);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(91, 186, 181, 0.25);
+    }
+
+    .btn-cancel {
+      padding: 14px 28px;
+      background: var(--color-teal-700);
+      color: var(--color-white);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      min-height: 44px;
+    }
+
+    .btn-cancel:hover {
+      background: var(--color-teal-600);
+    }
+
+    .message {
+      padding: 14px 16px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      border-left: 3px solid;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #86efac;
+      border-left-color: #22c55e;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border-left-color: #ef4444;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      color: var(--color-teal-500);
+    }
+
+    @media (max-width: 1024px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Scrollbar styling */
+    .content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .content::-webkit-scrollbar-track {
+      background: var(--color-ink-800);
+    }
+
+    .content::-webkit-scrollbar-thumb {
+      background: var(--color-teal-700);
+      border-radius: 4px;
+    }
+
+    .content::-webkit-scrollbar-thumb:hover {
+      background: var(--color-teal-600);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-left">
+        <img src="/qrs-wordmark.webp" alt="QRS Logo" style="height: 32px; width: auto; margin-bottom: 12px;">
+        <h1>Admin Panel</h1>
+        <p>Content Management System</p>
+      </div>
+      <div class="header-right">
+        <div class="user-menu">
+          <span id="userName">Loading...</span>
+          <a href="/dashboard">👤</a>
+          <button onclick="logout()">🚪</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <div class="sidebar">
+        <button id="btnList" class="active">📋 Pages</button>
+        <button id="btnCreate">➕ New Page</button>
+      </div>
+
+      <div class="content">
+        <div id="message" class="message hidden"></div>
+
+        <!-- Pages List View -->
+        <div id="listView">
+          <h2>Pages</h2>
+          <div id="pagesList" class="pages-list"></div>
+        </div>
+
+        <!-- Create/Edit Form View -->
+        <div id="formView" class="hidden">
+          <h2 id="formHeading">Create Page</h2>
+
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="formTitle" placeholder="Page title">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Slug</label>
+              <input type="text" id="formSlug" placeholder="page-slug">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="formStatus">
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Content</label>
+            <textarea id="formContent" placeholder="Page content..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="formDescription" placeholder="Brief description..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>SEO Title</label>
+              <input type="text" id="formSeoTitle" placeholder="SEO title">
+            </div>
+            <div class="form-group">
+              <label>SEO Description</label>
+              <input type="text" id="formSeoDescription" placeholder="SEO description">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-submit" id="btnSave">Save</button>
+            <button class="btn-cancel" id="btnCancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3001/api';
+    const AUTH_API = 'http://localhost:3001/auth';
+    let editingId = null;
+
+    // Check authentication on page load
+    async function checkAuth() {
+      try {
+        const res = await fetch(AUTH_API + '/me', {
+          credentials: 'include'
+        });
+        if (!res.ok) {
+          window.location.href = '/login';
+          return false;
+        }
+        const user = await res.json();
+        document.getElementById('userName').textContent = user.email;
+        return true;
+      } catch (error) {
+        window.location.href = '/login';
+        return false;
+      }
+    }
+
+    async function logout() {
+      try {
+        await fetch(AUTH_API + '/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+
+    // Check auth before loading
+    checkAuth().then(authenticated => {
+      if (authenticated) {
+        loadPages();
+      }
+    });
+
+    const btnList = document.getElementById('btnList');
+    const btnCreate = document.getElementById('btnCreate');
+    const btnSave = document.getElementById('btnSave');
+    const btnCancel = document.getElementById('btnCancel');
+
+    const listView = document.getElementById('listView');
+    const formView = document.getElementById('formView');
+    const messageEl = document.getElementById('message');
+
+    function showMessage(text, type = 'success') {
+      messageEl.textContent = text;
+      messageEl.className = 'message ' + type;
+      messageEl.classList.remove('hidden');
+      setTimeout(() => messageEl.classList.add('hidden'), 4000);
+    }
+
+    async function loadPages() {
+      try {
+        const res = await fetch(API + '/pages');
+        const data = await res.json();
+        const pagesList = document.getElementById('pagesList');
+
+        if (!data.pages || data.pages.length === 0) {
+          pagesList.innerHTML = '<p style="color: var(--color-text-muted); text-align: center; padding: 40px 20px;">No pages yet. Create one to get started!</p>';
+          return;
+        }
+
+        pagesList.innerHTML = data.pages.map(page =>
+          '<div class="page-item"><div class="page-info"><h3>' + page.title + '</h3><p>slug: ' + page.slug + ' | status: ' + page.status + '</p></div><div class="page-actions"><button class="btn-edit" onclick="editPage(' + page.id + ')">Edit</button><button class="btn-delete" onclick="deletePage(' + page.id + ')">Delete</button></div></div>'
+        ).join('');
+      } catch (error) {
+        showMessage('Failed to load pages: ' + error.message, 'error');
+      }
+    }
+
+    async function editPage(id) {
+      try {
+        const res = await fetch(API + '/pages/' + id);
+        const page = await res.json();
+
+        document.getElementById('formTitle').value = page.title || '';
+        document.getElementById('formSlug').value = page.slug || '';
+        document.getElementById('formContent').value = page.content?.text || '';
+        document.getElementById('formDescription').value = page.description || '';
+        document.getElementById('formSeoTitle').value = page.seo_title || '';
+        document.getElementById('formSeoDescription').value = page.seo_description || '';
+        document.getElementById('formStatus').value = page.status || 'published';
+        editingId = id;
+
+        document.getElementById('formHeading').textContent = 'Edit Page';
+        showList(false);
+      } catch (error) {
+        showMessage('Failed to load page: ' + error.message, 'error');
+      }
+    }
+
+    async function deletePage(id) {
+      if (!confirm('Delete this page?')) return;
+
+      try {
+        await fetch(API + '/pages/' + id, { method: 'DELETE', credentials: 'include' });
+        showMessage('Page deleted!', 'success');
+        loadPages();
+      } catch (error) {
+        showMessage('Failed to delete: ' + error.message, 'error');
+      }
+    }
+
+    async function savePage() {
+      const title = document.getElementById('formTitle').value;
+      const slug = document.getElementById('formSlug').value;
+      const content = document.getElementById('formContent').value;
+      const description = document.getElementById('formDescription').value;
+      const seo_title = document.getElementById('formSeoTitle').value;
+      const seo_description = document.getElementById('formSeoDescription').value;
+      const status = document.getElementById('formStatus').value;
+
+      if (!title || !slug) {
+        showMessage('Title and slug are required', 'error');
+        return;
+      }
+
+      try {
+        const method = editingId ? 'PUT' : 'POST';
+        const url = editingId ? (API + '/pages/' + editingId) : (API + '/pages');
+
+        const res = await fetch(url, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            title: title,
+            slug: slug,
+            content: content,
+            description: description,
+            seo_title: seo_title,
+            seo_description: seo_description,
+            status: status
+          })
+        });
+
+        if (!res.ok) {
+          const error = await res.json();
+          throw new Error(error.error || 'Save failed');
+        }
+
+        showMessage(editingId ? 'Page updated!' : 'Page created!', 'success');
+        editingId = null;
+        loadPages();
+        showList(true);
+      } catch (error) {
+        showMessage('Failed to save: ' + error.message, 'error');
+      }
+    }
+
+    function showList(show) {
+      if (show) {
+        listView.classList.remove('hidden');
+        formView.classList.add('hidden');
+        btnList.classList.add('active');
+        btnCreate.classList.remove('active');
+      } else {
+        listView.classList.add('hidden');
+        formView.classList.remove('hidden');
+        btnList.classList.remove('active');
+        btnCreate.classList.add('active');
+      }
+    }
+
+    btnList.addEventListener('click', function() {
+      editingId = null;
+      document.getElementById('formTitle').value = '';
+      document.getElementById('formSlug').value = '';
+      document.getElementById('formContent').value = '';
+      document.getElementById('formDescription').value = '';
+      document.getElementById('formSeoTitle').value = '';
+      document.getElementById('formSeoDescription').value = '';
+      document.getElementById('formStatus').value = 'published';
+      showList(true);
+      loadPages();
+    });
+
+    btnCreate.addEventListener('click', function() {
+      editingId = null;
+      document.getElementById('formTitle').value = '';
+      document.getElementById('formSlug').value = '';
+      document.getElementById('formContent').value = '';
+      document.getElementById('formDescription').value = '';
+      document.getElementById('formSeoTitle').value = '';
+      document.getElementById('formSeoDescription').value = '';
+      document.getElementById('formStatus').value = 'published';
+      document.getElementById('formHeading').textContent = 'Create Page';
+      showList(false);
+    });
+
+    btnSave.addEventListener('click', savePage);
+    btnCancel.addEventListener('click', function() {
+      editingId = null;
+      showList(true);
+      loadPages();
+    });
+  </script>
+</body>
+</html>

@@ -1,35 +1,18 @@
 {
-  "name": "qrs-cms",
+  "name": "qrs-cms-api",
   "version": "1.0.0",
-  "description": "Standalone Payload CMS for QRS",
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3001",
-    "build": "next build",
-    "start": "next start -p 3001",
-    "generate:importmap": "payload generate:importmap",
-    "generate:types": "payload generate:types",
-    "migrate": "payload migrate",
-    "typecheck": "tsc --noEmit"
+    "dev": "node server.js",
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "3.87.0",
-    "@payloadcms/next": "3.87.0",
-    "@payloadcms/richtext-lexical": "3.87.0",
-    "graphql": "^16.14.2",
-    "next": "16.2.10",
-    "payload": "3.87.0",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
-    "sharp": "0.34.5"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.20.1",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "typescript": "^5.9.3"
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.11.3"
   }
 }

@@ -1,25 +1,43 @@
-// M2 Note: This file attempts to use Payload's Local API to fetch CMS content.
-// However, importing payload.config.ts triggers Turbopack's drizzle-kit native-module
-// resolution failure (same blocker as M1's admin/api stubs).
-//
-// TODO: Activate this once DATABASE_URL exists and a real Postgres is reachable.
-// In the meantime, pages import data directly from placeholder data instead.
+const API_URL = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3001';
 
-// import { getPayload } from 'payload';
-// import config from '@/cms/payload.config';
-//
-// let payloadInstance: Awaited<ReturnType<typeof getPayload>> | null = null;
-//
-// export async function getPayloadClient() {
-//   if (!payloadInstance) {
-//     payloadInstance = await getPayload({ config });
-//   }
-//   return payloadInstance;
-// }
+export async function fetchPages() {
+  console.log('[Payload] Fetching pages from:', `${API_URL}/api/pages`);
+  try {
+    const res = await fetch(`${API_URL}/api/pages`);
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const data = await res.json();
+    console.log('[Payload] Pages fetched:', data);
+    return data;
+  } catch (error) {
+    console.error('[Payload] Error fetching pages:', error);
+    return null;
+  }
+}
 
-// Stub for now:
-export async function getPayloadClient() {
-  throw new Error(
-    'Payload Local API requires DATABASE_URL. Placeholder data being used for now.',
-  );
+export async function fetchPageBySlug(slug: string) {
+  console.log('[Payload] Fetching page:', slug);
+  try {
+    const res = await fetch(`${API_URL}/api/pages?where[slug][equals]=${slug}`);
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const data = await res.json();
+    console.log('[Payload] Page data:', data);
+    return data.docs?.[0];
+  } catch (error) {
+    console.error('[Payload] Error fetching page:', error);
+    return null;
+  }
+}
+
+export async function fetchBlog() {
+  console.log('[Payload] Fetching blog posts');
+  try {
+    const res = await fetch(`${API_URL}/api/blog`);
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const data = await res.json();
+    console.log('[Payload] Blog posts fetched:', data);
+    return data;
+  } catch (error) {
+    console.error('[Payload] Error fetching blog:', error);
+    return null;
+  }
 }

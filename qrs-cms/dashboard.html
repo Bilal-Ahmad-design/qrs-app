@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRS - User Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-ink-900: #0C0D0E;
+      --color-ink-800: #1B3B3A;
+      --color-ink-700: #1f2124;
+      --color-teal-700: #29908A;
+      --color-teal-600: #3C8481;
+      --color-teal-500: #5BBAB5;
+      --color-white: #FFFFFF;
+      --color-text-muted: #69727d;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --radius-md: 8px;
+      --motion-base: 240ms;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--color-ink-900);
+      color: var(--color-white);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px;
+      background: var(--color-ink-800);
+      border-radius: 8px;
+      margin-bottom: 40px;
+      border: 1px solid var(--color-teal-700);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .header-left img {
+      height: 40px;
+      width: auto;
+    }
+
+    .header-left h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--color-teal-500);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      min-height: 44px;
+    }
+
+    .btn-primary {
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-teal-600);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(91, 186, 181, 0.25);
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: var(--color-white);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--color-ink-800);
+      padding: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--color-teal-700);
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .card:hover {
+      border-color: var(--color-teal-500);
+      box-shadow: 0 0 20px rgba(91, 186, 181, 0.1);
+    }
+
+    .card h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      color: var(--color-teal-500);
+    }
+
+    .user-info {
+      margin-bottom: 32px;
+    }
+
+    .user-info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--color-teal-700);
+    }
+
+    .user-info-item:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: var(--color-text-muted);
+      font-weight: 500;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .value {
+      color: var(--color-white);
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .stat-box {
+      background: var(--color-ink-900);
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid var(--color-teal-700);
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .stat-box:hover {
+      border-color: var(--color-teal-500);
+      background: rgba(91, 186, 181, 0.05);
+    }
+
+    .stat-label {
+      color: var(--color-text-muted);
+      font-size: 12px;
+      margin-bottom: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-teal-500);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--color-teal-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--color-ink-900);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 4px;
+      color: var(--color-white);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--color-teal-500);
+      box-shadow: 0 0 0 3px rgba(91, 186, 181, 0.15);
+      background: rgba(91, 186, 181, 0.03);
+    }
+
+    input::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--color-teal-500);
+      cursor: pointer;
+      padding: 6px;
+      font-size: 18px;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .password-toggle:hover {
+      color: var(--color-teal-600);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn-save {
+      flex: 1;
+      padding: 14px 24px;
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .btn-save:hover {
+      background: var(--color-teal-600);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(91, 186, 181, 0.25);
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 14px 24px;
+      background: var(--color-teal-700);
+      color: var(--color-white);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .btn-cancel:hover {
+      background: var(--color-teal-600);
+      transform: translateY(-1px);
+    }
+
+    .message {
+      padding: 14px 16px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      border-left: 3px solid;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #86efac;
+      border-left-color: #22c55e;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border-left-color: #ef4444;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-teal-700), transparent);
+      margin: 48px 0;
+    }
+
+    @media (max-width: 968px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .header-left {
+        flex-direction: column;
+      }
+
+      .nav-buttons {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .nav-buttons button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-left">
+        <img src="/qrs-wordmark.webp" alt="QRS Logo">
+        <h1>Dashboard</h1>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-primary" onclick="window.location.href='/admin'">📝 Admin Panel</button>
+        <button class="btn-danger" onclick="logout()">🚪 Logout</button>
+      </div>
+    </header>
+
+    <div id="message" class="message hidden"></div>
+
+    <div class="content">
+      <!-- Account Information Card -->
+      <div class="card">
+        <h2>Account Information</h2>
+
+        <div class="user-info">
+          <div class="user-info-item">
+            <span class="label">Email</span>
+            <span class="value" id="userEmail">Loading...</span>
+          </div>
+          <div class="user-info-item">
+            <span class="label">Full Name</span>
+            <span class="value" id="userFullname">Not set</span>
+          </div>
+          <div class="user-info-item">
+            <span class="label">Role</span>
+            <span class="value" id="userRole">Loading...</span>
+          </div>
+          <div class="user-info-item">
+            <span class="label">Member Since</span>
+            <span class="value" id="userCreated">Loading...</span>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-label">📄 Pages Created</div>
+            <div class="stat-value" id="pagesCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">👥 Total Users</div>
+            <div class="stat-value" id="usersCount">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Profile Card -->
+      <div class="card">
+        <h2>Edit Profile</h2>
+
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" placeholder="Your full name">
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="newPassword" placeholder="Leave blank to keep current" minlength="6">
+            <button type="button" class="password-toggle" onclick="togglePassword('newPassword')">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="confirmPassword" placeholder="••••••••" minlength="6">
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-save" onclick="updateProfile()">Save Changes</button>
+          <button class="btn-cancel" onclick="loadUserData()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      field.type = field.type === 'password' ? 'text' : 'password';
+    }
+
+    const API = 'http://localhost:3001';
+    const messageEl = document.getElementById('message');
+
+    function showMessage(text, type = 'success') {
+      messageEl.textContent = text;
+      messageEl.className = `message ${type}`;
+      messageEl.classList.remove('hidden');
+      setTimeout(() => messageEl.classList.add('hidden'), 3000);
+    }
+
+    async function loadUserData() {
+      try {
+        const res = await fetch(API + '/auth/me', {
+          credentials: 'include'
+        });
+
+        if (!res.ok) {
+          window.location.href = '/login';
+          return;
+        }
+
+        const user = await res.json();
+
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userFullname').textContent = user.fullname || 'Not set';
+        document.getElementById('userRole').textContent = (user.role || 'editor').toUpperCase();
+        document.getElementById('userCreated').textContent = new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+        document.getElementById('fullname').value = user.fullname || '';
+
+        loadPageCount();
+      } catch (error) {
+        showMessage('Error loading user data: ' + error.message, 'error');
+      }
+    }
+
+    async function loadPageCount() {
+      try {
+        const res = await fetch(API + '/api/pages');
+        const data = await res.json();
+        document.getElementById('pagesCount').textContent = (data.pages || []).length;
+      } catch (error) {
+        console.error('Error loading page count:', error);
+      }
+    }
+
+    async function updateProfile() {
+      const fullname = document.getElementById('fullname').value;
+      const password = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password && password !== confirmPassword) {
+        showMessage('Passwords do not match', 'error');
+        return;
+      }
+
+      try {
+        const body = { fullname };
+        if (password) {
+          body.password = password;
+        }
+
+        const res = await fetch(API + '/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          showMessage('Profile updated successfully!', 'success');
+          document.getElementById('newPassword').value = '';
+          document.getElementById('confirmPassword').value = '';
+          loadUserData();
+        } else {
+          const data = await res.json();
+          showMessage(data.error || 'Update failed', 'error');
+        }
+      } catch (error) {
+        showMessage('Error: ' + error.message, 'error');
+      }
+    }
+
+    async function logout() {
+      try {
+        await fetch(API + '/auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        window.location.href = '/login';
+      } catch (error) {
+        showMessage('Error logging out: ' + error.message, 'error');
+      }
+    }
+
+    loadUserData();
+  </script>
+</body>
+</html>
