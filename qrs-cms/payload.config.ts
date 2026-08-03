@@ -12,6 +12,11 @@ import { Redirects } from './collections/Redirects'
 import { FormSubmissions } from './collections/FormSubmissions'
 import { AuditLogs } from './collections/AuditLogs'
 import { Media } from './collections/Media'
+import { ProductShowcase } from './collections/ProductShowcase'
+import { Solutions } from './collections/Solutions'
+import { RegulatoryCompliance } from './collections/RegulatoryCompliance'
+import { PlatformCapability } from './collections/PlatformCapability'
+import { Documentation } from './collections/Documentation'
 import { TrustCenter } from './globals/TrustCenter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -34,6 +39,11 @@ export default buildConfig({
     FormSubmissions,
     AuditLogs,
     Media,
+    ProductShowcase,
+    Solutions,
+    RegulatoryCompliance,
+    PlatformCapability,
+    Documentation,
   ],
   globals: [
     TrustCenter,

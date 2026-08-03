@@ -55,6 +55,18 @@ export default {
           'warn': '#f59e0b',
           'error': '#ef4444',
         },
+        'light': {
+          'bg-primary': '#F4F6F6',
+          'bg-section': '#FFFFFF',
+          'bg-dark': '#1B3B3A',
+          'bg-deep': '#0C0D0E',
+          'text-primary': '#1A1A1A',
+          'text-secondary': '#5F6C72',
+          'text-light': '#FFFFFF',
+          'accent-primary': '#5BBAB5',
+          'accent-light': '#8ED2CE',
+          'accent-dark': '#1B5A54',
+        },
       },
       fontFamily: {
         'body': 'var(--font-outfit)',
