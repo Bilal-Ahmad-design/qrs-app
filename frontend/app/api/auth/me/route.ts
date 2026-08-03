@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import pg from 'pg'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 })
+
+interface DecodedToken extends JwtPayload {
+  id: number
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +19,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'No token provided' }, { status: 401 })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as DecodedToken
     const result = await pool.query(
       'SELECT id, email, fullname, role, created_at FROM users WHERE id = $1',
       [decoded.id]

@@ -34,16 +34,13 @@ export const metadata: Metadata = buildMetadata({
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
+    <div
       className={`${outfit.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
     >
-      {/* suppressHydrationWarning suppresses browser extension attribute mismatches (e.g., cz-shortcut-listen) */}
-      <body className="font-body bg-cream-50 text-text-strong" suppressHydrationWarning>
-        <CookieConsentProvider>
-          <SiteChrome>{children}</SiteChrome>
-        </CookieConsentProvider>
-      </body>
-    </html>
+      <CookieConsentProvider>
+        <SiteChrome>{children}</SiteChrome>
+      </CookieConsentProvider>
+    </div>
   );
 }

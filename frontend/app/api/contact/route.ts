@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
+import pg from 'pg';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
 
 export async function POST(request: Request) {
   try {
@@ -16,8 +22,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const verified = process.env.TURNSTILE_SECRET_KEY
-      ? await verifyTurnstileToken(turnstileToken, request.headers.get('x-forwarded-for') || undefined)
+    const verified = process.env.TURNSTILE_SECRET
+      ? await verifyTurnstileToken(turnstileToken)
       : true;
 
     if (!verified) {
@@ -27,22 +33,23 @@ export async function POST(request: Request) {
       );
     }
 
-    const submission = {
-      formType: 'contact',
-      email,
-      data: {
-        name,
-        message,
-        source: 'support-page',
-        submittedAt: new Date().toISOString(),
-      },
-      ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
-      turnstileVerified: true,
+    const ipAddress = request.headers.get('x-forwarded-for') || 'unknown';
+    const submissionData = {
+      name,
+      message,
+      source: 'support-page',
     };
 
-    console.log('Support form submission captured:', JSON.stringify(submission));
+    // Store in form_submissions table
+    await pool.query(
+      `INSERT INTO form_submissions (form_type, data, email, ip_address, turnstile_verified, review_status)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      ['contact', JSON.stringify(submissionData), email, ipAddress, true, 'pending']
+    );
 
-    return NextResponse.json({ success: true, message: 'Support request received.' });
+    // TODO: Send email notification to support@qrsrisk.com
+
+    return NextResponse.json({ success: true, message: 'Your support request has been received. We will respond shortly.' });
   } catch (error) {
     console.error('Contact form submission failed:', error);
     return NextResponse.json(

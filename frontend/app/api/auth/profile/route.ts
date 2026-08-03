@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import pg from 'pg'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 })
+
+interface DecodedToken extends JwtPayload {
+  id: number
+}
+
+interface ProfileUpdateRequest {
+  fullname?: string
+  password?: string
+  currentPassword?: string
+  newPassword?: string
+}
 
 export async function PUT(request: NextRequest) {
   try {
@@ -16,11 +27,11 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'No token provided' }, { status: 401 })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any
-    const { fullname, password } = await request.json()
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as DecodedToken
+    const { fullname, password } = (await request.json()) as ProfileUpdateRequest
 
     let query = 'UPDATE users SET fullname = $1'
-    let params: any[] = [fullname || '']
+    const params: (string | number)[] = [fullname || '']
 
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10)
