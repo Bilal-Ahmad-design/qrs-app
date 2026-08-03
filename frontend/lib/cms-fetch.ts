@@ -385,3 +385,48 @@ export async function getDocumentationBySlug(slug: string) {
     return null
   }
 }
+
+export async function getPageSections(page: string) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/page-sections?where[page][equals]=${page}&where[published][equals]=true&sort=order&limit=100`,
+      {
+        next: { revalidate: 3600 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn(`CMS fetch error for page sections "${page}":`, error)
+    return []
+  }
+}
+
+export async function getPageSectionsByType(page: string, type: string) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/page-sections?where[page][equals]=${page}&where[sectionType][equals]=${type}&where[published][equals]=true&sort=order&limit=100`,
+      {
+        next: { revalidate: 3600 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn(
+      `CMS fetch error for page sections "${page}" type "${type}":`,
+      error
+    )
+    return []
+  }
+}

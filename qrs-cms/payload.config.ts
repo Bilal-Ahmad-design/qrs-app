@@ -17,6 +17,7 @@ import { Solutions } from './collections/Solutions'
 import { RegulatoryCompliance } from './collections/RegulatoryCompliance'
 import { PlatformCapability } from './collections/PlatformCapability'
 import { Documentation } from './collections/Documentation'
+import { PageSections } from './collections/PageSections'
 import { TrustCenter } from './globals/TrustCenter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -44,6 +45,7 @@ export default buildConfig({
     RegulatoryCompliance,
     PlatformCapability,
     Documentation,
+    PageSections,
   ],
   globals: [
     TrustCenter,
