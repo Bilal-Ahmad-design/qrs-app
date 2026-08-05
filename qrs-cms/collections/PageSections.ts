@@ -150,6 +150,19 @@ export const PageSections: CollectionConfig = {
           type: 'text',
           label: 'Link URL',
         },
+        {
+          name: 'status',
+          type: 'select',
+          label: 'Status Badge',
+          options: [
+            { label: 'Validated', value: 'validated' },
+            { label: 'Illustrative', value: 'illustrative' },
+            { label: 'Roadmap', value: 'roadmap' },
+          ],
+          admin: {
+            description: 'Display status badge on card (optional)',
+          },
+        },
       ],
       admin: {
         description: 'Array of items for grids, cards, stats, etc',

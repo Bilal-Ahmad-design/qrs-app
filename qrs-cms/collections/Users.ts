@@ -2,9 +2,13 @@ import { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    depth: 0,
+  },
   admin: {
     useAsTitle: 'email',
+    defaultColumns: ['email', 'fullname', 'role', 'status', 'createdAt'],
+    group: 'Management',
   },
   fields: [
     {
@@ -13,11 +17,17 @@ export const Users: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
+      admin: {
+        autoComplete: 'email',
+      },
     },
     {
       name: 'fullname',
       type: 'text',
       required: false,
+      admin: {
+        placeholder: 'John Doe',
+      },
     },
     {
       name: 'role',

@@ -487,23 +487,30 @@
 
   <script>
     const API = 'http://localhost:3001/api';
-    const AUTH_API = 'http://localhost:3001/auth';
+    const AUTH_API = 'http://localhost:3001/api/auth';
     let editingId = null;
 
     // Check authentication on page load
     async function checkAuth() {
       try {
+        console.log('[AUTH DEBUG] Checking auth at:', AUTH_API + '/me');
         const res = await fetch(AUTH_API + '/me', {
           credentials: 'include'
         });
+        console.log('[AUTH DEBUG] Response status:', res.status, res.statusText);
+
         if (!res.ok) {
+          console.error('[AUTH DEBUG] Auth failed! Redirecting to login...');
           window.location.href = '/login';
           return false;
         }
+
         const user = await res.json();
+        console.log('[AUTH DEBUG] Auth success! User:', user.email);
         document.getElementById('userName').textContent = user.email;
         return true;
       } catch (error) {
+        console.error('[AUTH DEBUG] Auth error:', error);
         window.location.href = '/login';
         return false;
       }
@@ -511,13 +518,15 @@
 
     async function logout() {
       try {
-        await fetch(AUTH_API + '/logout', {
+        console.log('[LOGOUT DEBUG] Logging out from:', AUTH_API + '/logout');
+        const res = await fetch(AUTH_API + '/logout', {
           method: 'POST',
           credentials: 'include'
         });
+        console.log('[LOGOUT DEBUG] Response:', res.status, res.statusText);
         window.location.href = '/login';
       } catch (error) {
-        console.error('Logout error:', error);
+        console.error('[LOGOUT DEBUG] Error:', error);
       }
     }
 

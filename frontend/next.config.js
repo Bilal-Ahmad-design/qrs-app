@@ -27,16 +27,8 @@ const nextConfig = {
             value: 'geolocation=(), microphone=(), camera=()',
           },
           {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
-          },
-          {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https:; upgrade-insecure-requests;",
+            value: "default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: http://localhost:3001; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: http://localhost:3001; media-src 'self' data: http://localhost:3001 https:; upgrade-insecure-requests;",
           },
         ],
       },

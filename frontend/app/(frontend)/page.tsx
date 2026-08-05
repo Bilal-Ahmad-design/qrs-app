@@ -23,11 +23,16 @@ export default async function HomePage() {
   )
 
   return (
-    <main>
+    <main className="bg-light-bg-primary">
       {sections.map((section: any) => (
         <SectionRenderer key={section.id} section={section}>
-          {/* Hero section gets DeviceFrame as child */}
-          {section.sectionType === 'hero' && <DeviceFrame variant="macbook" />}
+          {/* Hero section gets DeviceFrame with uploaded image */}
+          {section.sectionType === 'hero' && (
+            <DeviceFrame
+              imageSrc={section.imageUrl ? `http://localhost:3001${section.imageUrl}` : undefined}
+              imageAlt={section.title}
+            />
+          )}
         </SectionRenderer>
       ))}
     </main>

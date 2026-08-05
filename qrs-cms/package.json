@@ -4,15 +4,20 @@
   "type": "module",
   "scripts": {
     "dev": "node server.js",
+    "build": "node server.js",
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "^3.87.0",
+    "@payloadcms/richtext-lexical": "^3.87.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
+    "payload": "^3.87.0",
     "pg": "^8.11.3"
   }
 }

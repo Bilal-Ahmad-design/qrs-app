@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 
 interface HeroDeviceFrameProps {
-  imageSrc: string;
-  imageAlt: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export function HeroDeviceFrame({ imageSrc, imageAlt }: HeroDeviceFrameProps) {
@@ -29,16 +29,24 @@ export function HeroDeviceFrame({ imageSrc, imageAlt }: HeroDeviceFrameProps) {
                 </div>
               </div>
 
-              {/* Screenshot content - using SVG placeholder */}
+              {/* Screenshot content - displays uploaded image or placeholder */}
               <div className="relative w-full bg-ink-800" style={{ aspectRatio: '16 / 10' }}>
-                <Image
-                  src="/hero-placeholder.svg"
-                  alt={imageAlt}
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-                />
+                {imageSrc && imageSrc.startsWith('http') ? (
+                  <img
+                    src={imageSrc}
+                    alt={imageAlt || 'Dashboard screenshot'}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src="/hero-placeholder.svg"
+                    alt={imageAlt || 'QRS Dashboard'}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                  />
+                )}
               </div>
             </div>
           </div>

@@ -1,553 +1,3053 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QRS - User Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>QRS Admin — Section Manager</title>
   <style>
+    /* ============================================
+       DESIGN TOKENS & CSS VARIABLES
+       ============================================ */
+    :root {
+      /* Light Theme */
+      --surface-primary: #FFFFFF;
+      --surface-secondary: #F8FAFB;
+      --surface-tertiary: #F0F4F8;
+      --surface-hover: #E8ECF1;
+
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #78828F;
+
+      --accent-primary: #0EA5E9;
+      --accent-hover: #0284C7;
+      --accent-light: #E0F2FE;
+
+      --status-published: #10B981;
+      --status-draft: #F59E0B;
+      --status-error: #EF4444;
+      --status-info: #3B82F6;
+
+      --border-color: #E2E8F0;
+      --border-color-hover: #CBD5E1;
+
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px rgba(15, 23, 42, 0.07);
+      --shadow-lg: 0 12px 24px rgba(15, 23, 42, 0.12);
+      --shadow-accent: 0 8px 24px rgba(14, 165, 233, 0.15);
+
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-lg: 16px;
+      --spacing-xl: 24px;
+      --spacing-2xl: 32px;
+      --spacing-3xl: 48px;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Dark Theme */
+        --surface-primary: #0F172A;
+        --surface-secondary: #1E293B;
+        --surface-tertiary: #334155;
+        --surface-hover: #475569;
+
+        --text-primary: #F1F5F9;
+        --text-secondary: #CBD5E1;
+        --text-muted: #94A3B8;
+
+        --accent-primary: #0EA5E9;
+        --accent-hover: #38BDF8;
+        --accent-light: #082F49;
+
+        --border-color: #334155;
+        --border-color-hover: #475569;
+
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+        --shadow-accent: 0 8px 24px rgba(14, 165, 233, 0.2);
+      }
+    }
+
+    :root[data-theme="light"] {
+      --surface-primary: #FFFFFF;
+      --surface-secondary: #F8FAFB;
+      --surface-tertiary: #F0F4F8;
+      --surface-hover: #E8ECF1;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #78828F;
+      --border-color: #E2E8F0;
+      --border-color-hover: #CBD5E1;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px rgba(15, 23, 42, 0.07);
+      --shadow-lg: 0 12px 24px rgba(15, 23, 42, 0.12);
+      --shadow-accent: 0 8px 24px rgba(14, 165, 233, 0.15);
+    }
+
+    :root[data-theme="dark"] {
+      --surface-primary: #0F172A;
+      --surface-secondary: #1E293B;
+      --surface-tertiary: #334155;
+      --surface-hover: #475569;
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --border-color: #334155;
+      --border-color-hover: #475569;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+      --shadow-accent: 0 8px 24px rgba(14, 165, 233, 0.2);
+    }
+
+    /* ============================================
+       BASE STYLES & RESET
+       ============================================ */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    :root {
-      --color-ink-900: #0C0D0E;
-      --color-ink-800: #1B3B3A;
-      --color-ink-700: #1f2124;
-      --color-teal-700: #29908A;
-      --color-teal-600: #3C8481;
-      --color-teal-500: #5BBAB5;
-      --color-white: #FFFFFF;
-      --color-text-muted: #69727d;
-      --space-4: 16px;
-      --space-6: 24px;
-      --space-8: 32px;
-      --radius-md: 8px;
-      --motion-base: 240ms;
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--color-ink-900);
-      color: var(--color-white);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--surface-primary);
+      transition: background var(--transition-base), color var(--transition-base);
     }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px;
+    /* ============================================
+       LAYOUT: GRID SYSTEM
+       ============================================ */
+    .app {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+      background: var(--surface-primary);
     }
 
-    header {
+    @media (max-width: 1024px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ============================================
+       MOBILE MENU OVERLAY
+       ============================================ */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar-overlay {
+        display: none;
+      }
+      .sidebar-overlay.active {
+        display: block;
+      }
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
+    .header {
+      grid-column: 1 / -1;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 32px;
-      background: var(--color-ink-800);
-      border-radius: 8px;
-      margin-bottom: 40px;
-      border: 1px solid var(--color-teal-700);
+      justify-content: space-between;
+      padding: var(--spacing-lg) var(--spacing-xl);
+      background: #1e293b;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: var(--spacing-lg);
     }
 
-    .header-left img {
-      height: 40px;
+    .header-logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .header-logo img {
+      height: 32px;
       width: auto;
     }
 
-    .header-left h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--color-teal-500);
+    .header-logo span {
+      color: white;
     }
 
-    .nav-buttons {
+    .header-right {
       display: flex;
-      gap: 12px;
+      align-items: center;
+      gap: var(--spacing-lg);
     }
 
-    button {
-      padding: 12px 24px;
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
       border: none;
-      border-radius: 4px;
+      color: white;
+      font-size: 24px;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
-      min-height: 44px;
+      padding: var(--spacing-sm);
+      transition: all var(--transition-fast);
     }
 
-    .btn-primary {
-      background: var(--color-teal-500);
-      color: var(--color-ink-900);
+    .mobile-menu-toggle:hover {
+      color: #0EA5E9;
     }
 
-    .btn-primary:hover {
-      background: var(--color-teal-600);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(91, 186, 181, 0.25);
+    .mobile-menu-toggle svg {
+      stroke: white;
+      stroke-width: 2;
+      stroke-linecap: round;
+      fill: none;
     }
 
-    .btn-danger {
-      background: #ef4444;
-      color: var(--color-white);
+    @media (max-width: 1024px) {
+      .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
-    .btn-danger:hover {
-      background: #dc2626;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 16px;
+      color: white;
     }
 
-    .content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-bottom: 32px;
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
-    .card {
-      background: var(--color-ink-800);
-      padding: 32px;
-      border-radius: 8px;
-      border: 1px solid var(--color-teal-700);
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .card:hover {
-      border-color: var(--color-teal-500);
-      box-shadow: 0 0 20px rgba(91, 186, 181, 0.1);
-    }
-
-    .card h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 28px;
-      color: var(--color-teal-500);
+    .theme-toggle svg {
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
     }
 
     .user-info {
-      margin-bottom: 32px;
-    }
-
-    .user-info-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--color-teal-700);
+      gap: var(--spacing-md);
+      padding: 0 var(--spacing-lg);
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .user-info-item:last-child {
-      border-bottom: none;
+    .user-name {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .label {
-      color: var(--color-text-muted);
+    .btn-logout {
+      background: var(--status-error);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
       font-weight: 500;
       font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      transition: all var(--transition-fast);
     }
 
-    .value {
-      color: var(--color-white);
+    .btn-logout:hover {
+      background: #DC2626;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ============================================
+       SIDEBAR NAVIGATION
+       ============================================ */
+    .sidebar {
+      grid-row: 2;
+      background: var(--surface-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: var(--spacing-xl) 0;
+      overflow-y: auto;
+      transition: all var(--transition-base);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 60px;
+        width: 280px;
+        height: calc(100vh - 60px);
+        z-index: 15;
+        background: var(--surface-secondary);
+        border-right: 1px solid var(--border-color);
+        transform: translateX(-100%);
+        transition: transform var(--transition-base);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+    }
+
+    .nav-section {
+      padding: var(--spacing-lg) 0;
+    }
+
+    .nav-section:first-child {
+      padding-top: 0;
+    }
+
+    .nav-label {
+      padding: 0 var(--spacing-xl);
+      font-size: 11px;
       font-weight: 600;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-md);
     }
 
-    .stats {
+    .nav-item {
+      padding: var(--spacing-md) var(--spacing-xl);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border-left: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .nav-item:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--accent-light);
+      color: var(--accent-primary);
+      border-left-color: var(--accent-primary);
+    }
+
+    .nav-icon {
+      font-size: 16px;
+      min-width: 20px;
+    }
+
+    .nav-stat {
+      margin-left: auto;
+      font-size: 11px;
+      background: var(--surface-tertiary);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+    .main {
+      grid-column: 2;
+      grid-row: 2;
+      overflow-y: auto;
+      padding: var(--spacing-3xl);
+      background: var(--surface-primary);
+    }
+
+    @media (max-width: 1024px) {
+      .main {
+        grid-column: 1;
+      }
+    }
+
+    /* ============================================
+       DASHBOARD HEADER
+       ============================================ */
+    .page-header {
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-md);
+      letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* ============================================
+       STATS GRID
+       ============================================ */
+    .stats-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-3xl);
     }
 
-    .stat-box {
-      background: var(--color-ink-900);
-      padding: 20px;
-      border-radius: 6px;
-      border: 1px solid var(--color-teal-700);
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+    .stat-card {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      transition: all var(--transition-base);
     }
 
-    .stat-box:hover {
-      border-color: var(--color-teal-500);
-      background: rgba(91, 186, 181, 0.05);
+    .stat-card:hover {
+      border-color: var(--border-color-hover);
+      box-shadow: var(--shadow-md);
     }
 
     .stat-label {
-      color: var(--color-text-muted);
       font-size: 12px;
-      margin-bottom: 10px;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-md);
     }
 
     .stat-value {
-      font-family: 'Outfit', sans-serif;
-      font-size: 32px;
+      font-size: 24px;
       font-weight: 700;
-      color: var(--color-teal-500);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
     }
 
-    .form-group {
-      margin-bottom: 24px;
+    .stat-progress {
+      height: 6px;
+      background: var(--surface-tertiary);
+      border-radius: 3px;
+      overflow: hidden;
     }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
+    .stat-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
+      border-radius: 3px;
+      transition: width var(--transition-base);
+    }
+
+    /* ============================================
+       FILTER & SEARCH
+       ============================================ */
+    .toolbar {
+      display: flex;
+      gap: var(--spacing-lg);
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--spacing-md) var(--spacing-lg);
+      padding-left: 36px;
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: all var(--transition-fast);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: var(--spacing-lg);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .btn {
+      padding: var(--spacing-md) var(--spacing-lg);
+      border: none;
+      border-radius: var(--radius-md);
       font-weight: 600;
       font-size: 13px;
-      color: var(--color-teal-500);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      box-shadow: var(--shadow-accent);
+    }
+
+    .btn-secondary {
+      background: var(--surface-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-color-hover);
+    }
+
+    /* ============================================
+       SECTIONS LIST & SPLIT PANE
+       ============================================ */
+    .sections-container {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--spacing-xl);
+      align-items: start;
+    }
+
+    @media (max-width: 1400px) {
+      .sections-container {
+        grid-template-columns: 1fr;
+      }
+      .detail-panel {
+        display: none !important;
+      }
+    }
+
+    .sections-list {
+      display: grid;
+      gap: var(--spacing-md);
+    }
+
+    /* ============================================
+       SECTION ITEM CARD
+       ============================================ */
+    .section-item {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--spacing-lg);
+      align-items: center;
+      transition: all var(--transition-base);
+      cursor: grab;
+      position: relative;
+    }
+
+    .section-item:hover {
+      border-color: var(--border-color-hover);
+      box-shadow: var(--shadow-md);
+      background: var(--surface-hover);
+    }
+
+    .section-item.dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+    }
+
+    .section-item.selected {
+      border-color: var(--accent-primary);
+      background: var(--accent-light);
+      box-shadow: var(--shadow-accent);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      min-width: 24px;
+      justify-content: center;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-published .status-dot {
+      background: var(--status-published);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+    }
+
+    .status-draft .status-dot {
+      background: var(--status-draft);
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+
+    .section-content {
+      display: grid;
+      gap: var(--spacing-sm);
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .section-meta {
+      display: flex;
+      gap: var(--spacing-lg);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .section-badge {
+      background: var(--accent-light);
+      color: var(--accent-primary);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+
+    .section-item:hover .section-actions {
+      opacity: 1;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--surface-tertiary);
+      color: var(--text-secondary);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .icon-btn.danger:hover {
+      background: var(--status-error);
+    }
+
+    /* ============================================
+       DETAIL PANEL (SIDE)
+       ============================================ */
+    .detail-panel {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .detail-panel.empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .detail-header {
+      margin-bottom: var(--spacing-xl);
+      padding-bottom: var(--spacing-lg);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .detail-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .detail-meta {
+      display: grid;
+      gap: var(--spacing-md);
+      font-size: 13px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .meta-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .meta-value {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .detail-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+      padding-top: var(--spacing-xl);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .detail-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ============================================
+       MODAL
+       ============================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface-primary);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 300ms ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      padding: var(--spacing-xl);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .btn-close-modal:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: var(--spacing-xl);
+    }
+
+    .modal-footer {
+      padding: var(--spacing-xl);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: var(--spacing-lg);
+      justify-content: flex-end;
+    }
+
+    /* ============================================
+       FORM ELEMENTS
+       ============================================ */
+    .form-group {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: var(--spacing-md);
+      color: var(--text-primary);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .password-wrapper {
-      position: relative;
-    }
-
-    input {
+    .form-input,
+    .form-select,
+    .form-textarea {
       width: 100%;
-      padding: 12px 16px;
-      background: var(--color-ink-900);
-      border: 1px solid var(--color-teal-700);
-      border-radius: 4px;
-      color: var(--color-white);
-      font-family: 'Poppins', sans-serif;
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: inherit;
       font-size: 14px;
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      transition: all var(--transition-fast);
     }
 
-    input:focus {
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
       outline: none;
-      border-color: var(--color-teal-500);
-      box-shadow: 0 0 0 3px rgba(91, 186, 181, 0.15);
-      background: rgba(91, 186, 181, 0.03);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-light);
+      background: var(--surface-primary);
     }
 
-    input::placeholder {
-      color: var(--color-text-muted);
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 13px;
     }
 
-    .password-toggle {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--color-teal-500);
-      cursor: pointer;
-      padding: 6px;
-      font-size: 18px;
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .password-toggle:hover {
-      color: var(--color-teal-600);
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .form-actions {
+    .form-toggle {
       display: flex;
-      gap: 12px;
-      margin-top: 32px;
+      align-items: center;
+      gap: var(--spacing-md);
     }
 
-    .btn-save {
-      flex: 1;
-      padding: 14px 24px;
-      background: var(--color-teal-500);
-      color: var(--color-ink-900);
+    .toggle-switch {
+      width: 40px;
+      height: 24px;
+      background: var(--surface-tertiary);
       border: none;
-      border-radius: 4px;
+      border-radius: 12px;
       cursor: pointer;
+      /* position: relative; */
+      transition: background var(--transition-fast);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: left var(--transition-fast);
+    }
+
+    .toggle-switch:checked {
+      background: var(--status-published);
+    }
+
+    .toggle-switch:checked::after {
+      left: 18px;
+    }
+
+    /* ============================================
+       TOAST NOTIFICATIONS
+       ============================================ */
+    .toast-container {
+      position: fixed;
+      bottom: var(--spacing-xl);
+      right: var(--spacing-xl);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .toast {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      min-width: 280px;
+      animation: slideInRight 300ms ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.success {
+      border-color: var(--status-published);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+    }
+
+    .toast.error {
+      border-color: var(--status-error);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+    }
+
+    .toast.info {
+      border-color: var(--status-info);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+    }
+
+    .toast-icon {
+      font-size: 18px;
+      min-width: 20px;
+    }
+
+    .toast-message {
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    /* ============================================
+       LOADING & EMPTY STATES
+       ============================================ */
+    .loading-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--surface-tertiary);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: var(--spacing-3xl);
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: var(--spacing-lg);
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-size: 16px;
       font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-md);
     }
 
-    .btn-save:hover {
-      background: var(--color-teal-600);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(91, 186, 181, 0.25);
+    .empty-text {
+      font-size: 13px;
+      color: var(--text-muted);
     }
 
-    .btn-cancel {
-      flex: 1;
-      padding: 14px 24px;
-      background: var(--color-teal-700);
-      color: var(--color-white);
-      border: none;
+    /* ============================================
+       SCROLLBAR STYLING
+       ============================================ */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--surface-tertiary);
       border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      transition: all var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .btn-cancel:hover {
-      background: var(--color-teal-600);
-      transform: translateY(-1px);
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-color-hover);
     }
 
-    .message {
-      padding: 14px 16px;
-      border-radius: 4px;
-      margin-bottom: 24px;
-      font-size: 14px;
-      border-left: 3px solid;
+    /* ============================================
+       ICONS
+       ============================================ */
+    .icon {
+      width: 1em;
+      height: 1em;
+      display: inline-block;
+      vertical-align: -0.125em;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
-    .message.success {
-      background: rgba(34, 197, 94, 0.1);
-      color: #86efac;
-      border-left-color: #22c55e;
+    .icon.filled {
+      fill: currentColor;
+      stroke: none;
     }
 
-    .message.error {
-      background: rgba(239, 68, 68, 0.1);
-      color: #fca5a5;
-      border-left-color: #ef4444;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .section-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--color-teal-700), transparent);
-      margin: 48px 0;
-    }
-
-    @media (max-width: 968px) {
-      .content {
+    /* ============================================
+       RESPONSIVE: TABLET (1024px and below)
+       ============================================ */
+    @media (max-width: 1024px) {
+      .app {
         grid-template-columns: 1fr;
       }
 
-      header {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
+      .main {
+        padding: var(--spacing-2xl) var(--spacing-xl);
       }
 
-      .header-left {
-        flex-direction: column;
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      .nav-buttons {
+      .sections-container {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-panel {
+        position: static;
+        max-height: none;
+        margin-top: var(--spacing-xl);
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+    }
+
+    /* ============================================
+       RESPONSIVE: MOBILE (768px and below)
+       ============================================ */
+    @media (max-width: 768px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+      }
+
+      .main {
+        padding: var(--spacing-xl);
+      }
+
+      .page-header {
+        margin-bottom: var(--spacing-xl);
+      }
+
+      .page-title {
+        font-size: 20px;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .page-subtitle {
+        font-size: 13px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+      }
+
+      .stat-card {
+        padding: var(--spacing-md);
+      }
+
+      .toolbar {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+
+      .search-box {
         width: 100%;
+        min-width: unset;
+      }
+
+      .search-input {
+        padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) 32px;
+        font-size: 14px;
+      }
+
+      .section-item {
+        grid-template-columns: auto 1fr;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+      }
+
+      .section-actions {
+        opacity: 1;
+        gap: var(--spacing-xs);
+      }
+
+      .icon-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+
+      .status-badge {
+        padding: 3px 6px;
+        font-size: 11px;
+      }
+
+      .section-title {
+        font-size: 14px;
+      }
+
+      .section-meta {
+        gap: var(--spacing-md);
+        font-size: 11px;
+      }
+
+      .modal {
+        width: 95%;
+        max-height: 90vh;
+      }
+
+      .form-label {
+        font-size: 12px;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        font-size: 14px;
+        padding: var(--spacing-md);
+      }
+
+      .btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 13px;
+        gap: var(--spacing-xs);
+      }
+
+      .header {
+        padding: var(--spacing-md) var(--spacing-lg);
+      }
+
+      .header-logo {
+        font-size: 18px;
+      }
+
+      .user-name {
+        display: none;
+      }
+
+      .user-info {
+        padding: 0 var(--spacing-md);
+        gap: var(--spacing-sm);
+      }
+
+      .btn-logout {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .nav-label {
+        font-size: 10px;
+        padding: 0 var(--spacing-lg);
+      }
+
+      .nav-item {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 13px;
+      }
+
+      .nav-stat {
+        font-size: 10px;
+        padding: 1px 6px;
+      }
+
+      .detail-panel {
+        margin-top: var(--spacing-xl);
+      }
+
+      .detail-title {
+        font-size: 14px;
+      }
+
+      .meta-row {
+        font-size: 12px;
+      }
+
+      .toast-container {
+        bottom: var(--spacing-lg);
+        right: var(--spacing-lg);
+      }
+
+      .toast {
+        min-width: 250px;
+        padding: var(--spacing-md);
+        font-size: 12px;
+      }
+
+      .toast-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .empty-icon {
+        font-size: 40px;
+      }
+
+      .empty-title {
+        font-size: 14px;
+      }
+
+      .empty-text {
+        font-size: 12px;
+      }
+    }
+
+    /* ============================================
+       RESPONSIVE: SMALL MOBILE (480px and below)
+       ============================================ */
+    @media (max-width: 480px) {
+      .main {
+        padding: var(--spacing-lg);
+      }
+
+      .page-title {
+        font-size: 18px;
+      }
+
+      .stats-grid {
+        gap: var(--spacing-sm);
+      }
+
+      .stat-card {
+        padding: var(--spacing-sm);
+      }
+
+      .stat-label {
+        font-size: 11px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+      }
+
+      .section-item {
+        padding: var(--spacing-sm);
+      }
+
+      .section-actions {
+        gap: 2px;
+      }
+
+      .icon-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+      }
+
+      .modal {
+        width: 98%;
+        margin: var(--spacing-lg);
+      }
+
+      .modal-header {
+        padding: var(--spacing-lg) var(--spacing-md);
+      }
+
+      .modal-body {
+        padding: var(--spacing-lg) var(--spacing-md);
+      }
+
+      .modal-footer {
+        padding: var(--spacing-lg) var(--spacing-md);
         flex-direction: column;
       }
 
-      .nav-buttons button {
+      .modal-footer .btn {
         width: 100%;
+      }
+
+      .btn {
+        font-size: 12px;
+        padding: var(--spacing-md) var(--spacing-lg);
+      }
+
+      .header-logo {
+        font-size: 16px;
+      }
+
+      .theme-toggle {
+        padding: 4px 8px;
+        font-size: 14px;
+      }
+
+      .search-input {
+        padding-left: 28px;
+      }
+
+      .search-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      .toast {
+        min-width: 200px;
+        padding: var(--spacing-sm);
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
+  <div class="app">
+    <!-- HEADER -->
+    <header class="header">
       <div class="header-left">
-        <img src="/qrs-wordmark.webp" alt="QRS Logo">
-        <h1>Dashboard</h1>
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()" title="Toggle Menu">
+          <svg class="icon" style="width: 24px; height: 24px;" viewBox="0 0 24 24">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="#home" class="header-logo" onclick="switchPage('home'); return false;">
+          <img src="/qrs-wordmark.webp" alt="QRS Logo" title="QRS Admin">
+          <span>Admin</span>
+        </a>
       </div>
-      <div class="nav-buttons">
-        <button class="btn-primary" onclick="window.location.href='/admin'">📝 Admin Panel</button>
-        <button class="btn-danger" onclick="logout()">🚪 Logout</button>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+          <svg class="icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <div class="user-info">
+          <span class="user-name" id="userName">User</span>
+          <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
       </div>
     </header>
 
-    <div id="message" class="message hidden"></div>
+    <!-- SIDEBAR OVERLAY (MOBILE) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-    <div class="content">
-      <!-- Account Information Card -->
-      <div class="card">
-        <h2>Account Information</h2>
-
-        <div class="user-info">
-          <div class="user-info-item">
-            <span class="label">Email</span>
-            <span class="value" id="userEmail">Loading...</span>
-          </div>
-          <div class="user-info-item">
-            <span class="label">Full Name</span>
-            <span class="value" id="userFullname">Not set</span>
-          </div>
-          <div class="user-info-item">
-            <span class="label">Role</span>
-            <span class="value" id="userRole">Loading...</span>
-          </div>
-          <div class="user-info-item">
-            <span class="label">Member Since</span>
-            <span class="value" id="userCreated">Loading...</span>
-          </div>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar" id="sidebar">
+      <div class="nav-section">
+        <div class="nav-label">Pages</div>
+        <div class="nav-item active" onclick="switchPage('home')" data-page="home">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Home</span>
+          <span class="nav-stat" id="stat-home">8</span>
         </div>
+        <div class="nav-item" onclick="switchPage('about')" data-page="about">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>About</span>
+          <span class="nav-stat" id="stat-about">4</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('platform')" data-page="platform">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+          <span>Platform</span>
+          <span class="nav-stat" id="stat-platform">2</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('trust')" data-page="trust">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Trust</span>
+          <span class="nav-stat" id="stat-trust">2</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('validation')" data-page="validation">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Validation</span>
+          <span class="nav-stat" id="stat-validation">3</span>
+        </div>
+      </div>
 
-        <div class="stats">
-          <div class="stat-box">
-            <div class="stat-label">📄 Pages Created</div>
-            <div class="stat-value" id="pagesCount">0</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-label">👥 Total Users</div>
-            <div class="stat-value" id="usersCount">—</div>
+      <div class="nav-section">
+        <div class="nav-label">Management</div>
+        <div class="nav-item" onclick="switchToUsers()">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Users</span>
+          <span class="nav-stat" id="stat-users">0</span>
+        </div>
+        <div class="nav-item" onclick="showProfile()">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>My Profile</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Resources</div>
+        <div class="nav-item" onclick="showHelp()">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+          <span>Help & Shortcuts</span>
+        </div>
+        <div class="nav-item" onclick="window.open('http://localhost:3000', '_blank')">
+          <svg class="nav-icon icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <span>Preview Site</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <div class="page-header">
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+        <p class="page-subtitle" id="pageSubtitle">Manage and edit your website sections</p>
+      </div>
+
+      <!-- STATS GRID -->
+      <div class="stats-grid" id="statsGrid" class="sections-only"></div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar" id="toolbar" class="sections-only">
+        <div class="search-box">
+          <svg class="search-icon icon" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search sections... (Cmd+K)">
+        </div>
+        <button class="btn btn-primary" onclick="refreshSections()">
+          <svg class="icon" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2-8.83"></path></svg>
+          Refresh
+        </button>
+      </div>
+
+      <!-- SECTIONS LAYOUT -->
+      <div class="sections-container" id="sectionsView">
+        <div class="sections-list" id="sectionsList"></div>
+        <div class="detail-panel empty" id="detailPanel">
+          <div>
+            <div class="empty-icon">
+              <svg class="icon" viewBox="0 0 24 24" style="width: 48px; height: 48px; opacity: 0.5;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </div>
+            <div class="empty-title">Select a Section</div>
+            <div class="empty-text">Click on a section to view details and edit</div>
           </div>
         </div>
       </div>
 
-      <!-- Edit Profile Card -->
-      <div class="card">
-        <h2>Edit Profile</h2>
-
-        <div class="form-group">
-          <label for="fullname">Full Name</label>
-          <input type="text" id="fullname" placeholder="Your full name">
+      <!-- USERS VIEW -->
+      <div id="usersView" style="display: none;">
+        <div style="margin-bottom: var(--spacing-xl); display: flex; gap: var(--spacing-lg);">
+          <button class="btn btn-primary" id="addUserBtn" onclick="openNewUserModal()">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add User
+          </button>
         </div>
+        <div class="sections-list" id="usersList"></div>
+      </div>
 
-        <div class="form-group">
-          <label for="newPassword">New Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="newPassword" placeholder="Leave blank to keep current" minlength="6">
-            <button type="button" class="password-toggle" onclick="togglePassword('newPassword')">👁️</button>
+      <!-- PROFILE VIEW -->
+      <div id="profileView" style="display: none;">
+        <div style="max-width: 600px; margin: 0 auto;">
+          <div class="sections-list">
+            <div class="section-item" style="grid-template-columns: 1fr;">
+              <div class="section-content">
+                <h3 class="section-title" id="profileEmail">Loading...</h3>
+                <div class="section-meta">
+                  <span class="section-badge" id="profileRole">Admin</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: var(--spacing-xl);">
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">Account Settings</h3>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="profileEmailInput" disabled>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="profileNameInput" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Role</label>
+              <select class="form-select" disabled>
+                <option id="profileRoleDisplay">Admin</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Change Password</label>
+              <div style="position: relative; display: flex; align-items: center;">
+                <input type="password" class="form-input" id="profilePasswordInput" placeholder="Leave blank to keep current password" style="width: 100%; padding-right: 45px;">
+                <button type="button" onclick="togglePasswordVisibility('profilePasswordInput')" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 20px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'" title="Show/hide password" id="profilePasswordInputToggle">
+                  👁️
+                </button>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="saveProfile()">
+              <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Save Profile
+            </button>
           </div>
         </div>
+      </div>
+    </main>
+  </div>
 
-        <div class="form-group">
-          <label for="confirmPassword">Confirm Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="confirmPassword" placeholder="••••••••" minlength="6">
-            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</button>
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="editModalTitle">Edit Section</h2>
+        <button class="btn-close-modal" onclick="closeModal()">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="editForm" onsubmit="saveSection(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Section Title</label>
+            <input type="text" class="form-input" id="editTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Heading</label>
+            <input type="text" class="form-input" id="editHeading">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="editDescription"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Section Type</label>
+            <select class="form-select" id="editType">
+              <option value="hero">Hero</option>
+              <option value="feature-grid">Feature Grid</option>
+              <option value="text-image">Text Image</option>
+              <option value="stats">Stats</option>
+              <option value="cta">Call to Action</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Background Style</label>
+            <select class="form-select" id="editBg">
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="white">White</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Order</label>
+            <input type="number" class="form-input" id="editOrder" min="0">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-toggle">
+              <input type="checkbox" id="editPublished" class="toggle-switch">
+              <span>Published</span>
+            </label>
+          </div>
+
+          <!-- Media Upload Section -->
+          <div style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg);">
+            <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--spacing-lg); color: var(--text-primary);">Media Assets</h4>
+
+            <!-- Image Upload -->
+            <div class="form-group">
+              <label class="form-label">Hero Image</label>
+              <div style="display: flex; gap: var(--spacing-md);">
+                <input type="text" class="form-input" id="editImageUrl" placeholder="Image URL" style="flex: 1;">
+                <button type="button" class="btn btn-primary" onclick="triggerImageUpload()" style="flex: 0 0 auto; width: 120px;">
+                  <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  Upload
+                </button>
+              </div>
+              <div id="imagePreview" style="margin-top: var(--spacing-md); max-height: 150px; border-radius: var(--radius-md); overflow: hidden; display: none;">
+                <img id="previewImage" style="width: 100%; height: auto; object-fit: cover;">
+              </div>
+              <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="uploadImage(event)">
+            </div>
+
+            <!-- Video Upload -->
+            <div class="form-group">
+              <label class="form-label">Background Video</label>
+              <div style="display: flex; gap: var(--spacing-md);">
+                <input type="text" class="form-input" id="editVideoUrl" placeholder="Video URL" style="flex: 1;">
+                <button type="button" class="btn btn-primary" onclick="triggerVideoUpload()" style="flex: 0 0 auto; width: 120px;">
+                  <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  Upload
+                </button>
+              </div>
+              <div id="videoPreview" style="margin-top: var(--spacing-md); max-height: 150px; border-radius: var(--radius-md); overflow: hidden; display: none;">
+                <video id="previewVideo" style="width: 100%; height: auto;" controls playsinline>
+                  Your browser doesn't support video playback
+                </video>
+              </div>
+              <input type="file" id="videoInput" style="display: none;" accept="video/*" onchange="uploadVideo(event)">
+            </div>
+
+            <!-- Poster Image (for video) -->
+            <div class="form-group">
+              <label class="form-label">Video Poster/Thumbnail</label>
+              <div style="display: flex; gap: var(--spacing-md);">
+                <input type="text" class="form-input" id="editPosterUrl" placeholder="Poster image URL" style="flex: 1;">
+                <button type="button" class="btn btn-primary" onclick="triggerPosterUpload()" style="flex: 0 0 auto; width: 120px;">
+                  <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  Upload
+                </button>
+              </div>
+              <div id="posterPreview" style="margin-top: var(--spacing-md); max-height: 150px; border-radius: var(--radius-md); overflow: hidden; display: none;">
+                <img id="previewPoster" style="width: 100%; height: auto; object-fit: cover;">
+              </div>
+              <input type="file" id="posterInput" style="display: none;" accept="image/*" onchange="uploadPoster(event)">
+            </div>
           </div>
         </div>
-
-        <div class="form-actions">
-          <button class="btn-save" onclick="updateProfile()">Save Changes</button>
-          <button class="btn-cancel" onclick="loadUserData()">Cancel</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Save Changes
+          </button>
         </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- USER MODAL -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="userModalTitle">Add User</h2>
+        <button class="btn-close-modal" onclick="closeUserModal()">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="userForm" onsubmit="saveUser(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="userEmail" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="userName">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" class="form-input" id="userPassword" placeholder="Min. 8 characters" style="width: 100%; padding-right: 45px;">
+              <button type="button" onclick="togglePasswordVisibility('userPassword')" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 20px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'" title="Show/hide password" id="userPasswordToggle">
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <select class="form-select" id="userRole" required>
+              <option value="viewer">Viewer (View only)</option>
+              <option value="editor">Editor (Create & Edit)</option>
+              <option value="admin">Admin (Full Access)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-toggle">
+              <input type="checkbox" id="userActive" class="toggle-switch" checked>
+              <span>Active</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" id="resetPasswordBtn" style="display: none;" onclick="handleResetPassword()">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M15 1H9v2h6V1m-4 5a4 4 0 00-4 4H0v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10h-3a4 4 0 00-4-4m0 2a2 2 0 012 2h-4a2 2 0 012-2z"></path></svg>
+            Reset Password
+          </button>
+          <div style="flex: 1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeUserModal()">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Save User
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div class="modal-overlay" id="helpModal">
+    <div class="modal" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 class="modal-title">QRS Admin — Keyboard Shortcuts</h2>
+        <button class="btn-close-modal" onclick="closeHelpModal()">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: var(--spacing-2xl);">
+        <div style="line-height: 1.8; font-size: 14px;">
+          <div style="margin-bottom: var(--spacing-lg);">
+            <div style="font-weight: 600; color: var(--accent-primary); margin-bottom: var(--spacing-sm);">Navigation & Search</div>
+            <div>Cmd+K / Ctrl+K — Focus search sections</div>
+            <div>Click navigation items — Switch pages</div>
+          </div>
+
+          <div style="margin-bottom: var(--spacing-lg);">
+            <div style="font-weight: 600; color: var(--accent-primary); margin-bottom: var(--spacing-sm);">Section Management</div>
+            <div>Click section — View details</div>
+            <div>Drag section — Reorder sections</div>
+            <div>Delete — Delete selected section (when focused)</div>
+            <div>Edit button — Modify section properties</div>
+            <div>Duplicate button — Create section copy</div>
+          </div>
+
+          <div style="margin-bottom: var(--spacing-lg);">
+            <div style="font-weight: 600; color: var(--accent-primary); margin-bottom: var(--spacing-sm);">Modals & Dialogs</div>
+            <div>Escape — Close any open modal</div>
+            <div>Click overlay — Close modal (outside content)</div>
+          </div>
+
+          <div style="margin-bottom: var(--spacing-lg);">
+            <div style="font-weight: 600; color: var(--accent-primary); margin-bottom: var(--spacing-sm);">User Roles</div>
+            <div><span style="color: #EF4444; font-weight: 600;">● Admin</span> — Full access to all features</div>
+            <div><span style="color: #3B82F6; font-weight: 600;">● Editor</span> — Can create and edit sections</div>
+            <div><span style="color: #6B7280; font-weight: 600;">● Viewer</span> — Read-only access</div>
+          </div>
+
+          <div>
+            <div style="font-weight: 600; color: var(--accent-primary); margin-bottom: var(--spacing-sm);">Other Features</div>
+            <div>Theme toggle — Switch light/dark mode</div>
+            <div>Refresh button — Reload sections data</div>
+            <div>Preview Site — Open main website</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closeHelpModal()">
+          <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Got It
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- ALERT MODAL -->
+  <div class="modal-overlay" id="alertModal">
+    <div class="modal" style="max-width: 450px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="alertTitle">Alert</h2>
+        <button class="btn-close-modal" onclick="closeAlertModal()">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="alertMessage" style="margin: 0; line-height: 1.6;"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="alertOkBtn" onclick="closeAlertModal()">
+          <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          OK
+        </button>
+        <button class="btn btn-secondary" id="alertCancelBtn" style="display: none;" onclick="closeAlertModal('cancel')">
+          <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
   <script>
-    function togglePassword(fieldId) {
-      const field = document.getElementById(fieldId);
-      field.type = field.type === 'password' ? 'text' : 'password';
+    /* ============================================
+       CONFIGURATION & STATE
+       ============================================ */
+    const API_URL = 'http://localhost:3001'
+    let currentPage = 'home'
+    let sections = []
+    let selectedSectionIndex = null
+    let editingSectionIndex = null
+
+    const PAGES = {
+      home: { icon: '🏠', label: 'Home' },
+      about: { icon: 'ℹ️', label: 'About' },
+      platform: { icon: '⚙️', label: 'Platform' },
+      trust: { icon: '🔐', label: 'Trust' },
+      validation: { icon: '✓', label: 'Validation' }
     }
 
-    const API = 'http://localhost:3001';
-    const messageEl = document.getElementById('message');
-
-    function showMessage(text, type = 'success') {
-      messageEl.textContent = text;
-      messageEl.className = `message ${type}`;
-      messageEl.classList.remove('hidden');
-      setTimeout(() => messageEl.classList.add('hidden'), 3000);
+    const ROLE_COLORS = {
+      'super-admin': '#DC2626',
+      'admin': '#EF4444',
+      'editor': '#3B82F6',
+      'reviewer': '#8B5CF6',
+      'read-only': '#6B7280',
+      'viewer': '#6B7280'
     }
 
-    async function loadUserData() {
+    const ROLE_LABELS = {
+      'super-admin': 'Super Admin',
+      'admin': 'Admin',
+      'editor': 'Editor',
+      'reviewer': 'Reviewer',
+      'read-only': 'Read-Only',
+      'viewer': 'Viewer'
+    }
+
+    let currentUser = null
+    let users = [
+      { id: 1, email: 'clients.1356@gmail.com', fullname: 'Admin User', role: 'admin', active: true }
+    ]
+    let editingUserId = null
+
+    /* ============================================
+       INITIALIZATION
+       ============================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme()
+      checkAuth()
+      setupEventListeners()
+      setupKeyboardShortcuts()
+
+      // Restore previous view or default to home
+      const savedView = localStorage.getItem('currentAdminView')
+      const savedPage = localStorage.getItem('currentAdminPage')
+
+      if (savedView === 'users') {
+        switchToUsers()
+      } else if (savedView === 'profile') {
+        showProfile()
+      } else {
+        loadSections(savedPage || 'home')
+      }
+    })
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const theme = savedTheme || (prefersDark ? 'dark' : 'light')
+      document.documentElement.setAttribute('data-theme', theme)
+      updateThemeIcon()
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme')
+      const next = current === 'dark' ? 'light' : 'dark'
+      document.documentElement.setAttribute('data-theme', next)
+      localStorage.setItem('theme', next)
+      updateThemeIcon()
+    }
+
+    function updateThemeIcon() {
+      const theme = document.documentElement.getAttribute('data-theme')
+      document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️' : '🌙'
+    }
+
+    function setupEventListeners() {
+      document.getElementById('searchInput').addEventListener('input', filterSections)
+      document.getElementById('editForm').addEventListener('submit', saveSection)
+    }
+
+    function setupKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault()
+          document.getElementById('searchInput').focus()
+        }
+        if (e.key === 'Escape') {
+          closeModal()
+        }
+        if (e.key === 'Delete' && selectedSectionIndex !== null) {
+          showConfirmModal('Delete this section?', '⚠️ Delete Section', (confirmed) => {
+            if (confirmed) {
+              deleteSection(selectedSectionIndex)
+            }
+          })
+        }
+      })
+    }
+
+    /* ============================================
+       AUTHENTICATION
+       ============================================ */
+    async function checkAuth() {
       try {
-        const res = await fetch(API + '/auth/me', {
-          credentials: 'include'
-        });
-
+        const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' })
         if (!res.ok) {
-          window.location.href = '/login';
-          return;
+          window.location.href = '/login'
+          return
+        }
+        const user = await res.json()
+        currentUser = user
+
+        // Check if user has access to dashboard
+        const allowedRoles = ['admin', 'super-admin', 'editor']
+        if (!allowedRoles.includes(user.role)) {
+          showAccessDenied(user)
+          return
         }
 
-        const user = await res.json();
+        document.getElementById('userName').textContent = user.email
+        document.getElementById('userRole').textContent = ROLE_LABELS[user.role] || user.role
+        console.log('[AUTH] User authenticated:', user.email, 'Role:', user.role)
 
-        document.getElementById('userEmail').textContent = user.email;
-        document.getElementById('userFullname').textContent = user.fullname || 'Not set';
-        document.getElementById('userRole').textContent = (user.role || 'editor').toUpperCase();
-        document.getElementById('userCreated').textContent = new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
-
-        document.getElementById('fullname').value = user.fullname || '';
-
-        loadPageCount();
+        // Hide admin-only features for editors
+        if (user.role === 'editor') {
+          restrictEditorAccess()
+        }
       } catch (error) {
-        showMessage('Error loading user data: ' + error.message, 'error');
+        console.error('[AUTH ERROR]', error)
+        window.location.href = '/login'
       }
     }
 
-    async function loadPageCount() {
-      try {
-        const res = await fetch(API + '/api/pages');
-        const data = await res.json();
-        document.getElementById('pagesCount').textContent = (data.pages || []).length;
-      } catch (error) {
-        console.error('Error loading page count:', error);
+    function restrictEditorAccess() {
+      // Hide Users management for editors
+      const usersNav = document.querySelector('[onclick="switchToUsers()"]')
+      if (usersNav) {
+        usersNav.style.pointerEvents = 'none'
+        usersNav.style.opacity = '0.5'
+        usersNav.title = 'Admin only'
       }
+
+      // Hide Add User button for editors
+      const addUserBtn = document.getElementById('addUserBtn')
+      if (addUserBtn) {
+        addUserBtn.style.display = 'none'
+      }
+
+      // Add restriction banner
+      const toolbar = document.getElementById('toolbar')
+      if (toolbar) {
+        const banner = document.createElement('div')
+        banner.style.cssText = `
+          background: rgba(100, 150, 200, 0.1);
+          border-left: 4px solid #3B82F6;
+          padding: 12px 16px;
+          margin-bottom: 16px;
+          border-radius: 4px;
+          color: #93c5fd;
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        `
+        banner.innerHTML = `<span>👁️</span> <strong>Editor Mode:</strong> You can view and edit sections, but cannot delete them or manage users.`
+        toolbar.parentElement.insertBefore(banner, toolbar)
+      }
+
+      console.log('[EDITOR MODE] Restricted access enabled')
     }
 
-    async function updateProfile() {
-      const fullname = document.getElementById('fullname').value;
-      const password = document.getElementById('newPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
+    function showAccessDenied(user) {
+      document.body.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          <div style="text-align: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 60px 40px; max-width: 500px; backdrop-filter: blur(10px);">
+            <div style="font-size: 64px; margin-bottom: 24px;">🔒</div>
+            <h1 style="color: #fff; font-size: 28px; margin: 0 0 12px 0;">Access Denied</h1>
+            <p style="color: #aaa; font-size: 16px; margin: 0 0 24px 0;">You do not have permission to access the admin dashboard.</p>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left;">
+              <div style="color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Your Account</div>
+              <div style="color: #fff; font-size: 14px; margin-bottom: 8px;"><strong>Email:</strong> ${user.email}</div>
+              <div style="color: #fff; font-size: 14px;"><strong>Role:</strong> ${ROLE_LABELS[user.role] || user.role}</div>
+            </div>
+            <p style="color: #888; font-size: 13px; margin: 0 0 24px 0;">Only users with Admin or Super Admin roles can access this area. Please contact your administrator if you believe this is incorrect.</p>
+            <a href="/login" style="display: inline-block; background: #3B82F6; color: white; padding: 12px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.2s;">Back to Login</a>
+          </div>
+        </div>
+      `
+    }
 
-      if (password && password !== confirmPassword) {
-        showMessage('Passwords do not match', 'error');
-        return;
+    function hasAdminPermission() {
+      if (!currentUser) {
+        showAlertModal('🔒 Your session has expired. Please login again.', 'Session Expired')
+        return false
       }
-
-      try {
-        const body = { fullname };
-        if (password) {
-          body.password = password;
-        }
-
-        const res = await fetch(API + '/auth/profile', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(body)
-        });
-
-        if (res.ok) {
-          showMessage('Profile updated successfully!', 'success');
-          document.getElementById('newPassword').value = '';
-          document.getElementById('confirmPassword').value = '';
-          loadUserData();
-        } else {
-          const data = await res.json();
-          showMessage(data.error || 'Update failed', 'error');
-        }
-      } catch (error) {
-        showMessage('Error: ' + error.message, 'error');
+      if (!['admin', 'super-admin'].includes(currentUser.role)) {
+        showAlertModal(
+          `<strong>Admin Only</strong><br><br>This action requires admin privileges.<br><br>Your role: <code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 3px;">${ROLE_LABELS[currentUser.role] || currentUser.role}</code>`,
+          '🔒 Access Denied'
+        )
+        return false
       }
+      return true
+    }
+
+    function canDeleteSection() {
+      return hasAdminPermission()
+    }
+
+    function canManageUsers() {
+      return hasAdminPermission()
+    }
+
+    function canResetPassword() {
+      return hasAdminPermission()
+    }
+
+    function canCreateUser() {
+      return hasAdminPermission()
+    }
+
+    function canSaveSection() {
+      if (!currentUser) {
+        showAlertModal('🔒 Your session has expired. Please login again.', 'Session Expired')
+        return false
+      }
+      // Editors can create/edit sections, but not delete
+      if (['admin', 'super-admin', 'editor'].includes(currentUser.role)) {
+        return true
+      }
+      showAlertModal(
+        `<strong>Not Authorized</strong><br><br>You do not have permission to edit sections.`,
+        '🔒 Access Denied'
+      )
+      return false
     }
 
     async function logout() {
       try {
-        await fetch(API + '/auth/logout', {
+        await fetch(`${API_URL}/api/auth/logout`, {
           method: 'POST',
           credentials: 'include'
-        });
-        window.location.href = '/login';
+        })
+        window.location.href = '/login'
       } catch (error) {
-        showMessage('Error logging out: ' + error.message, 'error');
+        showToast('Logout error', 'error')
       }
     }
 
-    loadUserData();
+    /* ============================================
+       DATA OPERATIONS
+       ============================================ */
+    async function loadSections(page) {
+      try {
+        currentPage = page
+        // Show sections view, hide others
+        document.getElementById('sectionsView').style.display = 'block'
+        document.getElementById('usersView').style.display = 'none'
+        document.getElementById('profileView').style.display = 'none'
+        document.getElementById('statsGrid').style.display = 'grid'
+        document.getElementById('toolbar').style.display = 'flex'
+        document.getElementById('pageSubtitle').textContent = 'Manage and edit your website sections'
+
+        const res = await fetch(`${API_URL}/api/page-sections?page=${page}`)
+        if (!res.ok) throw new Error('Failed to load sections')
+        const data = await res.json()
+        sections = data.docs || []
+        selectedSectionIndex = null
+        renderUI()
+        updateStats()
+      } catch (error) {
+        showToast('Error loading sections', 'error')
+      }
+    }
+
+    function renderUI() {
+      renderSectionsList()
+      updatePageTitle()
+      updateNavigation()
+    }
+
+    function renderSectionsList() {
+      const container = document.getElementById('sectionsList')
+
+      if (sections.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg class="icon" viewBox="0 0 24 24" style="width: 48px; height: 48px; opacity: 0.5;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </div>
+            <div class="empty-title">No Sections Found</div>
+            <div class="empty-text">Create your first section to get started</div>
+          </div>
+        `
+        return
+      }
+
+      container.innerHTML = sections.map((section, index) => `
+        <div class="section-item ${selectedSectionIndex === index ? 'selected' : ''}"
+             onclick="selectSection(${index})"
+             draggable="true"
+             ondragstart="startDrag(event, ${index})"
+             ondrop="handleDrop(event, ${index})"
+             ondragover="event.preventDefault()">
+          <div class="status-badge ${section.published ? 'status-published' : 'status-draft'}">
+            <span class="status-dot"></span>
+            <span>${section.published ? 'Published' : 'Draft'}</span>
+          </div>
+          <div class="section-content">
+            <h3 class="section-title">${section.title}</h3>
+            <div class="section-meta">
+              <span class="section-badge">${section.sectionType}</span>
+              <span>Order: ${section.order}</span>
+            </div>
+          </div>
+          <div class="section-actions">
+            <button class="icon-btn" onclick="editSection(${index})" title="Edit">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="icon-btn" onclick="duplicateSection(${index})" title="Duplicate">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 16.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"></path><path d="M16 12H8"></path><path d="M16 8H8"></path><path d="M16 4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"></path></svg>
+            </button>
+            ${currentUser && ['admin', 'super-admin'].includes(currentUser.role) ? `
+            <button class="icon-btn danger" onclick="deleteSection(${index})" title="Delete">
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('')
+    }
+
+    function updatePageTitle() {
+      document.getElementById('pageTitle').textContent = `${PAGES[currentPage].label} Page`
+    }
+
+    function updateNavigation() {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active')
+      })
+      document.querySelector(`[data-page="${currentPage}"]`).classList.add('active')
+    }
+
+    function updateStats() {
+      const published = sections.filter(s => s.published).length
+      const total = sections.length
+
+      const html = `
+        <div class="stat-card">
+          <div class="stat-label">Total Sections</div>
+          <div class="stat-value">${total}</div>
+          <div class="stat-progress">
+            <div class="stat-progress-bar" style="width: 100%"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Published</div>
+          <div class="stat-value">${published}</div>
+          <div class="stat-progress">
+            <div class="stat-progress-bar" style="width: ${total > 0 ? (published/total)*100 : 0}%"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Drafts</div>
+          <div class="stat-value">${total - published}</div>
+          <div class="stat-progress">
+            <div class="stat-progress-bar" style="width: ${total > 0 ? ((total-published)/total)*100 : 0}%"></div>
+          </div>
+        </div>
+      `
+
+      document.getElementById('statsGrid').innerHTML = html
+
+      const stat = document.getElementById(`stat-${currentPage}`)
+      if (stat) stat.textContent = total
+    }
+
+    /* ============================================
+       SECTION OPERATIONS
+       ============================================ */
+    function selectSection(index) {
+      selectedSectionIndex = index
+      const section = sections[index]
+
+      const detailPanel = document.getElementById('detailPanel')
+      detailPanel.classList.remove('empty')
+      detailPanel.innerHTML = `
+        <div class="detail-header">
+          <div class="detail-title">${section.title}</div>
+          <div class="detail-meta">
+            <div class="meta-row">
+              <span class="meta-label">Type</span>
+              <span class="meta-value">${section.sectionType}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Order</span>
+              <span class="meta-value">${section.order}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Status</span>
+              <span class="meta-value">${section.published ? '✓ Published' : '○ Draft'}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Background</span>
+              <span class="meta-value">${section.backgroundStyle}</span>
+            </div>
+          </div>
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-primary" onclick="editSection(${index})">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Edit
+          </button>
+          <button class="btn btn-secondary" onclick="duplicateSection(${index})">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M4 16.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"></path><path d="M16 12H8"></path><path d="M16 8H8"></path><path d="M16 4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"></path></svg>
+            Duplicate
+          </button>
+          <button class="btn btn-secondary" onclick="deleteSection(${index})" style="color: var(--status-error);">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            Delete
+          </button>
+        </div>
+      `
+
+      renderSectionsList()
+    }
+
+    function editSection(index) {
+      editingSectionIndex = index
+      const section = sections[index]
+
+      document.getElementById('editModalTitle').textContent = `Edit: ${section.title}`
+      document.getElementById('editTitle').value = section.title
+      document.getElementById('editHeading').value = section.heading || ''
+      document.getElementById('editDescription').value = section.description || ''
+      document.getElementById('editType').value = section.sectionType
+      document.getElementById('editBg').value = section.backgroundStyle
+      document.getElementById('editOrder').value = section.order
+      document.getElementById('editPublished').checked = section.published
+
+      // Load media URLs
+      document.getElementById('editImageUrl').value = section.imageUrl || ''
+      document.getElementById('editVideoUrl').value = section.videoUrl || ''
+      document.getElementById('editPosterUrl').value = section.posterImage || ''
+
+      // Show media previews
+      if (section.imageUrl) {
+        document.getElementById('previewImage').src = section.imageUrl
+        document.getElementById('imagePreview').style.display = 'block'
+      } else {
+        document.getElementById('imagePreview').style.display = 'none'
+      }
+
+      if (section.videoUrl) {
+        document.getElementById('previewVideo').src = section.videoUrl
+        document.getElementById('videoPreview').style.display = 'block'
+      } else {
+        document.getElementById('videoPreview').style.display = 'none'
+      }
+
+      if (section.posterImage) {
+        document.getElementById('previewPoster').src = section.posterImage
+        document.getElementById('posterPreview').style.display = 'block'
+      } else {
+        document.getElementById('posterPreview').style.display = 'none'
+      }
+
+      document.getElementById('editModal').classList.add('active')
+    }
+
+    async function saveSection(event) {
+      event.preventDefault()
+
+      if (!canSaveSection()) return
+
+      const updated = {
+        ...sections[editingSectionIndex],
+        title: document.getElementById('editTitle').value,
+        heading: document.getElementById('editHeading').value,
+        description: document.getElementById('editDescription').value,
+        sectionType: document.getElementById('editType').value,
+        backgroundStyle: document.getElementById('editBg').value,
+        order: parseInt(document.getElementById('editOrder').value),
+        published: document.getElementById('editPublished').checked,
+        imageUrl: document.getElementById('editImageUrl').value || null,
+        videoUrl: document.getElementById('editVideoUrl').value || null,
+        posterImage: document.getElementById('editPosterUrl').value || null,
+        page: currentPage
+      }
+
+      // Update locally first for immediate UI feedback
+      sections[editingSectionIndex] = updated
+
+      // Save to backend
+      try {
+        const res = await fetch(`${API_URL}/api/page-sections/${updated.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(updated)
+        })
+
+        if (!res.ok) throw new Error('Failed to save section')
+
+        showToast('✓ Section saved successfully', 'success')
+      } catch (error) {
+        showToast('✗ Error saving section: ' + error.message, 'error')
+        // Revert local change on error
+        await loadSections(currentPage)
+      }
+
+      closeModal()
+      renderUI()
+      updateStats()
+    }
+
+    function duplicateSection(index) {
+      const section = { ...sections[index] }
+      section.title = `${section.title} (Copy)`
+      section.order = Math.max(...sections.map(s => s.order)) + 1
+      sections.push(section)
+      renderUI()
+      updateStats()
+      showToast('✓ Section duplicated', 'success')
+    }
+
+    function deleteSection(index) {
+      if (!hasAdminPermission()) return
+
+      showConfirmModal('Are you sure you want to delete this section?<br><br><strong>This action cannot be undone.</strong>', '⚠️ Delete Section', (confirmed) => {
+        if (confirmed) {
+          sections.splice(index, 1)
+          selectedSectionIndex = null
+          renderSectionsList()
+          showToast('✓ Section deleted', 'success')
+        }
+      })
+    }
+
+
+    /* ============================================
+       DRAG & DROP
+       ============================================ */
+    let draggedIndex = null
+
+    function startDrag(event, index) {
+      draggedIndex = index
+      event.target.closest('.section-item').classList.add('dragging')
+    }
+
+    function handleDrop(event, targetIndex) {
+      event.preventDefault()
+      if (draggedIndex === null || draggedIndex === targetIndex) return
+
+      const [moved] = sections.splice(draggedIndex, 1)
+      sections.splice(targetIndex, 0, moved)
+
+      draggedIndex = null
+      document.querySelectorAll('.section-item').forEach(el => el.classList.remove('dragging'))
+      renderUI()
+      showToast('✓ Section reordered', 'success')
+    }
+
+    /* ============================================
+       SEARCH & FILTER
+       ============================================ */
+    function filterSections() {
+      const query = document.getElementById('searchInput').value.toLowerCase()
+      const container = document.getElementById('sectionsList')
+
+      if (!query) {
+        renderSectionsList()
+        return
+      }
+
+      const filtered = sections.filter(s =>
+        s.title.toLowerCase().includes(query) ||
+        s.sectionType.toLowerCase().includes(query) ||
+        (s.description && s.description.toLowerCase().includes(query))
+      )
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg class="icon" viewBox="0 0 24 24" style="width: 48px; height: 48px; opacity: 0.5;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <div class="empty-title">No Results</div>
+            <div class="empty-text">Try a different search term</div>
+          </div>
+        `
+        return
+      }
+
+      container.innerHTML = filtered.map((section, displayIndex) => {
+        const actualIndex = sections.indexOf(section)
+        return `
+          <div class="section-item" onclick="selectSection(${actualIndex})">
+            <div class="status-badge ${section.published ? 'status-published' : 'status-draft'}">
+              <span class="status-dot"></span>
+            </div>
+            <div class="section-content">
+              <h3 class="section-title">${section.title}</h3>
+              <div class="section-meta">
+                <span class="section-badge">${section.sectionType}</span>
+              </div>
+            </div>
+            <div class="section-actions">
+              <button class="icon-btn" onclick="editSection(${actualIndex})">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+            </div>
+          </div>
+        `
+      }).join('')
+    }
+
+    /* ============================================
+       MODAL MANAGEMENT
+       ============================================ */
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('active')
+      editingSectionIndex = null
+    }
+
+    document.getElementById('editModal').addEventListener('click', (e) => {
+      if (e.target.id === 'editModal') closeModal()
+    })
+
+    document.getElementById('helpModal').addEventListener('click', (e) => {
+      if (e.target.id === 'helpModal') closeHelpModal()
+    })
+
+    /* ============================================
+       TOAST NOTIFICATIONS
+       ============================================ */
+    function showToast(message, type = 'success', duration = 3000) {
+      const container = document.getElementById('toastContainer')
+      const toast = document.createElement('div')
+      toast.className = `toast ${type}`
+
+      const iconSvgs = {
+        success: '<svg class="icon toast-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+        error: '<svg class="icon toast-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        info: '<svg class="icon toast-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+      }
+
+      toast.innerHTML = `
+        ${iconSvgs[type]}
+        <span class="toast-message">${message}</span>
+      `
+
+      container.appendChild(toast)
+      setTimeout(() => {
+        toast.style.animation = 'slideInRight 300ms ease-out reverse'
+        setTimeout(() => toast.remove(), 300)
+      }, duration)
+    }
+
+    /* ============================================
+       UTILITIES
+       ============================================ */
+    function refreshSections() {
+      loadSections(currentPage)
+      showToast('✓ Sections refreshed', 'success')
+    }
+
+    /* ============================================
+       MEDIA UPLOAD FUNCTIONS
+       ============================================ */
+    function triggerImageUpload() {
+      document.getElementById('imageInput').click()
+    }
+
+    function triggerVideoUpload() {
+      document.getElementById('videoInput').click()
+    }
+
+    function triggerPosterUpload() {
+      document.getElementById('posterInput').click()
+    }
+
+    async function uploadImage(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      await uploadMedia(file, 'editImageUrl', 'previewImage', 'imagePreview')
+    }
+
+    async function uploadVideo(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      await uploadMedia(file, 'editVideoUrl', 'previewVideo', 'videoPreview')
+    }
+
+    async function uploadPoster(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      await uploadMedia(file, 'editPosterUrl', 'previewPoster', 'posterPreview')
+    }
+
+    async function uploadMedia(file, inputId, previewId, previewContainerId) {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      try {
+        showToast('📤 Uploading file...', 'info')
+
+        const res = await fetch(`${API_URL}/api/upload`, {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+        })
+
+        if (!res.ok) throw new Error('Upload failed')
+
+        const data = await res.json()
+        document.getElementById(inputId).value = data.url
+
+        // Show preview
+        const preview = document.getElementById(previewId)
+        const container = document.getElementById(previewContainerId)
+
+        if (data.type === 'image') {
+          preview.src = data.url
+        } else if (data.type === 'video') {
+          preview.src = data.url
+        }
+
+        container.style.display = 'block'
+        showToast('✅ File uploaded successfully', 'success')
+      } catch (error) {
+        showToast('✗ Upload failed: ' + error.message, 'error')
+      }
+    }
+
+    function showHelp() {
+      document.getElementById('helpModal').classList.add('active')
+    }
+
+    function closeHelpModal() {
+      document.getElementById('helpModal').classList.remove('active')
+    }
+
+    /* ============================================
+       MOBILE MENU MANAGEMENT
+       ============================================ */
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar')
+      const overlay = document.getElementById('sidebarOverlay')
+      sidebar.classList.toggle('mobile-open')
+      overlay.classList.toggle('active')
+    }
+
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar')
+      const overlay = document.getElementById('sidebarOverlay')
+      sidebar.classList.remove('mobile-open')
+      overlay.classList.remove('active')
+    }
+
+    // Close sidebar when navigation item is clicked
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-item')) {
+        closeSidebar()
+      }
+    })
+
+    // Close sidebar on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSidebar()
+      }
+    })
+
+    /* ============================================
+       USER MANAGEMENT
+       ============================================ */
+    async function loadUsers() {
+      try {
+        console.log('[LOAD USERS] Fetching users from API...')
+        const response = await fetch('/api/users', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          users = data.docs || []
+          console.log('[LOAD USERS] Users loaded from database:', users.length, 'users')
+          renderUsersList()
+        } else {
+          console.error('[LOAD USERS] Failed to load users, using local data')
+          renderUsersList()
+        }
+      } catch (err) {
+        console.error('[LOAD USERS ERROR]', err)
+        renderUsersList()
+      }
+    }
+
+    function switchToUsers() {
+      document.getElementById('sectionsView').style.display = 'none'
+      document.getElementById('profileView').style.display = 'none'
+      document.getElementById('usersView').style.display = 'block'
+      document.getElementById('statsGrid').style.display = 'none'
+      document.getElementById('toolbar').style.display = 'none'
+      document.getElementById('pageTitle').textContent = 'User Management'
+      document.getElementById('pageSubtitle').textContent = 'Create, edit, and manage admin users'
+      localStorage.setItem('currentAdminView', 'users')
+      loadUsers()
+      updateNavigation()
+    }
+
+    function switchPage(page) {
+      document.getElementById('sectionsView').style.display = 'block'
+      document.getElementById('usersView').style.display = 'none'
+      document.getElementById('profileView').style.display = 'none'
+      document.getElementById('statsGrid').style.display = 'grid'
+      document.getElementById('toolbar').style.display = 'flex'
+      document.getElementById('pageSubtitle').textContent = 'Manage and edit your website sections'
+      localStorage.setItem('currentAdminView', 'sections')
+      localStorage.setItem('currentAdminPage', page)
+      loadSections(page)
+    }
+
+    function renderUsersList() {
+      const container = document.getElementById('usersList')
+
+      if (users.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg class="icon" viewBox="0 0 24 24" style="width: 48px; height: 48px; opacity: 0.5;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="empty-title">No Users</div>
+            <div class="empty-text">Click "Add User" to create your first user</div>
+          </div>
+        `
+        return
+      }
+
+      const html = users.map((user, index) => {
+        const isActive = user.active !== false && user.status !== 'inactive'
+        return `
+        <div class="section-item" style="${!isActive ? 'opacity: 0.6;' : ''}">
+          <div class="status-badge ${isActive ? 'status-published' : 'status-draft'}" style="background-color: ${ROLE_COLORS[user.role] || '#6B7280'}; color: white; border: none;">
+            <span style="width: 8px; height: 8px; background: white; border-radius: 50%; display: inline-block; margin-right: 6px;"></span>
+            <span>${ROLE_LABELS[user.role] || user.role}</span>
+          </div>
+          <div class="section-content">
+            <h3 class="section-title">${user.fullname || user.email}</h3>
+            <div class="section-meta">
+              <span>${user.email}</span>
+              <span>${isActive ? '✓ Active' : '○ Inactive'}</span>
+            </div>
+          </div>
+          <div class="section-actions">
+            <button class="icon-btn" onclick="resetUserPassword('${user.email}', ${user.id})" title="Reset Password" style="color: #F59E0B;">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M15 1H9v2h6V1m-4 5a4 4 0 00-4 4H0v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10h-3a4 4 0 00-4-4m0 2a2 2 0 012 2h-4a2 2 0 012-2z"></path></svg>
+            </button>
+            <button class="icon-btn" onclick="editUser(${index})" title="Edit">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="icon-btn danger" onclick="deleteUser(${index})" title="Delete">
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+          </div>
+        </div>
+      `
+      }).join('')
+
+      container.innerHTML = html
+      document.getElementById('stat-users').textContent = users.length
+    }
+
+    function openNewUserModal() {
+      editingUserId = null
+      document.getElementById('userModalTitle').textContent = 'Add New User'
+      document.getElementById('userForm').reset()
+      document.getElementById('userEmail').disabled = false
+      document.getElementById('userPassword').required = true
+      document.getElementById('userPassword').placeholder = 'Min. 8 characters'
+      document.getElementById('resetPasswordBtn').style.display = 'none'
+      document.getElementById('userModal').classList.add('active')
+    }
+
+    function editUser(index) {
+      editingUserId = index
+      const user = users[index]
+      document.getElementById('userModalTitle').textContent = `Edit User: ${user.email}`
+      document.getElementById('userEmail').value = user.email
+      document.getElementById('userEmail').disabled = true
+      document.getElementById('userName').value = user.fullname || ''
+      document.getElementById('userPassword').value = ''
+      document.getElementById('userPassword').required = false
+      document.getElementById('userPassword').placeholder = 'Leave blank to keep current password'
+      document.getElementById('userRole').value = user.role
+      document.getElementById('userActive').checked = user.active !== false && user.status !== 'inactive'
+      document.getElementById('resetPasswordBtn').style.display = 'inline-flex'
+      document.getElementById('userModal').classList.add('active')
+    }
+
+    function handleResetPassword() {
+      const email = document.getElementById('userEmail').value
+      resetUserPassword(email, editingUserId)
+    }
+
+    /* ============================================
+       ALERT MODAL SYSTEM
+       ============================================ */
+    let alertCallback = null
+
+    function showAlertModal(message, title = 'Alert') {
+      document.getElementById('alertTitle').textContent = title
+      document.getElementById('alertMessage').innerHTML = message
+      document.getElementById('alertOkBtn').textContent = 'OK'
+      document.getElementById('alertOkBtn').style.display = 'inline-flex'
+      document.getElementById('alertCancelBtn').style.display = 'none'
+      alertCallback = null
+      document.getElementById('alertModal').classList.add('active')
+    }
+
+    function showConfirmModal(message, title = 'Confirm', onConfirm = null) {
+      document.getElementById('alertTitle').textContent = title
+      document.getElementById('alertMessage').innerHTML = message
+      document.getElementById('alertOkBtn').textContent = 'Confirm'
+      document.getElementById('alertOkBtn').style.display = 'inline-flex'
+      document.getElementById('alertCancelBtn').style.display = 'inline-flex'
+      alertCallback = onConfirm
+      document.getElementById('alertModal').classList.add('active')
+    }
+
+    function closeAlertModal(action = 'ok') {
+      document.getElementById('alertModal').classList.remove('active')
+      if (action === 'ok' && alertCallback && typeof alertCallback === 'function') {
+        alertCallback(true)
+      } else if (action === 'cancel' && alertCallback && typeof alertCallback === 'function') {
+        alertCallback(false)
+      }
+      alertCallback = null
+    }
+
+    function togglePasswordVisibility(fieldId) {
+      const input = document.getElementById(fieldId)
+      const toggle = document.getElementById(fieldId + 'Toggle')
+
+      if (input.type === 'password') {
+        input.type = 'text'
+        toggle.textContent = '👁️‍🗨️'
+        toggle.title = 'Hide password'
+      } else {
+        input.type = 'password'
+        toggle.textContent = '👁️'
+        toggle.title = 'Show password'
+      }
+    }
+
+    async function resetUserPassword(email, userId) {
+      if (!hasAdminPermission()) return
+
+      const tempPassword = 'TempPass' + Date.now().toString().slice(-6)
+
+      showConfirmModal(
+        `<strong>Generate temporary password for:</strong><br><code style="background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 4px; font-size: 13px;">${email}</code><br><br><strong>Temporary Password:</strong><br><code style="background: rgba(100,255,100,0.1); padding: 8px 12px; border-radius: 4px; font-size: 14px; color: #4ade80;">${tempPassword}</code><br><br>This password will be set immediately. Share it securely with the user.`,
+        '🔑 Reset Password',
+        (confirmed) => {
+          if (confirmed) {
+            setUserPassword(email, userId, tempPassword)
+          }
+        }
+      )
+    }
+
+    async function setUserPassword(email, userId, tempPassword) {
+
+      try {
+        const response = await fetch(`/api/users/${userId}/reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: tempPassword }),
+          credentials: 'include'
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          showAlertModal(
+            `<strong style="color: #4ade80;">✓ Password Reset Successfully!</strong><br><br><strong>Share this temporary password with the user:</strong><br><br><code style="background: rgba(100,255,100,0.15); padding: 10px 14px; border-radius: 6px; font-size: 15px; color: #4ade80; display: block; margin: 12px 0; word-break: break-all;">${data.tempPassword}</code><br><strong>Important:</strong> The user should change this password on their first login.`,
+            '✓ Password Reset Successful'
+          )
+          console.log('[PASSWORD RESET] Success for:', email)
+          console.log('[TEMP PASSWORD]', data.tempPassword)
+          showToast(`✓ Password reset for ${email}`, 'success')
+          await loadUsers()
+        } else {
+          const error = await response.json()
+          showToast(`❌ Error: ${error.error}`, 'error')
+          console.error('[PASSWORD RESET ERROR]', error)
+        }
+      } catch (err) {
+        console.error('[RESET PASSWORD ERROR]', err)
+        showToast(`❌ Error: ${err.message}`, 'error')
+      }
+    }
+
+    function closeUserModal() {
+      document.getElementById('userModal').classList.remove('active')
+      editingUserId = null
+    }
+
+    async function saveUser(event) {
+      event.preventDefault()
+
+      if (!hasAdminPermission()) return
+
+      const email = document.getElementById('userEmail').value.trim()
+      const password = document.getElementById('userPassword').value.trim()
+      const fullname = document.getElementById('userName').value.trim()
+      const role = document.getElementById('userRole').value
+      const active = document.getElementById('userActive').checked
+
+      // Validation
+      if (!email) {
+        showToast('❌ Email is required', 'error')
+        return
+      }
+
+      if (!password && editingUserId === null) {
+        showToast('❌ Password is required for new users', 'error')
+        return
+      }
+
+      if (password && password.length < 8) {
+        showToast('❌ Password must be at least 8 characters', 'error')
+        return
+      }
+
+      const userData = {
+        email,
+        fullname,
+        role,
+        status: active ? 'active' : 'inactive'
+      }
+
+      if (password) {
+        userData.password = password
+      }
+
+      try {
+        let response
+
+        if (editingUserId !== null) {
+          // Update existing user
+          response = await fetch(`/api/users/${editingUserId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
+            credentials: 'include'
+          })
+
+          if (response.ok) {
+            showToast('✓ User updated successfully', 'success')
+            console.log('[USER UPDATE] User updated successfully')
+          } else {
+            const error = await response.json()
+            showToast(`❌ Error: ${error.error || 'Failed to update user'}`, 'error')
+            console.error('[USER UPDATE ERROR]', error)
+            return
+          }
+        } else {
+          // Create new user
+          response = await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
+            credentials: 'include'
+          })
+
+          if (response.status === 201) {
+            showToast('✓ User created and saved to database!', 'success')
+            console.log('[USER CREATE] User created successfully')
+            const data = await response.json()
+            console.log('[USER DATA]', data.docs[0])
+          } else {
+            const error = await response.json()
+            showToast(`❌ Error: ${error.error || 'Failed to create user'}`, 'error')
+            console.error('[USER CREATE ERROR]', error)
+            return
+          }
+        }
+
+        closeUserModal()
+        await loadUsers()
+      } catch (err) {
+        console.error('[SAVE USER ERROR]', err)
+        showToast(`❌ Error: ${err.message}`, 'error')
+      }
+    }
+
+    function deleteUser(index) {
+      if (!hasAdminPermission()) return
+
+      const user = users[index]
+      showConfirmModal(
+        `<strong>Delete user:</strong><br><code style="background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 4px; font-size: 13px;">${user.email}</code><br><br><strong style="color: #ef4444;">This action cannot be undone.</strong>`,
+        '⚠️ Delete User',
+        (confirmed) => {
+          if (confirmed) {
+            users.splice(index, 1)
+            renderUsersList()
+            showToast('✓ User deleted', 'success')
+          }
+        }
+      )
+    }
+
+    /* ============================================
+       PROFILE MANAGEMENT
+       ============================================ */
+    function showProfile() {
+      document.getElementById('sectionsView').style.display = 'none'
+      document.getElementById('usersView').style.display = 'none'
+      document.getElementById('profileView').style.display = 'block'
+      document.getElementById('statsGrid').style.display = 'none'
+      document.getElementById('toolbar').style.display = 'none'
+      document.getElementById('pageTitle').textContent = 'My Profile'
+      document.getElementById('pageSubtitle').textContent = 'Update your profile information and preferences'
+      localStorage.setItem('currentAdminView', 'profile')
+      loadUserProfile()
+      updateNavigation()
+    }
+
+    function loadUserProfile() {
+      const user = users.find(u => u.email === document.getElementById('userName').textContent)
+      currentUser = user || { email: 'clients.1356@gmail.com', fullname: 'Admin User', role: 'admin' }
+
+      document.getElementById('profileEmail').textContent = currentUser.email
+      document.getElementById('profileRole').textContent = ROLE_LABELS[currentUser.role]
+      document.getElementById('profileEmailInput').value = currentUser.email
+      document.getElementById('profileNameInput').value = currentUser.fullname || ''
+      document.getElementById('profileRoleDisplay').textContent = ROLE_LABELS[currentUser.role]
+    }
+
+    function saveProfile() {
+      const fullname = document.getElementById('profileNameInput').value
+      const password = document.getElementById('profilePasswordInput').value
+
+      if (currentUser) {
+        currentUser.fullname = fullname
+        users = users.map(u => u.email === currentUser.email ? currentUser : u)
+      }
+
+      showToast('✓ Profile updated successfully', 'success')
+      document.getElementById('profilePasswordInput').value = ''
+      loadUserProfile()
+    }
+
+    function updateNavigation() {
+      document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+        item.classList.remove('active')
+      })
+    }
   </script>
 </body>
 </html>

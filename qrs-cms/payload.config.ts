@@ -17,7 +17,6 @@ import { Solutions } from './collections/Solutions'
 import { RegulatoryCompliance } from './collections/RegulatoryCompliance'
 import { PlatformCapability } from './collections/PlatformCapability'
 import { Documentation } from './collections/Documentation'
-import { PageSections } from './collections/PageSections'
 import { TrustCenter } from './globals/TrustCenter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -29,6 +28,18 @@ export default buildConfig({
     meta: {
       titleSuffix: ' - QRS CMS',
     },
+    css: `
+      input[type="password"] {
+        font-family: inherit;
+      }
+      .field-password input {
+        font-family: inherit;
+      }
+      /* Show password toggle button */
+      input[type="password"]::placeholder {
+        opacity: 1;
+      }
+    `,
   },
   collections: [
     Users,
@@ -45,7 +56,6 @@ export default buildConfig({
     RegulatoryCompliance,
     PlatformCapability,
     Documentation,
-    PageSections,
   ],
   globals: [
     TrustCenter,

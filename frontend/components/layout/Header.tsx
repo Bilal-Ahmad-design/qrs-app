@@ -8,14 +8,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-ink-800 border-b border-teal-700">
       <nav className="max-w-screen-xl mx-auto px-4 sm:px-6 py-2 sm:py-3 flex items-center justify-between">
-        <Link href="/" className="flex-shrink-0 w-20 sm:w-28 h-auto">
-          <Image
+        <Link href="/" className="flex-shrink-0">
+          <img
             src="/qrs-wordmark.webp"
             alt="QRS - Quantitative Risk Systems"
-            width={112}
-            height={32}
-            priority
-            className="w-full h-auto"
+            className="w-20 sm:w-28 h-auto"
           />
         </Link>
 

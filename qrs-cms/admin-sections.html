@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRS Admin - Section Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-ink-900: #0C0D0E;
+      --color-ink-800: #1B3B3A;
+      --color-ink-700: #1f2124;
+      --color-teal-700: #29908A;
+      --color-teal-600: #3C8481;
+      --color-teal-500: #5BBAB5;
+      --color-white: #FFFFFF;
+      --color-text-muted: #69727d;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--color-ink-900);
+      color: var(--color-white);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      background: var(--color-ink-800);
+      border-radius: 8px;
+      margin-bottom: 32px;
+      border: 1px solid var(--color-teal-700);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-left h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--color-teal-500);
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 240ms;
+    }
+
+    .btn-logout {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-logout:hover {
+      background: #dc2626;
+    }
+
+    .page-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--color-teal-700);
+      padding-bottom: 12px;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: transparent;
+      color: var(--color-text-muted);
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 240ms;
+    }
+
+    .tab-btn.active {
+      color: var(--color-teal-500);
+      border-bottom-color: var(--color-teal-500);
+    }
+
+    .tab-btn:hover {
+      color: var(--color-teal-600);
+    }
+
+    .sections-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .section-card {
+      background: var(--color-ink-800);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 8px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .section-info h3 {
+      color: var(--color-teal-500);
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .section-info p {
+      color: var(--color-text-muted);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-edit {
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-edit:hover {
+      background: var(--color-teal-600);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--color-ink-800);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 8px;
+      padding: 32px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 90%;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--color-teal-700);
+    }
+
+    .modal-header h2 {
+      color: var(--color-teal-500);
+      font-size: 20px;
+    }
+
+    .btn-close {
+      background: transparent;
+      color: var(--color-text-muted);
+      font-size: 24px;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close:hover {
+      color: var(--color-white);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--color-teal-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      background: var(--color-ink-900);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 4px;
+      color: var(--color-white);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--color-teal-500);
+      box-shadow: 0 0 0 3px rgba(91, 186, 181, 0.15);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-teal-700);
+    }
+
+    .btn-save {
+      flex: 1;
+      background: var(--color-teal-500);
+      color: var(--color-ink-900);
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    .btn-save:hover {
+      background: var(--color-teal-600);
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: var(--color-teal-700);
+      color: var(--color-white);
+      padding: 12px;
+    }
+
+    .btn-cancel:hover {
+      background: var(--color-teal-600);
+    }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      border-left: 3px solid;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #86efac;
+      border-left-color: #22c55e;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border-left-color: #ef4444;
+    }
+
+    .loading {
+      text-align: center;
+      color: var(--color-text-muted);
+      padding: 40px;
+    }
+
+    .json-display {
+      background: var(--color-ink-900);
+      border: 1px solid var(--color-teal-700);
+      border-radius: 4px;
+      padding: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 8px;
+      color: var(--color-teal-500);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-left">
+        <h1>📝 Section Manager</h1>
+      </div>
+      <div class="header-right">
+        <span id="userName" style="color: var(--color-text-muted); font-size: 14px;"></span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div id="message" class="message" style="display: none;"></div>
+
+    <div class="page-tabs">
+      <button class="tab-btn active" onclick="switchPage('home')">Home</button>
+      <button class="tab-btn" onclick="switchPage('about')">About</button>
+      <button class="tab-btn" onclick="switchPage('platform')">Platform</button>
+      <button class="tab-btn" onclick="switchPage('trust')">Trust</button>
+      <button class="tab-btn" onclick="switchPage('validation')">Validation</button>
+    </div>
+
+    <div id="sectionsContainer" class="sections-list"></div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Edit Section</h2>
+        <button class="btn-close" onclick="closeModal()">✕</button>
+      </div>
+
+      <form id="editForm">
+        <div class="form-group">
+          <label for="sectionTitle">Title</label>
+          <input type="text" id="sectionTitle" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sectionHeading">Heading</label>
+          <input type="text" id="sectionHeading">
+        </div>
+
+        <div class="form-group">
+          <label for="sectionDescription">Description</label>
+          <textarea id="sectionDescription"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="sectionType">Section Type</label>
+          <select id="sectionType">
+            <option value="hero">Hero</option>
+            <option value="feature-grid">Feature Grid</option>
+            <option value="text-image">Text Image</option>
+            <option value="stats">Stats</option>
+            <option value="cta">CTA</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sectionBg">Background Style</label>
+          <select id="sectionBg">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="white">White</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sectionOrder">Order</label>
+          <input type="number" id="sectionOrder" min="0">
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="sectionPublished">
+            Published
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-save">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3001'
+    let currentPage = 'home'
+    let sections = []
+    let editingSection = null
+
+    function showMessage(text, type = 'success') {
+      const el = document.getElementById('message')
+      el.textContent = text
+      el.className = `message ${type}`
+      el.style.display = 'block'
+      setTimeout(() => el.style.display = 'none', 3000)
+    }
+
+    async function checkAuth() {
+      try {
+        const res = await fetch(API + '/api/auth/me', { credentials: 'include' })
+        if (!res.ok) {
+          window.location.href = '/login'
+          return
+        }
+        const user = await res.json()
+        document.getElementById('userName').textContent = user.email
+      } catch (error) {
+        window.location.href = '/login'
+      }
+    }
+
+    async function loadSections(page) {
+      try {
+        const res = await fetch(`${API}/api/page-sections?page=${page}`)
+        if (!res.ok) throw new Error('Failed to load sections')
+        const data = await res.json()
+        sections = data.docs || []
+        renderSections()
+      } catch (error) {
+        showMessage('Error loading sections: ' + error.message, 'error')
+      }
+    }
+
+    function renderSections() {
+      const container = document.getElementById('sectionsContainer')
+
+      if (sections.length === 0) {
+        container.innerHTML = '<div class="loading">No sections found for this page</div>'
+        return
+      }
+
+      container.innerHTML = sections.map(section => `
+        <div class="section-card">
+          <div class="section-info">
+            <h3>${section.title}</h3>
+            <p><strong>Type:</strong> ${section.sectionType}</p>
+            <p><strong>Order:</strong> ${section.order}</p>
+            <p><strong>Status:</strong> ${section.published ? '✓ Published' : '○ Draft'}</p>
+            <p style="color: var(--color-text-muted); margin-top: 8px;">${section.description || 'No description'}</p>
+          </div>
+          <div class="section-actions">
+            <button class="btn-edit" onclick="openEditModal(${sections.indexOf(section)})">Edit</button>
+          </div>
+        </div>
+      `).join('')
+    }
+
+    function switchPage(page) {
+      currentPage = page
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'))
+      event.target.classList.add('active')
+      loadSections(page)
+    }
+
+    function openEditModal(index) {
+      editingSection = index
+      const section = sections[index]
+
+      document.getElementById('modalTitle').textContent = `Edit: ${section.title}`
+      document.getElementById('sectionTitle').value = section.title
+      document.getElementById('sectionHeading').value = section.heading || ''
+      document.getElementById('sectionDescription').value = section.description || ''
+      document.getElementById('sectionType').value = section.sectionType
+      document.getElementById('sectionBg').value = section.backgroundStyle
+      document.getElementById('sectionOrder').value = section.order
+      document.getElementById('sectionPublished').checked = section.published
+
+      document.getElementById('editModal').classList.add('active')
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('active')
+      editingSection = null
+    }
+
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const updatedSection = {
+        ...sections[editingSection],
+        title: document.getElementById('sectionTitle').value,
+        heading: document.getElementById('sectionHeading').value,
+        description: document.getElementById('sectionDescription').value,
+        sectionType: document.getElementById('sectionType').value,
+        backgroundStyle: document.getElementById('sectionBg').value,
+        order: parseInt(document.getElementById('sectionOrder').value),
+        published: document.getElementById('sectionPublished').checked
+      }
+
+      sections[editingSection] = updatedSection
+      showMessage('✓ Section updated! Changes saved locally', 'success')
+      renderSections()
+      closeModal()
+    })
+
+    async function logout() {
+      try {
+        await fetch(API + '/api/auth/logout', { method: 'POST', credentials: 'include' })
+        window.location.href = '/login'
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    // Initialize
+    checkAuth()
+    loadSections('home')
+  </script>
+</body>
+</html>

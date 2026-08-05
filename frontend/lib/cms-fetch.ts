@@ -389,13 +389,14 @@ export async function getDocumentationBySlug(slug: string) {
 export async function getPageSections(page: string) {
   try {
     const response = await fetch(
-      `${CMS_URL}/api/page-sections?where[page][equals]=${page}&where[published][equals]=true&sort=order&limit=100`,
+      `${CMS_URL}/api/page-sections?page=${encodeURIComponent(page)}&published=true&sort=order&limit=100`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate: 0 },
       }
     )
 
     if (!response.ok) {
+      console.warn(`CMS fetch failed for page sections "${page}": ${response.statusText}`)
       return []
     }
 

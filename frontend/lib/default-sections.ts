@@ -13,7 +13,7 @@ export const defaultHomeSections = [
     description:
       'Every number cryptographically signed and independently verifiable.',
     sectionType: 'hero',
-    backgroundStyle: 'dark',
+    backgroundStyle: 'light-institutional',
     buttonText: 'Request Demo',
     buttonUrl: '/platform',
     secondaryButtonText: 'Request Validation Report',
@@ -26,23 +26,27 @@ export const defaultHomeSections = [
     title: 'Active Models',
     heading: 'ACTIVE MODELS',
     sectionType: 'feature-grid',
-    backgroundStyle: 'light',
+    backgroundStyle: 'light-institutional',
     items: [
       {
         title: 'North Atlantic Hurricane',
         icon: '🌀',
+        status: 'validated',
       },
       {
         title: 'California Wildfire',
         icon: '🔥',
+        status: 'illustrative',
       },
       {
         title: 'European Wind',
         icon: '💨',
+        status: 'illustrative',
       },
       {
         title: 'Japan Typhoon',
         icon: '🌊',
+        status: 'illustrative',
       },
     ],
     order: 1,
@@ -55,7 +59,7 @@ export const defaultHomeSections = [
     description:
       'Every calculation is cryptographically signed and independently verifiable. Built-in reproducibility, not an afterthought.',
     sectionType: 'text-image',
-    backgroundStyle: 'white',
+    backgroundStyle: 'light-institutional',
     order: 2,
     published: true,
   },
@@ -66,7 +70,7 @@ export const defaultHomeSections = [
     description:
       'Built from the ground up for institutional intelligence and scalability.',
     sectionType: 'feature-grid',
-    backgroundStyle: 'dark',
+    backgroundStyle: 'deep-dark',
     items: [
       {
         title: 'Copilot Interface',
@@ -94,7 +98,7 @@ export const defaultHomeSections = [
     description:
       '7 of 12 top carriers withdrew from California',
     sectionType: 'stats',
-    backgroundStyle: 'white',
+    backgroundStyle: 'light-institutional',
     items: [
       {
         value: '$10B+',
@@ -125,7 +129,7 @@ export const defaultHomeSections = [
     title: 'How It Works',
     heading: 'How It Works',
     sectionType: 'feature-grid',
-    backgroundStyle: 'light',
+    backgroundStyle: 'light-institutional',
     items: [
       {
         value: '01',
@@ -158,7 +162,7 @@ export const defaultHomeSections = [
     description:
       'QRS models are independently verified by leading academic and industry experts',
     sectionType: 'feature-grid',
-    backgroundStyle: 'white',
+    backgroundStyle: 'light-institutional',
     items: [
       {
         title: 'SSRN Validation Study',
@@ -183,7 +187,7 @@ export const defaultHomeSections = [
     description:
       'Connect with our team to discuss how QRS can accelerate your risk deployment strategy.',
     sectionType: 'cta',
-    backgroundStyle: 'dark',
+    backgroundStyle: 'deep-dark',
     buttonText: 'Request Demo',
     buttonUrl: '/platform',
     order: 7,
@@ -263,34 +267,214 @@ export const defaultPlatformSections = [
     description:
       'Enterprise-grade risk analytics built for institutional investors, asset managers, and reinsurance professionals.',
     sectionType: 'hero',
-    backgroundStyle: 'dark',
+    backgroundStyle: 'light-institutional',
+    imageUrl: '/placeholder-platform-hero.png',
+    buttonText: 'Request Demo',
+    buttonUrl: '/contact',
     order: 0,
     published: true,
   },
   {
-    id: 'capabilities',
-    title: 'Core Capabilities',
-    heading: 'Core Capabilities',
-    sectionType: 'feature-grid',
-    backgroundStyle: 'light',
+    id: 'how-it-works',
+    title: 'How QRS Works',
+    heading: 'How QRS Works',
+    sectionType: 'workflow-steps',
+    backgroundStyle: 'light-institutional',
     items: [
       {
-        title: 'Portfolio Analytics',
-        description:
-          'Real-time VaR, TVaR, and scenario analysis across multi-asset portfolios with instant recalculation.',
+        title: 'Upload Portfolio',
+        description: 'Ingest exposure data in your native format',
+        icon: '📤',
       },
       {
-        title: 'Stress Testing',
-        description:
-          'Historical and hypothetical scenarios with cryptographic reproducibility for audit compliance.',
+        title: 'Run Model',
+        description: 'Quantum-native catastrophe modeling engine',
+        icon: '⚙️',
       },
       {
-        title: 'Risk Reporting',
-        description:
-          'Auditable risk reports with verified calculations and complete lineage tracking for every metric.',
+        title: 'Verify Results',
+        description: 'Cryptographic reproducibility certificate included',
+        icon: '✅',
+      },
+      {
+        title: 'Deploy Capital',
+        description: 'Verified metrics ready for institutional deployment',
+        icon: '🚀',
       },
     ],
     order: 1,
+    published: true,
+  },
+  {
+    id: 'risk-engine',
+    title: 'The Risk Engine',
+    heading: 'The Risk Engine',
+    description: 'Multi-peril modeling built for precision and scale',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'deep-dark',
+    items: [
+      {
+        title: 'Multi-Peril Modeling',
+        description: 'Hurricane, wildfire, wind, flood, earthquake, and more',
+        icon: '🌍',
+      },
+      {
+        title: 'EP Curves',
+        description: 'Exceedance probability analysis and risk distribution',
+        icon: '📊',
+      },
+      {
+        title: 'Risk Maps',
+        description: 'Exposure concentration heatmaps and geographic risk',
+        icon: '🗺️',
+      },
+      {
+        title: 'Stress Testing',
+        description: 'Historical and hypothetical scenario analysis',
+        icon: '⚡',
+      },
+      {
+        title: 'Scenario Analysis',
+        description: 'What-if portfolio impact assessment',
+        icon: '🔮',
+      },
+      {
+        title: 'Accumulation Analysis',
+        description: 'Multi-location risk aggregation and concentration',
+        icon: '🎯',
+      },
+    ],
+    order: 2,
+    published: true,
+  },
+  {
+    id: 'product-evidence',
+    title: 'Real QRS Product',
+    heading: 'Real QRS Product',
+    description: 'See the platform in action',
+    sectionType: 'product-evidence',
+    backgroundStyle: 'light-institutional',
+    items: [
+      {
+        title: 'Risk Map',
+        description: 'Geographic exposure visualization and concentration analysis',
+        imageUrl: '/placeholder-risk-map.png',
+      },
+      {
+        title: 'EP Curve Analysis',
+        description: 'Probability distribution and loss exceedance charts',
+        imageUrl: '/placeholder-ep-curve.png',
+      },
+      {
+        title: 'War Room Dashboard',
+        description: 'Real-time event response and portfolio impact tracking',
+        imageUrl: '/placeholder-war-room.png',
+      },
+    ],
+    order: 3,
+    published: true,
+  },
+  {
+    id: 'quantum-native',
+    title: 'Quantum-Native Engine',
+    heading: 'Quantum-Native Engine',
+    description:
+      'Enterprise architecture built for precision, auditability, and institutional scale. Our quantum-native approach enables real-time risk quantification with cryptographic reproducibility at every step.',
+    sectionType: 'text-image',
+    backgroundStyle: 'light-institutional',
+    imageUrl: '/placeholder-quantum-arch.png',
+    order: 4,
+    published: true,
+  },
+  {
+    id: 'ai-capabilities',
+    title: 'AI-Assisted Intelligence',
+    heading: 'AI-Assisted Intelligence',
+    description: 'Intelligent risk analysis with human oversight and control',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'deep-dark',
+    items: [
+      {
+        title: 'Automated Insights',
+        description: 'AI identifies key risk drivers, anomalies, and opportunities',
+        icon: '🤖',
+      },
+      {
+        title: 'Natural Language Interface',
+        description: 'Ask questions about risk in plain English',
+        icon: '💬',
+      },
+      {
+        title: 'Controlled Workflows',
+        description: 'Every recommendation reviewed before institutional execution',
+        icon: '🔒',
+      },
+    ],
+    order: 5,
+    published: true,
+  },
+  {
+    id: 'regulatory-ready',
+    title: 'Built for Compliance',
+    heading: 'Built for Compliance',
+    description: 'Support for major regulatory frameworks and audit requirements',
+    sectionType: 'regulatory-grid',
+    backgroundStyle: 'light-institutional',
+    items: [
+      {
+        title: 'Solvency II',
+        description: 'European insurance regulation and SCR calculation',
+        icon: '🇪🇺',
+      },
+      {
+        title: 'ORSA',
+        description: 'Own Risk and Solvency Assessment frameworks',
+        icon: '📋',
+      },
+      {
+        title: 'NAIC RBC',
+        description: 'US Risk-Based Capital and reserve adequacy',
+        icon: '🇺🇸',
+      },
+      {
+        title: 'Lloyd\'s/BMA',
+        description: 'Bermuda Monetary Authority insurance regulations',
+        icon: '💼',
+      },
+    ],
+    order: 6,
+    published: true,
+  },
+  {
+    id: 'data-integration',
+    title: 'Enterprise Integration',
+    heading: 'Enterprise Integration',
+    description: 'Connect QRS to your existing infrastructure and workflows',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light-institutional',
+    items: [
+      {
+        title: 'REST APIs',
+        description: 'Full API access to all calculations and data streams',
+        icon: '🔌',
+      },
+      {
+        title: 'Data Exchange',
+        description: 'EDM XML, CSV, JSON, and custom format support',
+        icon: '🔄',
+      },
+      {
+        title: 'Real-Time Streaming',
+        description: 'Live data feeds, webhooks, and event notifications',
+        icon: '📡',
+      },
+      {
+        title: 'Enterprise Auth',
+        description: 'OAuth 2.0, SSO integration, role-based access control',
+        icon: '🔐',
+      },
+    ],
+    order: 7,
     published: true,
   },
 ]
