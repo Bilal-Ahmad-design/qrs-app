@@ -1,12 +1,17 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "npm install",
-  "env": {
-    "NEXT_PUBLIC_PAYLOAD_URL": "/api",
-    "NEXT_PUBLIC_SITE_URL": "@next_public_site_url",
-    "DATABASE_URL": "@database_url",
-    "JWT_SECRET": "@jwt_secret"
-  }
+  "projects": [
+    {
+      "name": "qrs-app-frontend",
+      "path": "frontend",
+      "buildCommand": "npm run build",
+      "outputDirectory": ".next"
+    },
+    {
+      "name": "qrs-app-cms",
+      "path": "qrs-cms",
+      "buildCommand": "npm run build",
+      "outputDirectory": ".next"
+    }
+  ]
 }
