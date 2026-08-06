@@ -168,7 +168,7 @@ const response = await fetch(`${cms}/api/pages?filters[slug][$eq]=platform&popul
 
 Both applications connect to the **same PostgreSQL database** on Neon Cloud:
 ```
-DATABASE_URL=postgresql://neondb_owner:npg_JkuPtB1MWK7U@ep-cool-block-at41gwhk-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require
+DATABASE_URL=...........................................................
 ```
 
 **Tables managed by Strapi:**
