@@ -33,6 +33,11 @@ export function Footer() {
             <h3 className="font-display text-h4 font-semibold mb-4">Trust</h3>
             <ul className="space-y-2">
               <li>
+                <Link href="/trust/" className="text-teal-500 hover:text-teal-600">
+                  Trust Center
+                </Link>
+              </li>
+              <li>
                 <Link href={COMPLIANCE_LINKS.security} className="text-teal-500 hover:text-teal-600">
                   Security
                 </Link>
