@@ -496,21 +496,57 @@
       "page": "trust",
       "title": "Security & Compliance",
       "heading": "Security & Compliance",
-      "sectionType": "feature-grid",
-      "backgroundStyle": "light",
+      "description": "Enterprise-grade security built into every layer",
+      "sectionType": "security-compliance",
+      "backgroundStyle": "light-institutional",
+      "leftTitle": "Cryptographic Reproducibility",
+      "leftDescription": "Every calculation is cryptographically signed with our ECDSA seal. Independently verify any analysis using open-source verification tools.",
+      "rightTitle": "Compliance Certifications",
+      "rightDescription": "SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.",
+      "order": 1,
+      "published": true
+    },
+    {
+      "id": "security-features",
+      "page": "trust",
+      "title": "Security Features",
+      "heading": "Security Features",
+      "description": "Built-in security controls at every layer",
+      "sectionType": "security-features-grid",
+      "backgroundStyle": "deep-dark",
       "items": [
         {
-          "title": "Cryptographic Reproducibility",
-          "description": "Every calculation is cryptographically signed with our ECDSA seal. Independently verify any analysis using open-source verification tools.",
+          "title": "Data Encryption",
+          "description": "AES-256 encryption for data at rest and in transit",
           "icon": "🔐"
         },
         {
-          "title": "Compliance Certifications",
-          "description": "SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.",
+          "title": "Access Control",
+          "description": "Role-based access control (RBAC) with fine-grained permissions",
+          "icon": "🔑"
+        },
+        {
+          "title": "Audit Logging",
+          "description": "Comprehensive audit trails for all actions and API calls",
+          "icon": "📋"
+        },
+        {
+          "title": "Infrastructure Isolation",
+          "description": "Multi-tenant infrastructure with complete data isolation",
+          "icon": "🔒"
+        },
+        {
+          "title": "DDoS Protection",
+          "description": "Enterprise-grade DDoS mitigation and rate limiting",
+          "icon": "⚔️"
+        },
+        {
+          "title": "Compliance Monitoring",
+          "description": "Continuous monitoring for regulatory compliance requirements",
           "icon": "✓"
         }
       ],
-      "order": 1,
+      "order": 2,
       "published": true
     }
   ],

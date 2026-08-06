@@ -4,6 +4,8 @@ import { DataCard } from '@/components/marketing/DataCard'
 import { WorkflowSteps } from '@/components/marketing/WorkflowSteps'
 import { ProductEvidence } from '@/components/marketing/ProductEvidence'
 import { RegulatoryGrid } from '@/components/marketing/RegulatoryGrid'
+import { SecurityComplianceSection } from '@/components/marketing/SecurityComplianceSection'
+import { SecurityFeaturesGrid } from '@/components/marketing/SecurityFeaturesGrid'
 
 interface SectionItem {
   title?: string
@@ -30,6 +32,10 @@ interface PageSection {
   secondaryButtonText?: string
   secondaryButtonUrl?: string
   content?: Record<string, any>
+  leftTitle?: string
+  leftDescription?: string
+  rightTitle?: string
+  rightDescription?: string
 }
 
 interface SectionRendererProps {
@@ -336,6 +342,27 @@ export function SectionRenderer({
     case 'regulatory-grid':
       return (
         <RegulatoryGrid
+          items={section.items || []}
+          title={section.heading || section.title}
+          description={section.description}
+        />
+      )
+
+    case 'security-compliance':
+      return (
+        <SecurityComplianceSection
+          title={section.heading || section.title}
+          description={section.description}
+          leftTitle={section.leftTitle}
+          leftDescription={section.leftDescription}
+          rightTitle={section.rightTitle}
+          rightDescription={section.rightDescription}
+        />
+      )
+
+    case 'security-features-grid':
+      return (
+        <SecurityFeaturesGrid
           items={section.items || []}
           title={section.heading || section.title}
           description={section.description}
