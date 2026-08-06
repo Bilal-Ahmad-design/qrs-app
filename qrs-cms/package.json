@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server.js",
-    "build": "node server.js",
+    "build": "echo 'Building CMS...' && npm install",
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
