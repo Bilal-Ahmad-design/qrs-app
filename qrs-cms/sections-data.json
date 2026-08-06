@@ -5,10 +5,10 @@
       "page": "home",
       "title": "Hero Section",
       "subtitle": "Patent Pending: QRS-001-PROV",
-      "heading": "Run catastrophe models in seconds. Release billions is tripize",
+      "heading": "Run catastrophe models in seconds. Release billions in trapped capital.",
       "description": "Every number cryptographically signed and independently verifiable.",
       "sectionType": "hero",
-      "backgroundStyle": "",
+      "backgroundStyle": "light-institutional",
       "buttonText": "Request Demo",
       "buttonUrl": "/platform",
       "secondaryButtonText": "Request Validation Report",
@@ -29,21 +29,25 @@
       "items": [
         {
           "title": "North Atlantic Hurricane",
+          "description": "Catastrophic hurricane modeling with validated parameters and real-time scenario analysis.",
           "icon": "🌀",
           "status": "validated"
         },
         {
           "title": "California Wildfire",
+          "description": "Wildfire risk assessment for portfolios concentrated in California's high-risk zones.",
           "icon": "🔥",
           "status": "illustrative"
         },
         {
           "title": "European Wind",
+          "description": "European windstorm modeling covering Atlantic and Mediterranean storm tracks.",
           "icon": "💨",
           "status": "illustrative"
         },
         {
           "title": "Japan Typhoon",
+          "description": "Typhoon and earthquake risk modeling for Asia-Pacific portfolios.",
           "icon": "🌊",
           "status": "illustrative"
         }
@@ -59,6 +63,7 @@
       "description": "Every calculation is cryptographically signed and independently verifiable. Built-in reproducibility, not an afterthought.",
       "sectionType": "text-image",
       "backgroundStyle": "light-institutional",
+      "imageUrl": "/placeholder-verifiable.png",
       "order": 2,
       "published": true
     },

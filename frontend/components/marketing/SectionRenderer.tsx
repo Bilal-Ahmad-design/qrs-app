@@ -145,10 +145,10 @@ export function SectionRenderer({
 
     case 'feature-grid':
       return (
-        <section className={`${bgClass} py-24 lg:py-40`}>
+        <section className={`${bgClass} py-28 lg:py-48`}>
           <div className="max-w-screen-xl mx-auto px-6">
             {section.title && (
-              <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-20 text-center ${textClass}`}>
+              <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-24 text-center ${textClass}`}>
                 {section.title}
               </h2>
             )}
@@ -190,9 +190,9 @@ export function SectionRenderer({
 
     case 'text-image':
       return (
-        <section className={`${bgClass} py-24 lg:py-40`}>
+        <section className={`${bgClass} py-28 lg:py-48`}>
           <div className="max-w-screen-xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-28 items-center">
               <div>
                 {section.heading && (
                   <h2
@@ -278,10 +278,10 @@ export function SectionRenderer({
 
     case 'stats':
       return (
-        <section className={`${bgClass} py-24 lg:py-40`}>
+        <section className={`${bgClass} py-28 lg:py-48`}>
           <div className="max-w-screen-xl mx-auto px-6">
             {section.title && (
-              <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-20 text-center ${textClass}`}>
+              <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-24 text-center ${textClass}`}>
                 {section.title}
               </h2>
             )}
@@ -344,10 +344,10 @@ export function SectionRenderer({
 
     default:
       return (
-        <section className={`${bgClass} py-24 lg:py-40`}>
+        <section className={`${bgClass} py-28 lg:py-48`}>
           <div className="max-w-screen-xl mx-auto px-6">
             {section.heading && (
-              <h2 className={`text-3xl lg:text-4xl font-semibold mb-6 ${textClass}`}>
+              <h2 className={`text-3xl lg:text-4xl font-semibold mb-8 ${textClass}`}>
                 {section.heading}
               </h2>
             )}
