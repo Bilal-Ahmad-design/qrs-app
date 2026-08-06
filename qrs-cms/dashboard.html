@@ -192,12 +192,15 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      height: 60px;
     }
 
     .header-left {
       display: flex;
       align-items: center;
       gap: var(--spacing-lg);
+      flex: 1;
+      min-width: 0;
     }
 
     .header-logo {
@@ -209,11 +212,13 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
+      white-space: nowrap;
     }
 
     .header-logo img {
       height: 32px;
       width: auto;
+      flex-shrink: 0;
     }
 
     .header-logo span {
@@ -246,6 +251,29 @@
       stroke-width: 2;
       stroke-linecap: round;
       fill: none;
+      position: absolute;
+      transition: opacity var(--transition-fast), visibility var(--transition-fast);
+    }
+
+    .mobile-menu-toggle .menu-icon {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu-toggle .close-icon {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Show close icon when sidebar is open */
+    .mobile-menu-toggle.open .menu-icon {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .mobile-menu-toggle.open .close-icon {
+      opacity: 1;
+      visibility: visible;
     }
 
     @media (max-width: 1024px) {
@@ -253,6 +281,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
       }
     }
 
@@ -571,24 +600,57 @@
        SECTIONS LIST & SPLIT PANE
        ============================================ */
     .sections-container {
-      display: grid;
-      grid-template-columns: 1fr 380px;
+      display: flex;
       gap: var(--spacing-xl);
-      align-items: start;
-    }
-
-    @media (max-width: 1400px) {
-      .sections-container {
-        grid-template-columns: 1fr;
-      }
-      .detail-panel {
-        display: none !important;
-      }
+      align-items: flex-start;
+      height: calc(100vh - 280px);
+      width: 100%;
     }
 
     .sections-list {
       display: grid;
       gap: var(--spacing-md);
+      flex: 1 0 420px;
+      max-height: calc(100vh - 320px);
+      overflow-y: auto;
+      padding-right: var(--spacing-md);
+    }
+
+    .detail-panel {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .sections-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sections-list::-webkit-scrollbar-track {
+      background: var(--surface-secondary);
+      border-radius: var(--radius-md);
+    }
+
+    .sections-list::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: var(--radius-md);
+    }
+
+    .sections-list::-webkit-scrollbar-thumb:hover {
+      background: var(--border-color-hover);
+    }
+
+    @media (max-width: 1024px) {
+      .sections-container {
+        flex-direction: column;
+        height: auto;
+      }
+      .sections-list {
+        flex: 1 1 auto;
+        max-height: 400px;
+      }
+      .detail-panel {
+        display: none !important;
+      }
     }
 
     /* ============================================
@@ -727,17 +789,20 @@
       position: sticky;
       top: 100px;
       height: fit-content;
-      max-height: calc(100vh - 200px);
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      max-width: 50%;
     }
 
     .detail-panel.empty {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 300px;
       color: var(--text-muted);
       text-align: center;
+      flex-direction: column;
+      gap: var(--spacing-lg);
     }
 
     .detail-header {
@@ -1080,6 +1145,86 @@
     }
 
     /* ============================================
+       FOOTER STYLING
+       ============================================ */
+    .qrs-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #1a1a1a;
+      border-top: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-xl);
+      z-index: 1000;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      gap: var(--spacing-xl);
+    }
+
+    .qrs-footer-left {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .qrs-logo-img {
+      height: 24px;
+      width: auto;
+      max-width: 40px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .qrs-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .qrs-footer-right {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Adjust body to account for footer */
+    body {
+      margin-bottom: 60px;
+    }
+
+    .main {
+      padding-bottom: 20px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .qrs-footer {
+        height: 50px;
+        font-size: 9px;
+        padding: 0 var(--spacing-lg);
+        flex-direction: column;
+      }
+
+      .qrs-footer-left {
+        gap: var(--spacing-sm);
+      }
+
+      .qrs-text {
+        max-width: 200px;
+      }
+
+      body {
+        margin-bottom: 50px;
+      }
+    }
+
+    /* ============================================
        ICONS
        ============================================ */
     .icon {
@@ -1235,10 +1380,21 @@
 
       .header {
         padding: var(--spacing-md) var(--spacing-lg);
+        height: 56px;
       }
 
       .header-logo {
-        font-size: 18px;
+        font-size: 16px;
+        gap: 8px;
+      }
+
+      .header-logo img {
+        height: 28px;
+      }
+
+      .sidebar {
+        top: 56px;
+        height: calc(100vh - 56px);
       }
 
       .user-name {
@@ -1380,8 +1536,27 @@
         padding: var(--spacing-md) var(--spacing-lg);
       }
 
+      .header {
+        padding: var(--spacing-sm) var(--spacing-md);
+        height: 50px;
+      }
+
       .header-logo {
-        font-size: 16px;
+        font-size: 14px;
+        gap: 6px;
+      }
+
+      .header-logo img {
+        height: 24px;
+      }
+
+      .header-logo span {
+        display: none;
+      }
+
+      .sidebar {
+        top: 50px;
+        height: calc(100vh - 50px);
       }
 
       .theme-toggle {
@@ -1410,11 +1585,17 @@
     <!-- HEADER -->
     <header class="header">
       <div class="header-left">
-        <button class="mobile-menu-toggle" onclick="toggleSidebar()" title="Toggle Menu">
-          <svg class="icon" style="width: 24px; height: 24px;" viewBox="0 0 24 24">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()" title="Toggle Menu">
+          <!-- Hamburger Icon -->
+          <svg class="icon menu-icon" style="width: 24px; height: 24px;" viewBox="0 0 24 24">
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <!-- Close Icon -->
+          <svg class="icon close-icon" style="width: 24px; height: 24px;" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
         <a href="#home" class="header-logo" onclick="switchPage('home'); return false;">
@@ -2142,7 +2323,7 @@
       try {
         currentPage = page
         // Show sections view, hide others
-        document.getElementById('sectionsView').style.display = 'block'
+        document.getElementById('sectionsView').style.display = 'flex'
         document.getElementById('usersView').style.display = 'none'
         document.getElementById('profileView').style.display = 'none'
         document.getElementById('statsGrid').style.display = 'grid'
@@ -2635,15 +2816,19 @@
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar')
       const overlay = document.getElementById('sidebarOverlay')
+      const toggle = document.getElementById('mobileMenuToggle')
       sidebar.classList.toggle('mobile-open')
       overlay.classList.toggle('active')
+      toggle.classList.toggle('open')
     }
 
     function closeSidebar() {
       const sidebar = document.getElementById('sidebar')
       const overlay = document.getElementById('sidebarOverlay')
+      const toggle = document.getElementById('mobileMenuToggle')
       sidebar.classList.remove('mobile-open')
       overlay.classList.remove('active')
+      toggle.classList.remove('open')
     }
 
     // Close sidebar when navigation item is clicked
@@ -2701,7 +2886,7 @@
     }
 
     function switchPage(page) {
-      document.getElementById('sectionsView').style.display = 'block'
+      document.getElementById('sectionsView').style.display = 'flex'
       document.getElementById('usersView').style.display = 'none'
       document.getElementById('profileView').style.display = 'none'
       document.getElementById('statsGrid').style.display = 'grid'
@@ -3049,5 +3234,16 @@
       })
     }
   </script>
+
+  <!-- Footer -->
+  <footer class="qrs-footer">
+    <div class="qrs-footer-left">
+      <img src="/qrs-wordmark.webp" alt="QRS Logo" class="qrs-logo-img">
+      <span class="qrs-text">© 2026 Quantum Risk Systems, Inc.</span>
+    </div>
+    <div class="qrs-footer-right">
+      Confidential, authorised personnel only
+    </div>
+  </footer>
 </body>
 </html>

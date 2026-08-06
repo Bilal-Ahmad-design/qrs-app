@@ -203,6 +203,7 @@
       "description": "Building trust infrastructure for institutional risk management through cryptographic verification and auditable analytics.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
+      "imageUrl": "/placeholder-about-hero.png",
       "order": 0,
       "published": true
     },
@@ -488,6 +489,7 @@
       "description": "Enterprise-grade security, cryptographic verification, and independent audit trails at every step — designed for institutional review and continuous assurance.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
+      "imageUrl": "/placeholder-trust-hero.png",
       "order": 0,
       "published": true
     },
@@ -559,6 +561,7 @@
       "description": "QRS models have been independently validated by leading academic and industry experts to ensure calculation accuracy and methodological rigor.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
+      "imageUrl": "/placeholder-validation-hero.png",
       "order": 0,
       "published": true
     },

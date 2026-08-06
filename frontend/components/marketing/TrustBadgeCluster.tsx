@@ -45,25 +45,25 @@ export function TrustBadgeCluster() {
             key={badge.label}
             className={`group flex flex-col items-start gap-4 px-6 py-8 rounded-xl border backdrop-blur-sm transition-all duration-300 ${
               badge.highlight
-                ? 'border-teal-500/50 bg-teal-500/15 hover:bg-teal-500/25 shadow-lg shadow-teal-500/20'
-                : 'border-teal-700/30 bg-ink-800/50 hover:border-teal-600/50 hover:bg-ink-800/80 hover:shadow-lg hover:shadow-teal-500/10'
+                ? 'border-teal-400/60 bg-gradient-to-br from-teal-500/20 to-teal-600/15 hover:border-teal-400 hover:bg-teal-500/25 shadow-lg shadow-teal-500/25'
+                : 'border-teal-500/40 bg-gradient-to-br from-teal-600/10 to-teal-700/5 hover:border-teal-400/60 hover:bg-teal-600/15 hover:shadow-lg hover:shadow-teal-500/15'
             }`}
           >
             <Icon
-              size={badge.highlight ? 32 : 28}
+              size={badge.highlight ? 36 : 32}
               className={`transition-colors ${
-                badge.highlight ? 'text-teal-400' : 'text-teal-500 group-hover:text-teal-400'
+                badge.highlight ? 'text-teal-300' : 'text-teal-400 group-hover:text-teal-300'
               }`}
               strokeWidth={1.5}
             />
             <div className="flex-1">
-              <p className={`font-semibold text-sm leading-tight mb-2 ${
-                badge.highlight ? 'text-teal-200' : 'text-white'
+              <p className={`font-bold text-sm leading-tight mb-2 ${
+                badge.highlight ? 'text-teal-900' : 'text-gray-900 dark:text-white'
               }`}>
                 {badge.label}
               </p>
-              <p className={`text-xs leading-relaxed ${
-                badge.highlight ? 'text-teal-300/70' : 'text-teal-200/60'
+              <p className={`text-xs leading-relaxed font-medium ${
+                badge.highlight ? 'text-teal-800' : 'text-gray-700 dark:text-teal-100/70'
               }`}>
                 {badge.description}
               </p>

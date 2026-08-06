@@ -67,9 +67,12 @@ export function SectionRenderer({
   const textClass = textStyles[section.backgroundStyle || 'light']
 
   switch (section.sectionType) {
-    case 'hero':
+    case 'hero': {
+      const isLightBg = section.backgroundStyle === 'light-institutional' || section.backgroundStyle === 'light'
+      const bgClass = isLightBg ? 'bg-light-bg-primary' : 'bg-ink-900'
+
       return (
-        <section className={`relative overflow-hidden py-20 lg:py-32 bg-light-bg-primary`}>
+        <section className={`relative overflow-hidden py-20 lg:py-32 ${bgClass}`}>
           {/* Background Video (muted, looping, no controls) */}
           {section.videoUrl && (
             <video
@@ -92,9 +95,13 @@ export function SectionRenderer({
             />
           )}
 
-          {/* Strong overlay for text readability on media backgrounds */}
+          {/* Overlay for text readability - different colors based on page theme */}
           {(section.videoUrl || section.imageUrl) && (
-            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/40 to-black/35"></div>
+            <div className={`absolute inset-0 ${
+              isLightBg
+                ? 'bg-gradient-to-b from-black/35 via-black/40 to-black/35'
+                : 'bg-gradient-to-b from-ink-900/60 via-ink-900/70 to-ink-900/60'
+            }`}></div>
           )}
 
           {/* Content overlay */}
@@ -148,6 +155,7 @@ export function SectionRenderer({
           </div>
         </section>
       )
+    }
 
     case 'feature-grid':
       return (

@@ -171,17 +171,19 @@ export const PageSections: CollectionConfig = {
     {
       name: 'imageUrl',
       type: 'text',
-      label: 'Image URL',
+      label: 'Hero Image URL',
       admin: {
-        description: 'URL to featured image for this section',
+        description: 'URL to hero image (only for hero sections)',
+        condition: (data) => data?.sectionType === 'hero',
       },
     },
     {
       name: 'videoUrl',
       type: 'text',
-      label: 'Video URL',
+      label: 'Hero Video URL',
       admin: {
-        description: 'URL to featured video (MP4)',
+        description: 'URL to hero video MP4 (only for hero sections)',
+        condition: (data) => data?.sectionType === 'hero',
       },
     },
     {
@@ -189,7 +191,8 @@ export const PageSections: CollectionConfig = {
       type: 'text',
       label: 'Button Text',
       admin: {
-        description: 'Text for primary CTA button',
+        description: 'Text for primary CTA button (only for hero sections)',
+        condition: (data) => data?.sectionType === 'hero',
       },
     },
     {
@@ -197,7 +200,8 @@ export const PageSections: CollectionConfig = {
       type: 'text',
       label: 'Button URL',
       admin: {
-        description: 'Link for primary CTA button',
+        description: 'Link for primary CTA button (only for hero sections)',
+        condition: (data) => data?.sectionType === 'hero',
       },
     },
     {
@@ -205,7 +209,8 @@ export const PageSections: CollectionConfig = {
       type: 'text',
       label: 'Secondary Button Text',
       admin: {
-        description: 'Text for secondary CTA button',
+        description: 'Text for secondary CTA button (only for hero sections)',
+        condition: (data) => data?.sectionType === 'hero',
       },
     },
     {
@@ -213,7 +218,8 @@ export const PageSections: CollectionConfig = {
       type: 'text',
       label: 'Secondary Button URL',
       admin: {
-        description: 'Link for secondary CTA button',
+        description: 'Link for secondary CTA button (only for hero sections)',
+        condition: (data) => data?.sectionType === 'hero',
       },
     },
     {
