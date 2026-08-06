@@ -10,7 +10,7 @@
  * import config from '@/qrs-cms/payload.config'
  */
 
-const API_URL = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3001'
+const API_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
 export async function fetchPages() {
   console.log('[Payload] Fetching pages from:', `${API_URL}/api/pages`)

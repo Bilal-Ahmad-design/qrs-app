@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+
 const nextConfig = {
   reactStrictMode: true,
   headers: async () => {
@@ -28,7 +31,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: http://localhost:3001; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: http://localhost:3001; media-src 'self' data: http://localhost:3001 https:; upgrade-insecure-requests;",
+            value: `default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: ${cmsUrl}; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: ${cmsUrl}; media-src 'self' data: ${cmsUrl} https:; upgrade-insecure-requests;`,
           },
         ],
       },
