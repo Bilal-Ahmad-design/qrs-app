@@ -375,6 +375,7 @@ export function SectionRenderer({
           items={section.items || []}
           title={section.heading || section.title}
           description={section.description}
+          backgroundStyle={section.backgroundStyle}
         />
       )
 
