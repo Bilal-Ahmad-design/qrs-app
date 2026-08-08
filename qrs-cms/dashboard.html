@@ -879,7 +879,7 @@
       background: var(--surface-primary);
       border-radius: var(--radius-lg);
       width: 90%;
-      max-width: 600px;
+      max-width: 60%;
       max-height: 85vh;
       overflow-y: auto;
       box-shadow: var(--shadow-lg);
@@ -1000,7 +1000,7 @@
       transition: background var(--transition-fast);
     }
 
-    .toggle-switch::after {
+    /* .toggle-switch::after {
       content: '';
       position: absolute;
       width: 20px;
@@ -1010,7 +1010,7 @@
       top: 2px;
       left: 2px;
       transition: left var(--transition-fast);
-    }
+    } */
 
     .toggle-switch:checked {
       background: var(--status-published);
@@ -1867,8 +1867,8 @@
               <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="uploadImage(event)">
             </div>
 
-            <!-- Video Upload -->
-            <div class="form-group">
+            <!-- Video Upload - HERO ONLY -->
+            <div class="form-group" data-video-only>
               <label class="form-label">Background Video</label>
               <div style="display: flex; gap: var(--spacing-md);">
                 <input type="text" class="form-input" id="editVideoUrl" placeholder="Video URL" style="flex: 1;">
@@ -1885,8 +1885,8 @@
               <input type="file" id="videoInput" style="display: none;" accept="video/*" onchange="uploadVideo(event)">
             </div>
 
-            <!-- Poster Image (for video) -->
-            <div class="form-group">
+            <!-- Poster Image (for video) - HERO ONLY -->
+            <div class="form-group" data-video-only>
               <label class="form-label">Video Poster/Thumbnail</label>
               <div style="display: flex; gap: var(--spacing-md);">
                 <input type="text" class="form-input" id="editPosterUrl" placeholder="Poster image URL" style="flex: 1;">
@@ -2561,11 +2561,27 @@
     function updateFieldsVisibility(sectionType) {
       const mediaSection = document.querySelector('[data-section="media-assets"]')
       const itemsSection = document.querySelector('[data-section="items-array"]')
+      const videoOnlyFields = document.querySelectorAll('[data-video-only]')
 
-      // Show media only for hero sections
+      // Show media for hero and text-image sections
+      const mediaSections = ['hero', 'text-image']
       if (mediaSection) {
-        mediaSection.style.display = sectionType === 'hero' ? 'block' : 'none'
+        mediaSection.style.display = mediaSections.includes(sectionType) ? 'block' : 'none'
+        // Update media section title based on type
+        const mediaTitle = mediaSection.querySelector('h4')
+        if (mediaTitle) {
+          if (sectionType === 'text-image') {
+            mediaTitle.textContent = '🖼️ Image Configuration (Text-Image Only)'
+          } else {
+            mediaTitle.textContent = '🎬 Media Assets (Hero Only)'
+          }
+        }
       }
+
+      // Hide video fields for text-image (show only for hero)
+      videoOnlyFields.forEach(field => {
+        field.style.display = sectionType === 'hero' ? 'block' : 'none'
+      })
 
       // Show items only for grids, stats, workflows
       const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
@@ -2582,6 +2598,8 @@
       const sectionType = document.getElementById('editType').value
       const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
 
+      const imageUrlSections = ['hero', 'text-image']
+
       const updated = {
         ...sections[editingSectionIndex],
         title: document.getElementById('editTitle').value,
@@ -2591,7 +2609,7 @@
         backgroundStyle: document.getElementById('editBg').value,
         order: parseInt(document.getElementById('editOrder').value),
         published: document.getElementById('editPublished').checked,
-        imageUrl: sectionType === 'hero' ? (document.getElementById('editImageUrl').value || null) : null,
+        imageUrl: imageUrlSections.includes(sectionType) ? (document.getElementById('editImageUrl').value || null) : null,
         videoUrl: sectionType === 'hero' ? (document.getElementById('editVideoUrl').value || null) : null,
         posterImage: sectionType === 'hero' ? (document.getElementById('editPosterUrl').value || null) : null,
         items: itemSections.includes(sectionType) ? editingItems : undefined,
