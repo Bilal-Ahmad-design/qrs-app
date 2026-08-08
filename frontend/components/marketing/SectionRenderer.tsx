@@ -241,7 +241,7 @@ export function SectionRenderer({
               {section.imageUrl && (
                 <div className="rounded-xl overflow-hidden shadow-2xl">
                   <img
-                    src={section.imageUrl}
+                    src={section.imageUrl.startsWith('http') ? section.imageUrl : `http://localhost:3001${section.imageUrl}`}
                     alt={section.title}
                     className="w-full h-auto object-cover"
                   />

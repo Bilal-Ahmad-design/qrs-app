@@ -23,9 +23,10 @@ export function ProductEvidence({ items, title, description }: ProductEvidencePr
   // Map placeholder URLs to use next/image compatible paths
   const getImageUrl = (url?: string) => {
     if (!url) return '/placeholder-product.png'
-    // If URL is a placeholder path, it's already correct
-    // If it's from CMS with full URL, use it as-is
-    return url
+    // If it's already a full URL, use as-is
+    if (url.startsWith('http')) return url
+    // If it's a relative path from CMS uploads, add server prefix
+    return `http://localhost:3001${url}`
   }
 
   return (
