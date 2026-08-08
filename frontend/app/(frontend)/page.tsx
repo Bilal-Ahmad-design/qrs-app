@@ -3,6 +3,7 @@ import { getPageSections } from '@/lib/cms-fetch'
 import { getDefaultSections } from '@/lib/default-sections'
 import { SectionRenderer } from '@/components/marketing/SectionRenderer'
 import { DeviceFrame } from '@/components/marketing/DeviceFrame'
+import { env } from '@/lib/env'
 
 export const metadata = buildMetadata({
   title: 'QRS',
@@ -11,6 +12,8 @@ export const metadata = buildMetadata({
 })
 
 export default async function HomePage() {
+  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+
   // Fetch sections from CMS, fall back to defaults
   let sections = await getPageSections('home')
   if (!sections || sections.length === 0) {
@@ -29,7 +32,7 @@ export default async function HomePage() {
           {/* Hero section gets DeviceFrame with uploaded image */}
           {section.sectionType === 'hero' && (
             <DeviceFrame
-              imageSrc={section.imageUrl ? `http://localhost:3001${section.imageUrl}` : undefined}
+              imageSrc={section.imageUrl ? `${cmsUrl}${section.imageUrl}` : undefined}
               imageAlt={section.title}
             />
           )}

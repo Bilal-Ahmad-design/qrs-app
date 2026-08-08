@@ -31,7 +31,15 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: `default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: ${cmsUrl}; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: ${cmsUrl}; media-src 'self' data: ${cmsUrl} https:; upgrade-insecure-requests;`,
+            value: `default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: ${cmsUrl}; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: ${cmsUrl}; media-src 'self' data: ${cmsUrl} https:; upgrade-insecure-requests;`,
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
           },
         ],
       },

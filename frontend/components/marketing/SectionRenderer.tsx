@@ -6,6 +6,7 @@ import { ProductEvidence } from '@/components/marketing/ProductEvidence'
 import { RegulatoryGrid } from '@/components/marketing/RegulatoryGrid'
 import { SecurityComplianceSection } from '@/components/marketing/SecurityComplianceSection'
 import { SecurityFeaturesGrid } from '@/components/marketing/SecurityFeaturesGrid'
+import { env } from '@/lib/env'
 
 interface SectionItem {
   title?: string
@@ -63,6 +64,7 @@ export function SectionRenderer({
   section,
   children,
 }: SectionRendererProps) {
+  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
   const bgClass = bgStyles[section.backgroundStyle || 'light']
   const textClass = textStyles[section.backgroundStyle || 'light']
 
@@ -82,14 +84,14 @@ export function SectionRenderer({
               loop
               playsInline
             >
-              <source src={`http://localhost:3001${section.videoUrl}`} type="video/mp4" />
+              <source src={`${cmsUrl}${section.videoUrl}`} type="video/mp4" />
             </video>
           )}
 
           {/* Background Image (fallback if no video or behind video) */}
           {section.imageUrl && !section.videoUrl && (
             <img
-              src={`http://localhost:3001${section.imageUrl}`}
+              src={`${cmsUrl}${section.imageUrl}`}
               alt={section.title}
               className="absolute inset-0 w-full h-full object-cover"
             />
@@ -241,7 +243,7 @@ export function SectionRenderer({
               {section.imageUrl && (
                 <div className="rounded-xl overflow-hidden shadow-2xl">
                   <img
-                    src={section.imageUrl.startsWith('http') ? section.imageUrl : `http://localhost:3001${section.imageUrl}`}
+                    src={section.imageUrl.startsWith('http') ? section.imageUrl : `${cmsUrl}${section.imageUrl}`}
                     alt={section.title}
                     className="w-full h-auto object-cover"
                   />

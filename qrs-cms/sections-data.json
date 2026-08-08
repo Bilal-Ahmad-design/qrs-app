@@ -166,8 +166,8 @@
     {
       "id": "validation",
       "page": "home",
-      "title": "Independently Validated",
-      "heading": "Independently Validated",
+      "title": "Validation Methodology",
+      "heading": "Validation Methodology",
       "description": "QRS models are independently verified by leading academic and industry experts",
       "sectionType": "feature-grid",
       "backgroundStyle": "light-institutional",

@@ -139,7 +139,7 @@ export const defaultHomeSections = [
       {
         value: '02',
         title: 'Run Model',
-        description: 'Quantum-optimized catastrophe modeling engine',
+        description: 'Scalable catastrophe modeling engine',
       },
       {
         value: '03',
@@ -157,17 +157,17 @@ export const defaultHomeSections = [
   },
   {
     id: 'validation',
-    title: 'Independently Validated',
-    heading: 'Independently Validated',
+    title: 'Validation Methodology',
+    heading: 'Validation Methodology',
     description:
-      'QRS models are independently verified by leading academic and industry experts',
+      'QRS models are benchmarked by leading academic and industry experts',
     sectionType: 'feature-grid',
     backgroundStyle: 'light-institutional',
     items: [
       {
         title: 'SSRN Validation Study',
         description:
-          'Peer-reviewed quantitative validation of QRS portfolio analytics methodology',
+          'Quantitatively validated methodology from QRS portfolio analytics research',
         link: 'https://ssrn.com',
       },
       {
