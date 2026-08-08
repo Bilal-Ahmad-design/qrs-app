@@ -8,7 +8,7 @@ export const PageSections: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'page', 'sectionType', 'order', 'published'],
+    defaultColumns: ['title', 'page', 'order', 'published'],
   },
   access: {
     read: () => true,
@@ -61,6 +61,7 @@ export const PageSections: CollectionConfig = {
       ],
       admin: {
         description: 'Type of section layout',
+        hidden: true,
       },
     },
     {
