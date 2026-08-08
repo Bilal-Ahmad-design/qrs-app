@@ -122,6 +122,41 @@ export const PageSections: CollectionConfig = {
       },
     },
     {
+      name: 'mediaAssets',
+      type: 'group',
+      label: 'Media Assets',
+      admin: {
+        condition: (data) => data?.sectionType === 'hero',
+        description: 'Media fields only available for hero sections',
+      },
+      fields: [
+        {
+          name: 'heroImage',
+          type: 'text',
+          label: 'Hero Image URL',
+          admin: {
+            description: 'URL to hero image',
+          },
+        },
+        {
+          name: 'backgroundVideo',
+          type: 'text',
+          label: 'Background Video URL',
+          admin: {
+            description: 'URL to background video (MP4)',
+          },
+        },
+        {
+          name: 'videoPoster',
+          type: 'text',
+          label: 'Video Poster/Thumbnail',
+          admin: {
+            description: 'Thumbnail image for video',
+          },
+        },
+      ],
+    },
+    {
       name: 'items',
       type: 'array',
       label: 'Items/Cards',
@@ -174,7 +209,7 @@ export const PageSections: CollectionConfig = {
       type: 'text',
       label: 'Hero Image URL',
       admin: {
-        description: 'URL to hero image (only for hero sections)',
+        description: 'URL to hero image (HERO SECTIONS ONLY)',
         condition: (data) => data?.sectionType === 'hero',
       },
     },
@@ -183,7 +218,7 @@ export const PageSections: CollectionConfig = {
       type: 'text',
       label: 'Hero Video URL',
       admin: {
-        description: 'URL to hero video MP4 (only for hero sections)',
+        description: 'URL to hero video MP4 (HERO SECTIONS ONLY)',
         condition: (data) => data?.sectionType === 'hero',
       },
     },
