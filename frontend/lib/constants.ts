@@ -18,7 +18,7 @@ export const NAV_LINKS = [
   { label: 'Platform', href: '/platform/' },
   { label: 'Trust', href: '/trust/' },
   { label: 'Validation', href: '/validation/' },
-  { label: 'Security', href: '/security/' },
+  { label: 'About', href: '/about/' },
   { label: 'Docs', href: '/docs/' },
   { label: 'Support', href: '/support/' },
 ];

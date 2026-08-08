@@ -62,6 +62,11 @@ export function Footer() {
             <h3 className="font-display text-h4 font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
               <li>
+                <Link href="/about/" className="text-teal-500 hover:text-teal-600">
+                  About
+                </Link>
+              </li>
+              <li>
                 <Link href={COMPLIANCE_LINKS.support} className="text-teal-500 hover:text-teal-600">
                   Support
                 </Link>
