@@ -17,6 +17,7 @@ import { Solutions } from './collections/Solutions'
 import { RegulatoryCompliance } from './collections/RegulatoryCompliance'
 import { PlatformCapability } from './collections/PlatformCapability'
 import { Documentation } from './collections/Documentation'
+import { PageSections } from './collections/PageSections'
 import { TrustCenter } from './globals/TrustCenter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -103,15 +104,33 @@ export default buildConfig({
         text-overflow: ellipsis;
       }
 
-      /* Modal/Dialog responsive */
+      /* Modal/Dialog responsive - FULL WIDTH */
       [class*="modal"],
       [class*="dialog"],
       [role="dialog"] {
-        width: calc(100% - 32px);
-        max-width: 90vw;
-        max-height: 90vh;
-        overflow-y: auto;
+        width: 95vw !important;
+        max-width: 95vw !important;
+        height: 95vh !important;
+        max-height: 95vh !important;
+        overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        left: 2.5vw !important;
+        top: 2.5vh !important;
+      }
+
+      /* Modal drawer/panel - full width */
+      [class*="drawer"] {
+        width: 95vw !important;
+        max-width: 95vw !important;
+      }
+
+      /* Modal content area - scrollable */
+      [class*="modal"] [class*="content"],
+      [class*="dialog"] [class*="content"],
+      [role="dialog"] [class*="content"] {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
       }
 
       /* Row/Grid responsive */
@@ -222,6 +241,7 @@ export default buildConfig({
     RegulatoryCompliance,
     PlatformCapability,
     Documentation,
+    PageSections,
   ],
   globals: [
     TrustCenter,
