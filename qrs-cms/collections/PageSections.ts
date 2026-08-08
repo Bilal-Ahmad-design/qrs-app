@@ -122,44 +122,13 @@ export const PageSections: CollectionConfig = {
       },
     },
     {
-      name: 'mediaAssets',
-      type: 'group',
-      label: 'Media Assets',
-      admin: {
-        condition: (data) => data?.sectionType === 'hero',
-        description: 'Media fields only available for hero sections',
-      },
-      fields: [
-        {
-          name: 'heroImage',
-          type: 'text',
-          label: 'Hero Image URL',
-          admin: {
-            description: 'URL to hero image',
-          },
-        },
-        {
-          name: 'backgroundVideo',
-          type: 'text',
-          label: 'Background Video URL',
-          admin: {
-            description: 'URL to background video (MP4)',
-          },
-        },
-        {
-          name: 'videoPoster',
-          type: 'text',
-          label: 'Video Poster/Thumbnail',
-          admin: {
-            description: 'Thumbnail image for video',
-          },
-        },
-      ],
-    },
-    {
       name: 'items',
       type: 'array',
       label: 'Items/Cards',
+      admin: {
+        condition: (data) => data?.sectionType !== 'hero',
+        description: 'Array of items for grids, cards, stats, etc (NOT for hero sections)',
+      },
       fields: [
         {
           name: 'title',
@@ -200,63 +169,73 @@ export const PageSections: CollectionConfig = {
           },
         },
       ],
-      admin: {
-        description: 'Array of items for grids, cards, stats, etc',
-      },
     },
     {
-      name: 'imageUrl',
-      type: 'text',
-      label: 'Hero Image URL',
+      name: 'heroConfiguration',
+      type: 'group',
+      label: '🎬 Hero Section Configuration',
       admin: {
-        description: 'URL to hero image (HERO SECTIONS ONLY)',
         condition: (data) => data?.sectionType === 'hero',
+        description: 'Media and button configuration for HERO SECTIONS ONLY',
       },
-    },
-    {
-      name: 'videoUrl',
-      type: 'text',
-      label: 'Hero Video URL',
-      admin: {
-        description: 'URL to hero video MP4 (HERO SECTIONS ONLY)',
-        condition: (data) => data?.sectionType === 'hero',
-      },
-    },
-    {
-      name: 'buttonText',
-      type: 'text',
-      label: 'Button Text',
-      admin: {
-        description: 'Text for primary CTA button (only for hero sections)',
-        condition: (data) => data?.sectionType === 'hero',
-      },
-    },
-    {
-      name: 'buttonUrl',
-      type: 'text',
-      label: 'Button URL',
-      admin: {
-        description: 'Link for primary CTA button (only for hero sections)',
-        condition: (data) => data?.sectionType === 'hero',
-      },
-    },
-    {
-      name: 'secondaryButtonText',
-      type: 'text',
-      label: 'Secondary Button Text',
-      admin: {
-        description: 'Text for secondary CTA button (only for hero sections)',
-        condition: (data) => data?.sectionType === 'hero',
-      },
-    },
-    {
-      name: 'secondaryButtonUrl',
-      type: 'text',
-      label: 'Secondary Button URL',
-      admin: {
-        description: 'Link for secondary CTA button (only for hero sections)',
-        condition: (data) => data?.sectionType === 'hero',
-      },
+      fields: [
+        {
+          name: 'imageUrl',
+          type: 'text',
+          label: 'Hero Image URL',
+          admin: {
+            description: 'Main hero image URL',
+          },
+        },
+        {
+          name: 'videoUrl',
+          type: 'text',
+          label: 'Hero Video URL',
+          admin: {
+            description: 'Background video URL (MP4 format)',
+          },
+        },
+        {
+          name: 'videoPoster',
+          type: 'text',
+          label: 'Video Poster/Thumbnail',
+          admin: {
+            description: 'Fallback image while video loads',
+          },
+        },
+        {
+          name: 'buttonText',
+          type: 'text',
+          label: 'Primary Button Text',
+          admin: {
+            description: 'Text for primary CTA button',
+          },
+        },
+        {
+          name: 'buttonUrl',
+          type: 'text',
+          label: 'Primary Button URL',
+          admin: {
+            description: 'Link for primary CTA button',
+          },
+        },
+        {
+          name: 'secondaryButtonText',
+          type: 'text',
+          label: 'Secondary Button Text',
+          admin: {
+            description: 'Text for secondary CTA button (optional)',
+          },
+        },
+        {
+          name: 'secondaryButtonUrl',
+          type: 'text',
+          label: 'Secondary Button URL',
+          admin: {
+            description: 'Link for secondary CTA button (optional)',
+          },
+        },
+      ],
     },
     {
       name: 'order',
