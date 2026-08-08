@@ -1844,6 +1844,31 @@
             </label>
           </div>
 
+          <!-- Security Compliance Section - SECURITY COMPLIANCE ONLY -->
+          <div data-section="security-compliance" style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg); display: none;">
+            <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--spacing-lg); color: var(--text-primary);">🔒 Security Compliance Fields</h4>
+
+            <div class="form-group">
+              <label class="form-label">Left Column Title</label>
+              <input type="text" class="form-input" id="editLeftTitle" placeholder="e.g., Cryptographic Reproducibility">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Left Column Description</label>
+              <textarea class="form-textarea" id="editLeftDescription" placeholder="Describe the left column content" style="height: 100px;"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Right Column Title</label>
+              <input type="text" class="form-input" id="editRightTitle" placeholder="e.g., Compliance Certifications">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Right Column Description</label>
+              <textarea class="form-textarea" id="editRightDescription" placeholder="Describe the right column content" style="height: 100px;"></textarea>
+            </div>
+          </div>
+
           <!-- Items Array Section - GRIDS/STATS ONLY -->
           <div data-section="items-array" style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg); display: none;">
             <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--spacing-lg); color: var(--text-primary);">📋 Items/Cards</h4>
@@ -2527,6 +2552,12 @@
       document.getElementById('editVideoUrl').value = section.videoUrl || ''
       document.getElementById('editPosterUrl').value = section.posterImage || ''
 
+      // Load security compliance fields
+      document.getElementById('editLeftTitle').value = section.leftTitle || ''
+      document.getElementById('editLeftDescription').value = section.leftDescription || ''
+      document.getElementById('editRightTitle').value = section.rightTitle || ''
+      document.getElementById('editRightDescription').value = section.rightDescription || ''
+
       // Show media previews
       if (section.imageUrl) {
         document.getElementById('previewImage').src = section.imageUrl
@@ -2567,6 +2598,7 @@
     function updateFieldsVisibility(sectionType) {
       const mediaSection = document.querySelector('[data-section="media-assets"]')
       const itemsSection = document.querySelector('[data-section="items-array"]')
+      const complianceSection = document.querySelector('[data-section="security-compliance"]')
       const videoOnlyFields = document.querySelectorAll('[data-video-only]')
 
       // Show media for hero and text-image sections
@@ -2594,6 +2626,11 @@
       if (itemsSection) {
         itemsSection.style.display = itemSections.includes(sectionType) ? 'block' : 'none'
       }
+
+      // Show security compliance fields only for security-compliance sections
+      if (complianceSection) {
+        complianceSection.style.display = sectionType === 'security-compliance' ? 'block' : 'none'
+      }
     }
 
     async function saveSection(event) {
@@ -2619,6 +2656,10 @@
         videoUrl: sectionType === 'hero' ? (document.getElementById('editVideoUrl').value || null) : null,
         posterImage: sectionType === 'hero' ? (document.getElementById('editPosterUrl').value || null) : null,
         items: itemSections.includes(sectionType) ? editingItems : undefined,
+        leftTitle: sectionType === 'security-compliance' ? (document.getElementById('editLeftTitle').value || null) : null,
+        leftDescription: sectionType === 'security-compliance' ? (document.getElementById('editLeftDescription').value || null) : null,
+        rightTitle: sectionType === 'security-compliance' ? (document.getElementById('editRightTitle').value || null) : null,
+        rightDescription: sectionType === 'security-compliance' ? (document.getElementById('editRightDescription').value || null) : null,
         page: currentPage
       }
 
