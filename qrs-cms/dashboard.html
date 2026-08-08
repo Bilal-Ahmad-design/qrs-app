@@ -3316,7 +3316,11 @@
           <textarea placeholder="Description" class="form-input" style="margin-bottom: var(--spacing-sm); height: 60px;" onchange="editingItems[${idx}].description = this.value">${item.description || ''}</textarea>
           <input type="text" placeholder="Icon (emoji)" maxlength="2" value="${item.icon || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].icon = this.value">
           <input type="text" placeholder="Value/Number" value="${item.value || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].value = this.value">
-          <input type="text" placeholder="Image URL" value="${item.imageUrl || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].imageUrl = this.value">
+          <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);">
+            <input type="text" id="itemImageUrl_${idx}" placeholder="Image URL" value="${item.imageUrl || ''}" class="form-input" style="flex: 1;" onchange="editingItems[${idx}].imageUrl = this.value">
+            <button type="button" class="btn btn-primary" onclick="triggerItemImageUpload(${idx})" style="width: 100px;">Upload</button>
+            <input type="file" id="itemImageInput_${idx}" style="display: none;" accept="image/*" onchange="uploadItemImage(event, ${idx})">
+          </div>
           <input type="text" placeholder="Link URL" value="${item.link || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].link = this.value">
           <button type="button" class="btn btn-secondary" onclick="removeItem(${idx})" style="width: 100%; background: var(--status-error); color: white;">Remove</button>
         </div>
@@ -3326,6 +3330,37 @@
     function removeItem(idx) {
       editingItems.splice(idx, 1)
       renderItems()
+    }
+
+    function triggerItemImageUpload(idx) {
+      document.getElementById(`itemImageInput_${idx}`).click()
+    }
+
+    async function uploadItemImage(event, idx) {
+      const file = event.target.files?.[0]
+      if (!file) return
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+        })
+
+        const result = await response.json()
+        if (result.url) {
+          editingItems[idx].imageUrl = result.url
+          document.getElementById(`itemImageUrl_${idx}`).value = result.url
+          showToast('✓ Image uploaded successfully', 'success')
+        } else {
+          showToast('✗ Upload failed', 'error')
+        }
+      } catch (error) {
+        showToast('✗ Error uploading image: ' + error.message, 'error')
+      }
     }
   </script>
 
