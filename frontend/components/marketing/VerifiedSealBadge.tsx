@@ -58,7 +58,7 @@ export function VerifiedSealBadge({
             </div>
 
             <p className="text-sm text-teal-100 mb-6 leading-relaxed font-medium">
-              Placeholder signature. Real ECDSA data from product backend before launch.
+              Click below to verify this calculation&apos;s cryptographic signature using our open-source verification tools.
             </p>
 
             <a

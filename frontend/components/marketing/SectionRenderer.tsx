@@ -79,10 +79,11 @@ export function SectionRenderer({
           {section.videoUrl && (
             <video
               className="absolute inset-0 w-full h-full object-cover"
-              autoPlay
+              autoPlay={typeof window !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches}
               muted
               loop
               playsInline
+              poster={`${cmsUrl}${section.imageUrl || '/placeholder.png'}`}
             >
               <source src={`${cmsUrl}${section.videoUrl}`} type="video/mp4" />
             </video>
