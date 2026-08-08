@@ -67,8 +67,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href={COMPLIANCE_LINKS.support} className="text-teal-500 hover:text-teal-600">
-                  Support
+                <Link href={COMPLIANCE_LINKS.contact} className="text-teal-500 hover:text-teal-600">
+                  Contact
                 </Link>
               </li>
             </ul>
