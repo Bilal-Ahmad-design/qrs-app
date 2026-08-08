@@ -24,7 +24,6 @@ export const PageSections: CollectionConfig = {
       req.user?.role === 'super-admin' || req.user?.role === 'admin',
   },
   fields: [
-    // ============ COMMON FIELDS (ALL SECTIONS) ============
     {
       name: 'page',
       type: 'select',
@@ -66,6 +65,31 @@ export const PageSections: CollectionConfig = {
       label: 'Section Title (Internal)',
     },
     {
+      name: 'subtitle',
+      type: 'text',
+      label: 'Subtitle/Badge Text',
+      admin: {
+        condition: (data) => data?.sectionType === 'hero',
+        description: 'Only for hero sections',
+      },
+    },
+    {
+      name: 'heading',
+      type: 'richText',
+      label: 'Heading',
+      admin: {
+        condition: (data) => data?.sectionType !== undefined,
+      },
+    },
+    {
+      name: 'description',
+      type: 'richText',
+      label: 'Description',
+      admin: {
+        condition: (data) => data?.sectionType !== undefined,
+      },
+    },
+    {
       name: 'backgroundStyle',
       type: 'select',
       label: '🎨 Background Color',
@@ -90,120 +114,69 @@ export const PageSections: CollectionConfig = {
       label: '✅ Published',
       defaultValue: true,
     },
-
-    // ============ HERO SECTION ONLY ============
     {
-      type: 'collapsible',
-      label: '🎬 HERO SECTION FIELDS',
-      admin: {
-        condition: (data) => data?.sectionType === 'hero',
-      },
-      fields: [
-        {
-          name: 'subtitle',
-          type: 'text',
-          label: 'Subtitle/Badge Text',
-          admin: {
-            description: 'Small badge text above heading',
-          },
-        },
-        {
-          name: 'heading',
-          type: 'richText',
-          label: 'Main Heading',
-          required: true,
-        },
-        {
-          name: 'description',
-          type: 'richText',
-          label: 'Description',
-        },
-        {
-          name: 'imageUrl',
-          type: 'text',
-          label: 'Hero Image URL',
-          admin: {
-            description: 'Background image for hero section',
-          },
-        },
-        {
-          name: 'videoUrl',
-          type: 'text',
-          label: 'Background Video URL (MP4)',
-          admin: {
-            description: 'Video plays behind content',
-          },
-        },
-        {
-          name: 'buttonText',
-          type: 'text',
-          label: 'Primary Button Text',
-        },
-        {
-          name: 'buttonUrl',
-          type: 'text',
-          label: 'Primary Button URL',
-        },
-        {
-          name: 'secondaryButtonText',
-          type: 'text',
-          label: 'Secondary Button Text',
-        },
-        {
-          name: 'secondaryButtonUrl',
-          type: 'text',
-          label: 'Secondary Button URL',
-        },
-      ],
-    },
-
-    // ============ TEXT-IMAGE & CTA SECTIONS ============
-    {
-      type: 'collapsible',
-      label: '📝 TEXT-IMAGE / CTA FIELDS',
+      name: 'imageUrl',
+      type: 'text',
+      label: 'Image URL',
       admin: {
         condition: (data) =>
+          data?.sectionType === 'hero' ||
+          data?.sectionType === 'text-image' ||
+          data?.sectionType === 'product-evidence',
+        description: 'Background/display image',
+      },
+    },
+    {
+      name: 'videoUrl',
+      type: 'text',
+      label: 'Video URL (MP4)',
+      admin: {
+        condition: (data) => data?.sectionType === 'hero',
+        description: 'Background video for hero',
+      },
+    },
+    {
+      name: 'buttonText',
+      type: 'text',
+      label: 'Button Text',
+      admin: {
+        condition: (data) =>
+          data?.sectionType === 'hero' ||
           data?.sectionType === 'text-image' ||
           data?.sectionType === 'cta',
       },
-      fields: [
-        {
-          name: 'heading',
-          type: 'richText',
-          label: 'Heading',
-          required: true,
-        },
-        {
-          name: 'description',
-          type: 'richText',
-          label: 'Description/Body Text',
-        },
-        {
-          name: 'imageUrl',
-          type: 'text',
-          label: 'Image URL (for text-image only)',
-          admin: {
-            condition: (data) => data?.sectionType === 'text-image',
-            description: 'Image displayed next to text',
-          },
-        },
-        {
-          name: 'buttonText',
-          type: 'text',
-          label: 'Button Text',
-        },
-        {
-          name: 'buttonUrl',
-          type: 'text',
-          label: 'Button URL',
-        },
-      ],
     },
-
-    // ============ ITEMS-BASED SECTIONS (Grid, Stats, Workflow, etc) ============
     {
-      type: 'collapsible',
-      label: '📋 ITEMS/CARDS CONFIGURATION',
+      name: 'buttonUrl',
+      type: 'text',
+      label: 'Button URL',
+      admin: {
+        condition: (data) =>
+          data?.sectionType === 'hero' ||
+          data?.sectionType === 'text-image' ||
+          data?.sectionType === 'cta',
+      },
+    },
+    {
+      name: 'secondaryButtonText',
+      type: 'text',
+      label: 'Secondary Button Text',
+      admin: {
+        condition: (data) => data?.sectionType === 'hero',
+      },
+    },
+    {
+      name: 'secondaryButtonUrl',
+      type: 'text',
+      label: 'Secondary Button URL',
+      admin: {
+        condition: (data) => data?.sectionType === 'hero',
+      },
+    },
+    {
+      name: 'items',
+      type: 'array',
+      label: 'Items/Cards',
       admin: {
         condition: (data) => {
           const itemSections = [
@@ -219,107 +192,78 @@ export const PageSections: CollectionConfig = {
       },
       fields: [
         {
-          name: 'heading',
-          type: 'richText',
-          label: 'Section Heading',
+          name: 'title',
+          type: 'text',
+          label: 'Title',
         },
         {
           name: 'description',
-          type: 'richText',
-          label: 'Section Description',
+          type: 'textarea',
+          label: 'Description',
         },
         {
-          name: 'items',
-          type: 'array',
-          label: 'Items/Cards',
-          fields: [
-            {
-              name: 'title',
-              type: 'text',
-              label: 'Title',
-            },
-            {
-              name: 'description',
-              type: 'textarea',
-              label: 'Description',
-            },
-            {
-              name: 'icon',
-              type: 'text',
-              label: 'Icon (emoji)',
-              admin: {
-                description: 'Add emoji directly',
-              },
-            },
-            {
-              name: 'value',
-              type: 'text',
-              label: 'Value/Number (for stats only)',
-            },
-            {
-              name: 'imageUrl',
-              type: 'text',
-              label: 'Image URL (product-evidence only)',
-            },
-            {
-              name: 'link',
-              type: 'text',
-              label: 'Link URL',
-            },
-            {
-              name: 'status',
-              type: 'select',
-              label: 'Status Badge (feature-grid only)',
-              options: [
-                { label: 'Validated', value: 'validated' },
-                { label: 'Illustrative', value: 'illustrative' },
-                { label: 'Roadmap', value: 'roadmap' },
-              ],
-            },
+          name: 'icon',
+          type: 'text',
+          label: 'Icon (emoji)',
+        },
+        {
+          name: 'value',
+          type: 'text',
+          label: 'Value/Number',
+        },
+        {
+          name: 'imageUrl',
+          type: 'text',
+          label: 'Image URL',
+        },
+        {
+          name: 'link',
+          type: 'text',
+          label: 'Link URL',
+        },
+        {
+          name: 'status',
+          type: 'select',
+          label: 'Status Badge',
+          options: [
+            { label: 'Validated', value: 'validated' },
+            { label: 'Illustrative', value: 'illustrative' },
+            { label: 'Roadmap', value: 'roadmap' },
           ],
         },
       ],
     },
-
-    // ============ SECURITY COMPLIANCE SECTION ============
     {
-      type: 'collapsible',
-      label: '🔒 SECURITY COMPLIANCE FIELDS',
+      name: 'leftTitle',
+      type: 'text',
+      label: 'Left Column Title',
       admin: {
         condition: (data) => data?.sectionType === 'security-compliance',
       },
-      fields: [
-        {
-          name: 'heading',
-          type: 'richText',
-          label: 'Main Heading',
-        },
-        {
-          name: 'description',
-          type: 'richText',
-          label: 'Main Description',
-        },
-        {
-          name: 'leftTitle',
-          type: 'text',
-          label: 'Left Column Title',
-        },
-        {
-          name: 'leftDescription',
-          type: 'richText',
-          label: 'Left Column Description',
-        },
-        {
-          name: 'rightTitle',
-          type: 'text',
-          label: 'Right Column Title',
-        },
-        {
-          name: 'rightDescription',
-          type: 'richText',
-          label: 'Right Column Description',
-        },
-      ],
+    },
+    {
+      name: 'leftDescription',
+      type: 'richText',
+      label: 'Left Column Description',
+      admin: {
+        condition: (data) => data?.sectionType === 'security-compliance',
+      },
+    },
+    {
+      name: 'rightTitle',
+      type: 'text',
+      label: 'Right Column Title',
+      admin: {
+        condition: (data) => data?.sectionType === 'security-compliance',
+      },
+    },
+    {
+      name: 'rightDescription',
+      type: 'richText',
+      label: 'Right Column Description',
+      admin: {
+        condition: (data) => data?.sectionType === 'security-compliance',
+      },
     },
   ],
 }
