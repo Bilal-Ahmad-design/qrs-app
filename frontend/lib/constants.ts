@@ -11,7 +11,7 @@ export const COMPLIANCE_LINKS = {
   vdp: '/security/vdp/',
   subprocessors: '/subprocessors/',
   cookies: '/cookies/',
-  support: '/support/',
+  contact: '/contact/',
 };
 
 export const NAV_LINKS = [
@@ -20,5 +20,5 @@ export const NAV_LINKS = [
   { label: 'Validation', href: '/validation/' },
   { label: 'About', href: '/about/' },
   { label: 'Docs', href: '/docs/' },
-  { label: 'Support', href: '/support/' },
+  { label: 'Contact', href: '/support/' },
 ];
