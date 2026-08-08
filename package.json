@@ -1,5 +1,5 @@
 {
-  "name": "qrs-app-monorepo",
+  "name": "qrs-app",
   "version": "1.0.0",
   "description": "QRS App - Frontend + CMS",
   "private": true,

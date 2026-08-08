@@ -62,10 +62,12 @@
       "heading": "Verifiable by Design",
       "description": "Every calculation is cryptographically signed and independently verifiable. Built-in reproducibility, not an afterthought.",
       "sectionType": "text-image",
-      "backgroundStyle": "light-institutional",
-      "imageUrl": "/placeholder-verifiable.png",
+      "backgroundStyle": "",
+      "imageUrl": "/uploads/1786203125114-ubpz4s.jpg",
       "order": 2,
-      "published": true
+      "published": true,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "ai-native",
@@ -131,7 +133,7 @@
       "title": "How It Works",
       "heading": "How It Works",
       "sectionType": "feature-grid",
-      "backgroundStyle": "light-institutional",
+      "backgroundStyle": "light",
       "items": [
         {
           "value": "01",
@@ -155,7 +157,11 @@
         }
       ],
       "order": 5,
-      "published": true
+      "published": true,
+      "description": "",
+      "imageUrl": null,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "validation",
@@ -203,9 +209,11 @@
       "description": "Building trust infrastructure for institutional risk management through cryptographic verification and auditable analytics.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
-      "imageUrl": "/placeholder-about-hero.png",
+      "imageUrl": "/uploads/1786203319761-wbb8hp.jpg",
       "order": 0,
-      "published": true
+      "published": true,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "mission",
@@ -216,7 +224,10 @@
       "sectionType": "text-image",
       "backgroundStyle": "light",
       "order": 1,
-      "published": true
+      "published": true,
+      "imageUrl": "/uploads/1786203325617-69ndea.jpg",
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "why-verifiable",
@@ -225,7 +236,7 @@
       "heading": "Why Verifiable Risk?",
       "description": "Institutional risk management demands more than black-box analytics. Our platform gives institutional investors the ability to independently verify every calculation, audit the entire lineage of a risk analysis, and build confidence in the numbers driving their decisions.",
       "sectionType": "feature-grid",
-      "backgroundStyle": "light",
+      "backgroundStyle": "white",
       "items": [
         {
           "title": "Transparent",
@@ -241,7 +252,10 @@
         }
       ],
       "order": 2,
-      "published": true
+      "published": true,
+      "imageUrl": null,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "team",
@@ -252,7 +266,10 @@
       "sectionType": "text-image",
       "backgroundStyle": "white",
       "order": 3,
-      "published": true
+      "published": true,
+      "imageUrl": "/uploads/1786203422618-d809rk.jpg",
+      "videoUrl": null,
+      "posterImage": null
     }
   ],
   "platform": [
@@ -263,20 +280,22 @@
       "heading": "Quantitative Risk Platform",
       "description": "Enterprise-grade risk analytics built for institutional investors, asset managers, and reinsurance professionals.",
       "sectionType": "hero",
-      "backgroundStyle": "light-institutional",
-      "imageUrl": "/placeholder-platform-hero.png",
+      "backgroundStyle": "",
+      "imageUrl": "/uploads/1786197011213-dv5xd7.jpg",
       "buttonText": "Request Demo",
       "buttonUrl": "/contact",
       "order": 0,
-      "published": true
+      "published": true,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "how-it-works",
       "page": "platform",
       "title": "How QRS Works",
       "heading": "How QRS Works",
-      "sectionType": "workflow-steps",
-      "backgroundStyle": "light-institutional",
+      "sectionType": "feature-grid",
+      "backgroundStyle": "white",
       "items": [
         {
           "title": "Upload Portfolio",
@@ -300,7 +319,11 @@
         }
       ],
       "order": 1,
-      "published": true
+      "published": true,
+      "description": "",
+      "imageUrl": null,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "risk-engine",
@@ -352,26 +375,29 @@
       "heading": "Real QRS Product",
       "description": "See the platform in action",
       "sectionType": "product-evidence",
-      "backgroundStyle": "light-institutional",
+      "backgroundStyle": "",
       "items": [
         {
           "title": "Risk Map",
           "description": "Geographic exposure visualization and concentration analysis",
-          "imageUrl": "/placeholder-risk-map.png"
+          "imageUrl": "/uploads/1786204540253-eccslh.jpg"
         },
         {
           "title": "EP Curve Analysis",
           "description": "Probability distribution and loss exceedance charts",
-          "imageUrl": "/placeholder-ep-curve.png"
+          "imageUrl": "/uploads/1786204906196-tu50f.jpg"
         },
         {
           "title": "War Room Dashboard",
           "description": "Real-time event response and portfolio impact tracking",
-          "imageUrl": "/placeholder-war-room.png"
+          "imageUrl": "/uploads/1786204896615-q68du4.jpg"
         }
       ],
       "order": 3,
-      "published": true
+      "published": true,
+      "imageUrl": null,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "quantum-native",
@@ -380,10 +406,12 @@
       "heading": "Quantum-Native Engine",
       "description": "Enterprise architecture built for precision, auditability, and institutional scale. Our quantum-native approach enables real-time risk quantification with cryptographic reproducibility at every step.",
       "sectionType": "text-image",
-      "backgroundStyle": "light-institutional",
-      "imageUrl": "/placeholder-quantum-arch.png",
+      "backgroundStyle": "",
+      "imageUrl": "/uploads/1786196989178-tntrxj.jpg",
       "order": 4,
-      "published": true
+      "published": true,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "ai-capabilities",
@@ -489,9 +517,11 @@
       "description": "Enterprise-grade security, cryptographic verification, and independent audit trails at every step — designed for institutional review and continuous assurance.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
-      "imageUrl": "/placeholder-trust-hero.png",
+      "imageUrl": "/uploads/1786205007924-m9m07i.jpg",
       "order": 0,
-      "published": true
+      "published": true,
+      "videoUrl": null,
+      "posterImage": null
     },
     {
       "id": "security",
@@ -506,7 +536,11 @@
       "rightTitle": "Compliance Certifications",
       "rightDescription": "SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.",
       "order": 1,
-      "published": true
+      "published": true,
+      "imageUrl": null,
+      "videoUrl": null,
+      "posterImage": null,
+      "items": []
     },
     {
       "id": "security-features",
@@ -515,7 +549,7 @@
       "heading": "Security Features",
       "description": "Built-in security controls at every layer",
       "sectionType": "security-features-grid",
-      "backgroundStyle": "deep-dark",
+      "backgroundStyle": "light",
       "items": [
         {
           "title": "Data Encryption",
@@ -549,7 +583,14 @@
         }
       ],
       "order": 2,
-      "published": true
+      "published": true,
+      "imageUrl": null,
+      "videoUrl": null,
+      "posterImage": null,
+      "leftTitle": null,
+      "leftDescription": null,
+      "rightTitle": null,
+      "rightDescription": null
     }
   ],
   "validation": [
@@ -561,9 +602,15 @@
       "description": "QRS models have been independently validated by leading academic and industry experts to ensure calculation accuracy and methodological rigor.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
-      "imageUrl": "/placeholder-validation-hero.png",
+      "imageUrl": "/uploads/1786206479065-mft7bs.jpg",
       "order": 0,
-      "published": true
+      "published": true,
+      "videoUrl": null,
+      "posterImage": null,
+      "leftTitle": null,
+      "leftDescription": null,
+      "rightTitle": null,
+      "rightDescription": null
     },
     {
       "id": "reports",

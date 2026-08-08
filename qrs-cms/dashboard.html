@@ -43,6 +43,7 @@
       --spacing-xl: 24px;
       --spacing-2xl: 32px;
       --spacing-3xl: 48px;
+      --spacing-4xl: 64px;
 
       --radius-sm: 4px;
       --radius-md: 8px;
@@ -1025,7 +1026,7 @@
        ============================================ */
     .toast-container {
       position: fixed;
-      bottom: var(--spacing-xl);
+      bottom: var(--spacing-4xl);
       right: var(--spacing-xl);
       z-index: 200;
       display: flex;
@@ -1159,7 +1160,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 var(--spacing-xl);
-      z-index: 1000;
+      z-index: 1;
       font-size: 11px;
       font-weight: 500;
       color: var(--text-muted);
@@ -2646,7 +2647,7 @@
       if (!canSaveSection()) return
 
       const sectionType = document.getElementById('editType').value
-      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid', 'security-compliance']
+      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
 
       const imageUrlSections = ['hero', 'text-image']
 
