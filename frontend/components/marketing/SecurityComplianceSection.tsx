@@ -3,6 +3,12 @@
 import { VerifiedSealBadge } from '@/components/marketing/VerifiedSealBadge'
 import { TrustBadgeCluster } from '@/components/marketing/TrustBadgeCluster'
 
+interface CertificationItem {
+  title?: string
+  description?: string
+  icon?: string
+}
+
 interface SecurityComplianceSectionProps {
   title?: string
   description?: string
@@ -10,6 +16,7 @@ interface SecurityComplianceSectionProps {
   leftDescription?: string
   rightTitle?: string
   rightDescription?: string
+  items?: CertificationItem[]
 }
 
 export function SecurityComplianceSection({
@@ -77,14 +84,39 @@ export function SecurityComplianceSection({
               </p>
             </div>
 
-            {/* Trust Badge Cluster */}
+            {/* Trust Badge Cluster - Dynamic or Fallback */}
             <div className="mt-8">
               <p className="text-sm font-semibold text-teal-700 uppercase tracking-wider mb-6">
                 Certifications & Standards
               </p>
-              <div className="bg-gradient-to-br from-white to-teal-50/30 p-8 rounded-xl border border-teal-300/30 shadow-lg shadow-teal-500/5">
-                <TrustBadgeCluster />
-              </div>
+              {items && items.length > 0 ? (
+                <div className="bg-gradient-to-br from-white to-teal-50/30 p-8 rounded-xl border border-teal-300/30 shadow-lg shadow-teal-500/5">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    {items.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col items-center text-center p-4 rounded-lg bg-teal-50/40 border border-teal-200/40 hover:border-teal-300/60 transition"
+                      >
+                        {item.icon && (
+                          <div className="text-3xl mb-2">{item.icon}</div>
+                        )}
+                        <h4 className="text-sm font-semibold text-ink-900 mb-1">
+                          {item.title}
+                        </h4>
+                        {item.description && (
+                          <p className="text-xs text-ink-700">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-gradient-to-br from-white to-teal-50/30 p-8 rounded-xl border border-teal-300/30 shadow-lg shadow-teal-500/5">
+                  <TrustBadgeCluster />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -2621,10 +2621,17 @@
         field.style.display = sectionType === 'hero' ? 'block' : 'none'
       })
 
-      // Show items only for grids, stats, workflows
-      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
+      // Show items for grids, stats, workflows, and certifications
+      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid', 'security-compliance']
       if (itemsSection) {
         itemsSection.style.display = itemSections.includes(sectionType) ? 'block' : 'none'
+        // Update items section title for security-compliance
+        const itemsTitle = itemsSection.querySelector('h4')
+        if (itemsTitle && sectionType === 'security-compliance') {
+          itemsTitle.textContent = '🏆 Certifications & Standards'
+        } else if (itemsTitle) {
+          itemsTitle.textContent = '📋 Items/Cards'
+        }
       }
 
       // Show security compliance fields only for security-compliance sections
@@ -2639,7 +2646,7 @@
       if (!canSaveSection()) return
 
       const sectionType = document.getElementById('editType').value
-      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
+      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid', 'security-compliance']
 
       const imageUrlSections = ['hero', 'text-image']
 

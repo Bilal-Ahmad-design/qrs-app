@@ -365,6 +365,7 @@ export function SectionRenderer({
           leftDescription={section.leftDescription}
           rightTitle={section.rightTitle}
           rightDescription={section.rightDescription}
+          items={section.items}
         />
       )
 
