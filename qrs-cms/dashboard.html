@@ -1838,9 +1838,18 @@
             </label>
           </div>
 
-          <!-- Media Upload Section -->
-          <div style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg);">
-            <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--spacing-lg); color: var(--text-primary);">Media Assets</h4>
+          <!-- Items Array Section - GRIDS/STATS ONLY -->
+          <div data-section="items-array" style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg); display: none;">
+            <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--spacing-lg); color: var(--text-primary);">📋 Items/Cards</h4>
+            <div id="itemsContainer" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: var(--spacing-md);">
+              <!-- Items will be populated here -->
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addItem()" style="margin-top: var(--spacing-md); width: 100%;">+ Add Item</button>
+          </div>
+
+          <!-- Media Upload Section - HERO ONLY -->
+          <div data-section="media-assets" style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg); display: none;">
+            <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--spacing-lg); color: var(--text-primary);">🎬 Media Assets (Hero Only)</h4>
 
             <!-- Image Upload -->
             <div class="form-group">
@@ -2534,7 +2543,35 @@
         document.getElementById('posterPreview').style.display = 'none'
       }
 
+      // Load items if section type supports them
+      editingItems = section.items ? JSON.parse(JSON.stringify(section.items)) : []
+      renderItems()
+
+      // Update field visibility based on section type
+      updateFieldsVisibility(section.sectionType)
+
+      // Update visibility when type changes
+      document.getElementById('editType').onchange = () => {
+        updateFieldsVisibility(document.getElementById('editType').value)
+      }
+
       document.getElementById('editModal').classList.add('active')
+    }
+
+    function updateFieldsVisibility(sectionType) {
+      const mediaSection = document.querySelector('[data-section="media-assets"]')
+      const itemsSection = document.querySelector('[data-section="items-array"]')
+
+      // Show media only for hero sections
+      if (mediaSection) {
+        mediaSection.style.display = sectionType === 'hero' ? 'block' : 'none'
+      }
+
+      // Show items only for grids, stats, workflows
+      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
+      if (itemsSection) {
+        itemsSection.style.display = itemSections.includes(sectionType) ? 'block' : 'none'
+      }
     }
 
     async function saveSection(event) {
@@ -2542,18 +2579,22 @@
 
       if (!canSaveSection()) return
 
+      const sectionType = document.getElementById('editType').value
+      const itemSections = ['feature-grid', 'stats', 'workflow-steps', 'product-evidence', 'regulatory-grid', 'security-features-grid']
+
       const updated = {
         ...sections[editingSectionIndex],
         title: document.getElementById('editTitle').value,
         heading: document.getElementById('editHeading').value,
         description: document.getElementById('editDescription').value,
-        sectionType: document.getElementById('editType').value,
+        sectionType: sectionType,
         backgroundStyle: document.getElementById('editBg').value,
         order: parseInt(document.getElementById('editOrder').value),
         published: document.getElementById('editPublished').checked,
-        imageUrl: document.getElementById('editImageUrl').value || null,
-        videoUrl: document.getElementById('editVideoUrl').value || null,
-        posterImage: document.getElementById('editPosterUrl').value || null,
+        imageUrl: sectionType === 'hero' ? (document.getElementById('editImageUrl').value || null) : null,
+        videoUrl: sectionType === 'hero' ? (document.getElementById('editVideoUrl').value || null) : null,
+        posterImage: sectionType === 'hero' ? (document.getElementById('editPosterUrl').value || null) : null,
+        items: itemSections.includes(sectionType) ? editingItems : undefined,
         page: currentPage
       }
 
@@ -3232,6 +3273,41 @@
       document.querySelectorAll('.nav-item[data-page]').forEach(item => {
         item.classList.remove('active')
       })
+    }
+
+    /* ============================================
+       ITEMS ARRAY MANAGEMENT
+       ============================================ */
+    let editingItems = []
+
+    function addItem() {
+      editingItems.push({ title: '', description: '', icon: '', value: '', imageUrl: '', link: '', status: '' })
+      renderItems()
+    }
+
+    function renderItems() {
+      const container = document.getElementById('itemsContainer')
+      if (!editingItems.length) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: var(--spacing-lg);">No items yet. Click "Add Item" to get started.</div>'
+        return
+      }
+
+      container.innerHTML = editingItems.map((item, idx) => `
+        <div style="background: var(--surface-secondary); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+          <input type="text" placeholder="Title" value="${item.title || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].title = this.value">
+          <textarea placeholder="Description" class="form-input" style="margin-bottom: var(--spacing-sm); height: 60px;" onchange="editingItems[${idx}].description = this.value">${item.description || ''}</textarea>
+          <input type="text" placeholder="Icon (emoji)" maxlength="2" value="${item.icon || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].icon = this.value">
+          <input type="text" placeholder="Value/Number" value="${item.value || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].value = this.value">
+          <input type="text" placeholder="Image URL" value="${item.imageUrl || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].imageUrl = this.value">
+          <input type="text" placeholder="Link URL" value="${item.link || ''}" class="form-input" style="margin-bottom: var(--spacing-sm);" onchange="editingItems[${idx}].link = this.value">
+          <button type="button" class="btn btn-secondary" onclick="removeItem(${idx})" style="width: 100%; background: var(--status-error); color: white;">Remove</button>
+        </div>
+      `).join('')
+    }
+
+    function removeItem(idx) {
+      editingItems.splice(idx, 1)
+      renderItems()
     }
   </script>
 
