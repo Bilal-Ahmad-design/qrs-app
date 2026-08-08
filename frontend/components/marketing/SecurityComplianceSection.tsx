@@ -26,6 +26,7 @@ export function SecurityComplianceSection({
   leftDescription = 'Every calculation is cryptographically signed with our ECDSA seal. Independently verify any analysis using open-source verification tools.',
   rightTitle = 'Compliance Certifications',
   rightDescription = 'SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.',
+  items,
 }: SecurityComplianceSectionProps) {
   return (
     <section className="py-28 lg:py-48 bg-light-bg-primary">
