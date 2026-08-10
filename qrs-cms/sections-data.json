@@ -597,9 +597,9 @@
     {
       "id": "hero",
       "page": "validation",
-      "title": "Independently Verified",
-      "heading": "Independently Verified",
-      "description": "QRS models have been independently validated by leading academic and industry experts to ensure calculation accuracy and methodological rigor.",
+      "title": "Internally Benchmarked",
+      "heading": "Internally Benchmarked",
+      "description": "QRS models have been internally benchmarked by leading academic and industry experts to ensure calculation accuracy and methodological rigor.",
       "sectionType": "hero",
       "backgroundStyle": "dark",
       "imageUrl": "/uploads/1786206479065-mft7bs.jpg",

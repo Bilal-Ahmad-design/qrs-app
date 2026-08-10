@@ -519,10 +519,10 @@ export const defaultTrustSections = [
 export const defaultValidationSections = [
   {
     id: 'hero',
-    title: 'Independently Verified',
-    heading: 'Independently Verified',
+    title: 'Internally Benchmarked',
+    heading: 'Internally Benchmarked',
     description:
-      'QRS models have been independently validated by leading academic and industry experts to ensure calculation accuracy and methodological rigor.',
+      'QRS models have been internally benchmarked by leading academic and industry experts to ensure calculation accuracy and methodological rigor.',
     sectionType: 'hero',
     backgroundStyle: 'dark',
     order: 0,
