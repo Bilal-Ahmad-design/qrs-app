@@ -18,6 +18,9 @@ import { RegulatoryCompliance } from './collections/RegulatoryCompliance'
 import { PlatformCapability } from './collections/PlatformCapability'
 import { Documentation } from './collections/Documentation'
 import { PageSections } from './collections/PageSections'
+import { EmailSettings } from './collections/EmailSettings'
+import { EmailLogs } from './collections/EmailLogs'
+import { FormEntries } from './collections/FormEntries'
 import { TrustCenter } from './globals/TrustCenter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -38,6 +41,9 @@ export default buildConfig({
     PerilStatus,
     Redirects,
     FormSubmissions,
+    FormEntries,
+    EmailLogs,
+    EmailSettings,
     AuditLogs,
     Media,
     ProductShowcase,
