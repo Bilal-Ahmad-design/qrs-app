@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import { SiteChrome } from '@/components/layout/SiteChrome'
 
 export const metadata: Metadata = {
   title: 'Solutions by Role | QRS',
@@ -61,7 +60,7 @@ const solutions = [
 
 export default function SolutionsPage() {
   return (
-    <SiteChrome>
+    <main>
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
         <section className="px-6 py-20 text-center max-w-4xl mx-auto">
@@ -114,6 +113,6 @@ export default function SolutionsPage() {
           </div>
         </section>
       </div>
-    </SiteChrome>
+    </main>
   )
 }

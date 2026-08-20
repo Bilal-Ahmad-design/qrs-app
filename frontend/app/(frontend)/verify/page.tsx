@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import { SiteChrome } from '@/components/layout/SiteChrome'
 
 export const metadata: Metadata = {
   title: 'Built to be Verified | QRS',
@@ -8,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function VerifyPage() {
   return (
-    <SiteChrome>
+    <main>
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
         <section className="px-6 py-20 text-center max-w-4xl mx-auto">
@@ -144,6 +143,6 @@ export default function VerifyPage() {
           </div>
         </section>
       </div>
-    </SiteChrome>
+    </main>
   )
 }
