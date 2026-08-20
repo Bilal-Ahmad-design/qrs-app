@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import pg from 'pg';
+import { z } from 'zod';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { logAuditEntry } from '@/lib/audit';
 import { checkRateLimit, getRemainingRequests } from '@/lib/rate-limit';
+import { contactFormSchema } from '@/lib/validation/schemas';
+import { createErrorResponse } from '@/lib/validation/responses';
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -21,17 +24,18 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const email = typeof body?.email === 'string' ? body.email.trim() : '';
-    const message = typeof body?.message === 'string' ? body.message.trim() : '';
-    const name = typeof body?.name === 'string' ? body.name.trim() : '';
-    const turnstileToken = typeof body?.turnstileToken === 'string' ? body.turnstileToken : '';
 
-    if (!email || !message) {
-      return NextResponse.json(
-        { success: false, error: 'Email and message are required.' },
-        { status: 400 },
+    // Validate input with Zod schema
+    const result = contactFormSchema.safeParse(body);
+    if (!result.success) {
+      return createErrorResponse(
+        'VALIDATION_ERROR',
+        'Validation failed',
+        result.error.flatten().fieldErrors
       );
     }
+
+    const { email, message, name, turnstileToken } = result.data;
 
     const verified = process.env.TURNSTILE_SECRET
       ? await verifyTurnstileToken(turnstileToken)

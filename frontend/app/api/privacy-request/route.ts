@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import pg from 'pg';
+import { z } from 'zod';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { logAuditEntry } from '@/lib/audit';
 import { checkRateLimit, getRemainingRequests } from '@/lib/rate-limit';
+import { privacyRequestSchema } from '@/lib/validation/schemas';
+import { createErrorResponse } from '@/lib/validation/responses';
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -21,17 +24,18 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const email = typeof body?.email === 'string' ? body.email.trim() : '';
-    const requestType = typeof body?.requestType === 'string' ? body.requestType : 'access';
-    const details = typeof body?.details === 'string' ? body.details.trim() : '';
-    const turnstileToken = typeof body?.turnstileToken === 'string' ? body.turnstileToken : '';
 
-    if (!email || !details) {
-      return NextResponse.json(
-        { success: false, error: 'Email and details are required.' },
-        { status: 400 },
+    // Validate input with Zod schema
+    const result = privacyRequestSchema.safeParse(body);
+    if (!result.success) {
+      return createErrorResponse(
+        'VALIDATION_ERROR',
+        'Validation failed',
+        result.error.flatten().fieldErrors
       );
     }
+
+    const { email, requestType, description: details, turnstileToken } = result.data;
 
     const verified = process.env.TURNSTILE_SECRET
       ? await verifyTurnstileToken(turnstileToken)
