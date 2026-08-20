@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import { hasPermission } from '../lib/rbac/roles'
 
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
@@ -7,14 +8,14 @@ export const FormSubmissions: CollectionConfig = {
     defaultColumns: ['formType', 'email', 'submittedAt', 'reviewStatus'],
   },
   access: {
-    read: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
+    read: ({ req: { user } }) => hasPermission(user?.role as any, 'forms:read'),
     create: ({ req }) => {
       // Only allow via API, not via admin UI
       if (req.data?.fromAPI) return true
       return false
     },
-    update: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
-    delete: ({ req: { user } }) => ['super-admin'].includes(user?.role),
+    update: ({ req: { user } }) => hasPermission(user?.role as any, 'forms:read'),
+    delete: ({ req: { user } }) => hasPermission(user?.role as any, 'audit:read'),
   },
   fields: [
     {

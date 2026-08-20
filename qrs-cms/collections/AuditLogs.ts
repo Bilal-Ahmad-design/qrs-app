@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import { hasPermission } from '../lib/rbac/roles'
 
 export const AuditLogs: CollectionConfig = {
   slug: 'audit-logs',
@@ -7,10 +8,10 @@ export const AuditLogs: CollectionConfig = {
     defaultColumns: ['user', 'tableName', 'action', 'timestamp'],
   },
   access: {
-    read: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
-    create: ({ req: { user } }) => !user || ['super-admin'].includes(user.role),
+    read: ({ req: { user } }) => hasPermission(user?.role as any, 'audit:read'),
+    create: ({ req: { user } }) => !user || hasPermission(user?.role as any, 'audit:read'),
     update: () => false,
-    delete: ({ req: { user } }) => ['super-admin'].includes(user?.role),
+    delete: () => false,
   },
   fields: [
     {

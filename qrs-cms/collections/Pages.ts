@@ -1,5 +1,6 @@
 import { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { hasPermission } from '../lib/rbac/roles'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -14,14 +15,14 @@ export const Pages: CollectionConfig = {
     read: ({ req: { user } }) => {
       // Public users can only see published pages
       if (!user) return { status: { equals: 'published' } }
-      // Editors and admins can see all
-      if (['editor', 'admin', 'super-admin', 'reviewer'].includes(user.role)) return true
-      // Read-only users see published only
+      // Users with content:read permission see all pages
+      if (hasPermission(user?.role as any, 'content:read')) return true
+      // Without permission, see published only
       return { status: { equals: 'published' } }
     },
-    create: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
-    update: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
-    delete: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
+    create: ({ req: { user } }) => hasPermission(user?.role as any, 'content:create'),
+    update: ({ req: { user } }) => hasPermission(user?.role as any, 'content:update'),
+    delete: ({ req: { user } }) => hasPermission(user?.role as any, 'content:delete'),
   },
   fields: [
     {

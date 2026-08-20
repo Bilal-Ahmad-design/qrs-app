@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import { hasPermission } from '../lib/rbac/roles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -9,6 +10,12 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
     defaultColumns: ['email', 'fullname', 'role', 'status', 'createdAt'],
     group: 'Management',
+  },
+  access: {
+    read: ({ req: { user } }) => hasPermission(user?.role as any, 'users:read'),
+    create: ({ req: { user } }) => hasPermission(user?.role as any, 'users:create'),
+    update: ({ req: { user } }) => hasPermission(user?.role as any, 'users:update'),
+    delete: ({ req: { user } }) => hasPermission(user?.role as any, 'users:delete'),
   },
   fields: [
     {
