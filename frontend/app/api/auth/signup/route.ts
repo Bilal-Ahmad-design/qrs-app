@@ -2,11 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import pg from 'pg'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { z } from 'zod'
 import { checkRateLimit } from '@/lib/rate-limit'
+import { createSuccessResponse, createErrorResponse } from '@/lib/validation/responses'
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
+})
+
+// Signup validation schema
+const signupSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  fullname: z.string().min(1, 'Fullname is required'),
+  role: z.enum(['super-admin', 'admin', 'editor', 'reviewer', 'read-only']).optional(),
+  adminToken: z.string().optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -19,22 +30,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email, password, fullname, role, adminToken } = await request.json()
+    const body = await request.json()
 
-    // Validation
-    if (!email || !password || !fullname) {
-      return NextResponse.json(
-        { error: 'Email, password, and fullname are required' },
-        { status: 400 }
-      )
+    // Validate input
+    const result = signupSchema.safeParse(body)
+    if (!result.success) {
+      return createErrorResponse('VALIDATION_ERROR', 'Invalid input format', result.error.errors)
     }
 
-    if (password.length < 6) {
-      return NextResponse.json(
-        { error: 'Password must be at least 6 characters' },
-        { status: 400 }
-      )
-    }
+    const { email, password, fullname, role, adminToken } = result.data
 
     // Check if user already exists
     const existingUser = await pool.query(
@@ -43,10 +47,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (existingUser.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'Email already registered' },
-        { status: 409 }
-      )
+      return createErrorResponse('USER_EXISTS', 'Email already registered')
     }
 
     // Determine user role
@@ -54,26 +55,23 @@ export async function POST(request: NextRequest) {
 
     // If role is specified and admin token is provided, use the specified role
     if (role && adminToken) {
-      const validRoles = ['super-admin', 'admin', 'editor', 'reviewer', 'read-only']
-      if (validRoles.includes(role)) {
-        // In real app, verify adminToken is valid admin JWT
-        // For now, just accept it if provided
-        userRole = role
-      }
+      // In real app, verify adminToken is valid admin JWT
+      // For now, just accept it if provided
+      userRole = role
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
     // Create user
-    const result = await pool.query(
+    const insertResult = await pool.query(
       `INSERT INTO users (email, password, fullname, role, created_at)
        VALUES ($1, $2, $3, $4, NOW())
        RETURNING id, email, fullname, role`,
       [email, hashedPassword, fullname, userRole]
     )
 
-    const user = result.rows[0]
+    const user = insertResult.rows[0]
 
     // Create JWT token with role
     const token = jwt.sign(
@@ -82,18 +80,16 @@ export async function POST(request: NextRequest) {
       { expiresIn: '7d' }
     )
 
-    const response = NextResponse.json({
-      success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        fullname: user.fullname,
-        role: user.role
-      }
-    })
+    const response = createSuccessResponse(
+      { user: { id: user.id, email: user.email, fullname: user.fullname, role: user.role } },
+      'Signup successful',
+      201
+    ) as NextResponse
 
     response.cookies.set('token', token, {
       httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/'
     })
@@ -101,9 +97,6 @@ export async function POST(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Signup error:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Signup failed' },
-      { status: 500 }
-    )
+    return createErrorResponse('INTERNAL_ERROR', error instanceof Error ? error.message : 'Signup failed')
   }
 }

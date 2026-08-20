@@ -2,11 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import pg from 'pg'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { z } from 'zod'
 import { checkRateLimit } from '@/lib/rate-limit'
+import { createSuccessResponse, createErrorResponse } from '@/lib/validation/responses'
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
+})
+
+// Login validation schema
+const loginSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 })
 
 export async function POST(request: NextRequest) {
@@ -19,37 +27,46 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email, password } = await request.json()
+    const body = await request.json()
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password required' }, { status: 400 })
+    // Validate input
+    const result = loginSchema.safeParse(body)
+    if (!result.success) {
+      return createErrorResponse('VALIDATION_ERROR', 'Invalid input format', result.error.errors)
     }
 
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+    const { email, password } = result.data
 
-    if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    const queryResult = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+
+    // Generic error message prevents user enumeration
+    if (queryResult.rows.length === 0) {
+      return NextResponse.json({ success: false, error: 'Email or password incorrect' }, { status: 401 })
     }
 
-    const user = result.rows[0]
+    const user = queryResult.rows[0]
     const passwordMatch = await bcrypt.compare(password, user.password)
 
     if (!passwordMatch) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+      // Same generic message
+      return NextResponse.json({ success: false, error: 'Email or password incorrect' }, { status: 401 })
     }
 
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     )
 
-    const response = NextResponse.json({
-      success: true,
-      user: { id: user.id, email: user.email, fullname: user.fullname, role: user.role }
-    })
+    const response = createSuccessResponse(
+      { user: { id: user.id, email: user.email, fullname: user.fullname, role: user.role } },
+      'Login successful'
+    ) as NextResponse
+
     response.cookies.set('token', token, {
       httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/'
     })
@@ -57,9 +74,6 @@ export async function POST(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Login error:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Login failed' },
-      { status: 500 }
-    )
+    return createErrorResponse('INTERNAL_ERROR', error instanceof Error ? error.message : 'Login failed')
   }
 }
