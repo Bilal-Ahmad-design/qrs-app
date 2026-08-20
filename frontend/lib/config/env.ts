@@ -19,15 +19,15 @@ if (missingVars.length > 0) {
 }
 
 // Validate format
-if (!requiredEnv.DATABASE_URL.startsWith('postgresql://')) {
+if (!requiredEnv.DATABASE_URL!.startsWith('postgresql://')) {
   throw new Error('DATABASE_URL must be a valid PostgreSQL connection string')
 }
 
-if (!requiredEnv.NEXT_PUBLIC_CMS_URL.startsWith('http')) {
+if (!requiredEnv.NEXT_PUBLIC_CMS_URL!.startsWith('http')) {
   throw new Error('NEXT_PUBLIC_CMS_URL must be a valid HTTP URL')
 }
 
-if (requiredEnv.JWT_SECRET.length < 32) {
+if (requiredEnv.JWT_SECRET!.length < 32) {
   throw new Error('JWT_SECRET must be at least 32 characters long')
 }
 
