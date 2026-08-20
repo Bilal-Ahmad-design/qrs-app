@@ -1,6 +1,6 @@
 /**
  * Sliding-window rate limiter for API endpoints
- * Tracks requests per IP address in memory
+ * Tracks requests per IP + endpoint combination
  */
 
 interface RateLimitEntry {
@@ -27,8 +27,29 @@ function getClientIP(request: Request): string | null {
 }
 
 /**
+ * Create a unique key for rate limiting (IP + endpoint)
+ */
+function getRateLimitKey(ip: string, endpoint: string): string {
+  return `${ip}:${endpoint}`
+}
+
+/**
+ * Extract endpoint from request URL
+ */
+function getEndpoint(request: Request): string {
+  try {
+    const url = new URL(request.url)
+    // Get the path up to first query param
+    return url.pathname.split('?')[0]
+  } catch {
+    return 'unknown'
+  }
+}
+
+/**
  * Check if request exceeds rate limit
  * Returns true if under limit, false if exceeded
+ * Limits are per-endpoint per-IP
  */
 export function checkRateLimit(request: Request, identifier?: string): boolean {
   const ip = identifier || getClientIP(request)
@@ -39,34 +60,38 @@ export function checkRateLimit(request: Request, identifier?: string): boolean {
     return false
   }
 
+  const endpoint = getEndpoint(request)
+  const key = getRateLimitKey(ip, endpoint)
   const now = Date.now()
-  const entry = limitStore.get(ip) || { timestamps: [] }
+  const entry = limitStore.get(key) || { timestamps: [] }
 
   // Remove timestamps outside the window
   entry.timestamps = entry.timestamps.filter(ts => now - ts < WINDOW_MS)
 
   // Check if limit exceeded
   if (entry.timestamps.length >= MAX_REQUESTS) {
-    console.warn(`Rate limit exceeded for IP ${ip}: ${entry.timestamps.length} requests in ${WINDOW_MS}ms`)
+    console.warn(`Rate limit exceeded for ${key}: ${entry.timestamps.length} requests in ${WINDOW_MS}ms`)
     return false
   }
 
   // Add current request
   entry.timestamps.push(now)
-  limitStore.set(ip, entry)
+  limitStore.set(key, entry)
 
   return true
 }
 
 /**
- * Get remaining requests for an IP
+ * Get remaining requests for an IP on an endpoint
  */
 export function getRemainingRequests(request: Request, identifier?: string): number {
   const ip = identifier || getClientIP(request)
   if (!ip) return 0
 
+  const endpoint = getEndpoint(request)
+  const key = getRateLimitKey(ip, endpoint)
   const now = Date.now()
-  const entry = limitStore.get(ip)
+  const entry = limitStore.get(key)
   if (!entry) return MAX_REQUESTS
 
   const activeRequests = entry.timestamps.filter(ts => now - ts < WINDOW_MS).length
@@ -80,10 +105,10 @@ export function cleanupOldEntries(): void {
   const now = Date.now()
   let cleaned = 0
 
-  for (const [ip, entry] of limitStore.entries()) {
+  for (const [key, entry] of limitStore.entries()) {
     const activeCount = entry.timestamps.filter(ts => now - ts < WINDOW_MS).length
     if (activeCount === 0) {
-      limitStore.delete(ip)
+      limitStore.delete(key)
       cleaned++
     }
   }
