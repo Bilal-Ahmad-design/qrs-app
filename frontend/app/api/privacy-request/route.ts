@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pg from 'pg';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { logAuditEntry } from '@/lib/audit';
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -41,11 +42,22 @@ export async function POST(request: Request) {
     };
 
     // Store in form_submissions table (encrypted at rest via Postgres)
-    await pool.query(
+    const result = await pool.query(
       `INSERT INTO form_submissions (form_type, data, email, ip_address, turnstile_verified, review_status)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
       ['privacy-request', JSON.stringify(submissionData), email, ipAddress, true, 'pending']
     );
+
+    const submissionId = result.rows[0]?.id || 0;
+
+    // Log audit entry (SOC 2 H5/H7 accountability)
+    await logAuditEntry({
+      tableName: 'form_submissions',
+      recordId: submissionId,
+      action: 'create',
+      changes: { form_type: 'privacy-request', email, request_type: requestType, turnstile_verified: true },
+      ipAddress,
+    });
 
     // Form submissions logged and can be accessed by Admin/Super Admin only (SOC2 D3)
     // Email notifications can be configured via CRM webhook or SMTP integration
