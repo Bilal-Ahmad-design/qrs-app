@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import pg from 'pg';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { logAuditEntry } from '@/lib/audit';
+import { checkRateLimit, getRemainingRequests } from '@/lib/rate-limit';
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -10,6 +11,15 @@ const pool = new pg.Pool({
 
 export async function POST(request: Request) {
   try {
+    // Check rate limit first (5 requests/minute per IP)
+    if (!checkRateLimit(request)) {
+      const remaining = getRemainingRequests(request);
+      return NextResponse.json(
+        { success: false, error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': '60' } },
+      );
+    }
+
     const body = await request.json();
     const email = typeof body?.email === 'string' ? body.email.trim() : '';
     const requestType = typeof body?.requestType === 'string' ? body.requestType : 'access';

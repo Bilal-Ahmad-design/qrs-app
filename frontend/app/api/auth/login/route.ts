@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import pg from 'pg'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -10,6 +11,14 @@ const pool = new pg.Pool({
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit first (5 requests/minute per IP)
+    if (!checkRateLimit(request)) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': '60' } },
+      )
+    }
+
     const { email, password } = await request.json()
 
     if (!email || !password) {
