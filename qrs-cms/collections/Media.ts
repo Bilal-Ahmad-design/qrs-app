@@ -7,7 +7,6 @@ export const Media: CollectionConfig = {
   },
   upload: {
     staticDir: '../public/media',
-    staticURL: '/media',
     imageSizes: [
       {
         name: 'thumbnail',
@@ -31,7 +30,7 @@ export const Media: CollectionConfig = {
     mimeTypes: ['image/*', 'application/pdf'],
   },
   access: {
-    read: true,
+    read: () => true,
     create: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
     update: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
     delete: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),

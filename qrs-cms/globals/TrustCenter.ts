@@ -4,7 +4,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 export const TrustCenter: GlobalConfig = {
   slug: 'trust-center',
   access: {
-    read: true,
+    read: () => true,
     update: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
   },
   fields: [

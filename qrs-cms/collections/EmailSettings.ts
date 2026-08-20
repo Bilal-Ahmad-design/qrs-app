@@ -39,8 +39,8 @@ export const EmailSettings: CollectionConfig = {
           type: 'text',
           required: true,
           label: 'SMTP Host',
-          placeholder: 'smtp.gmail.com',
           admin: {
+            placeholder: 'smtp.gmail.com',
             description: 'SMTP server hostname (e.g., smtp.gmail.com, smtp.office365.com)',
           },
         },
@@ -59,8 +59,8 @@ export const EmailSettings: CollectionConfig = {
           type: 'text',
           required: true,
           label: 'SMTP Username',
-          placeholder: 'your-email@gmail.com',
           admin: {
+            placeholder: 'your-email@gmail.com',
             description: 'Email account username/address',
           },
         },
@@ -70,7 +70,6 @@ export const EmailSettings: CollectionConfig = {
           required: true,
           label: 'SMTP Password',
           admin: {
-            type: 'password',
             description: 'Email account password or app password',
           },
         },
@@ -96,8 +95,8 @@ export const EmailSettings: CollectionConfig = {
           type: 'text',
           required: true,
           label: 'Contact Form Recipient Email',
-          placeholder: 'support@qrsrisk.com',
           admin: {
+            placeholder: 'support@qrsrisk.com',
             description: 'Where contact form submissions are sent',
           },
         },
@@ -106,8 +105,8 @@ export const EmailSettings: CollectionConfig = {
           type: 'text',
           required: true,
           label: 'Privacy Request Recipient Email',
-          placeholder: 'privacy@qrsrisk.com',
           admin: {
+            placeholder: 'privacy@qrsrisk.com',
             description: 'Where privacy/GDPR requests are sent',
           },
         },
@@ -116,8 +115,8 @@ export const EmailSettings: CollectionConfig = {
           type: 'text',
           required: true,
           label: 'Support Email Address',
-          placeholder: 'support@qrsrisk.com',
           admin: {
+            placeholder: 'support@qrsrisk.com',
             description: 'General support email (shown on website)',
           },
         },

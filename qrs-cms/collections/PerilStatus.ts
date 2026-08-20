@@ -4,7 +4,7 @@ export const PerilStatus: CollectionConfig = {
   slug: 'peril-status',
   admin: { useAsTitle: 'perilName' },
   access: {
-    read: true,
+    read: () => true,
     create: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
     update: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
     delete: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),

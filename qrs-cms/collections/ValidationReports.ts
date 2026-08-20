@@ -4,7 +4,7 @@ export const ValidationReports: CollectionConfig = {
   slug: 'validation-reports',
   admin: { useAsTitle: 'title' },
   access: {
-    read: true,
+    read: () => true,
     create: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
     update: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
     delete: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
