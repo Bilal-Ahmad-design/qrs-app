@@ -80,11 +80,12 @@ export async function POST(request: NextRequest) {
       { expiresIn: '7d' }
     )
 
-    const response = createSuccessResponse(
-      { user: { id: user.id, email: user.email, fullname: user.fullname, role: user.role } },
-      'Signup successful',
-      201
-    ) as NextResponse
+    const response = NextResponse.json({
+      success: true,
+      data: {
+        user: { id: user.id, email: user.email, fullname: user.fullname, role: user.role }
+      }
+    }, { status: 201 })
 
     response.cookies.set('token', token, {
       httpOnly: true,

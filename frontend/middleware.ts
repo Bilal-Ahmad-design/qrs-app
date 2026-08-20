@@ -8,7 +8,15 @@ import jwt from 'jsonwebtoken'
  */
 export function middleware(request: NextRequest) {
   // Extract JWT from httpOnly cookie
-  const token = request.cookies.get('token')?.value
+  let token = request.cookies.get('token')?.value
+
+  // Also check Authorization header (Bearer token)
+  if (!token) {
+    const authHeader = request.headers.get('authorization')
+    if (authHeader?.startsWith('Bearer ')) {
+      token = authHeader.slice(7)
+    }
+  }
 
   if (token) {
     try {
@@ -20,9 +28,9 @@ export function middleware(request: NextRequest) {
         exp: number
       }
 
-      // Create new headers with auth data
+      // Create new request headers with auth data
       const requestHeaders = new Headers(request.headers)
-      requestHeaders.set('x-user-id', decoded.id)
+      requestHeaders.set('x-user-id', String(decoded.id))
       requestHeaders.set('x-user-role', decoded.role)
       requestHeaders.set('x-user-email', decoded.email)
 
