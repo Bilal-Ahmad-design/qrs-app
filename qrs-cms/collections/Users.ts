@@ -44,16 +44,6 @@ export const Users: CollectionConfig = {
       },
     },
     {
-      name: 'password',
-      type: 'password',
-      required: true,
-      admin: {
-        placeholder: 'Min 8 characters',
-        description: 'Password must be at least 8 characters',
-      },
-      validate: (value: string) => validatePassword(value),
-    },
-    {
       name: 'fullname',
       type: 'text',
       required: false,
@@ -119,23 +109,4 @@ export const Users: CollectionConfig = {
     },
   ],
   timestamps: true,
-  hooks: {
-    beforeLogin: [
-      async ({ args }) => {
-        const { email, password } = args.data
-
-        // Validate email format
-        if (!email || !email.includes('@')) {
-          throw new Error('Invalid email format')
-        }
-
-        // Validate password length
-        if (!password || password.length < 8) {
-          throw new Error('Password must be at least 8 characters')
-        }
-
-        return args
-      },
-    ],
-  },
 }

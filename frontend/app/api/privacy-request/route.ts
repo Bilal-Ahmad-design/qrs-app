@@ -5,7 +5,7 @@ import { verifyTurnstileToken } from '@/lib/turnstile';
 import { logAuditEntry } from '@/lib/audit';
 import { checkRateLimit, getRemainingRequests } from '@/lib/rate-limit';
 import { privacyRequestSchema } from '@/lib/validation/schemas';
-import { createErrorResponse } from '@/lib/validation/responses';
+import { ApiErrors, handleValidationError } from '@/lib/validation/responses';
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -28,11 +28,7 @@ export async function POST(request: Request) {
     // Validate input with Zod schema
     const result = privacyRequestSchema.safeParse(body);
     if (!result.success) {
-      return createErrorResponse(
-        'VALIDATION_ERROR',
-        'Validation failed',
-        result.error.flatten().fieldErrors
-      );
+      return handleValidationError(result.error);
     }
 
     const { email, requestType, description: details, turnstileToken } = result.data;
@@ -56,13 +52,13 @@ export async function POST(request: Request) {
     };
 
     // Store in form_submissions table (encrypted at rest via Postgres)
-    const result = await pool.query(
+    const dbResult = await pool.query(
       `INSERT INTO form_submissions (form_type, data, email, ip_address, turnstile_verified, review_status)
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
       ['privacy-request', JSON.stringify(submissionData), email, ipAddress, true, 'pending']
     );
 
-    const submissionId = result.rows[0]?.id || 0;
+    const submissionId = dbResult.rows[0]?.id || 0;
 
     // Log audit entry (SOC 2 H5/H7 accountability)
     await logAuditEntry({

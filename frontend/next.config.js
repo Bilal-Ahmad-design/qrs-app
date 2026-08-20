@@ -4,6 +4,23 @@ const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
 const nextConfig = {
   reactStrictMode: true,
+  redirects: async () => {
+    try {
+      const response = await fetch(`${cmsUrl}/api/redirects?limit=1000`, {
+        headers: { 'Accept': 'application/json' },
+      })
+      if (!response.ok) return []
+
+      const data = await response.json()
+      return (data.docs || []).map(redirect => ({
+        source: redirect.sourcePath,
+        destination: redirect.destinationPath,
+        permanent: redirect.type === '301',
+      }))
+    } catch {
+      return []
+    }
+  },
   headers: async () => {
     return [
       {

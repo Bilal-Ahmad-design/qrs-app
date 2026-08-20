@@ -22,6 +22,7 @@ import { EmailSettings } from './collections/EmailSettings'
 import { EmailLogs } from './collections/EmailLogs'
 import { FormEntries } from './collections/FormEntries'
 import { TrustCenter } from './globals/TrustCenter'
+import { Settings } from './globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -55,6 +56,7 @@ export default buildConfig({
   ],
   globals: [
     TrustCenter,
+    Settings,
   ],
   db: postgresAdapter({
     pool: {
