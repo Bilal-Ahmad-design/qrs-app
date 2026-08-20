@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function VerifyPage() {
   return (
     <SiteChrome>
-      <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
         <section className="px-6 py-20 text-center max-w-4xl mx-auto">
           <div className="mb-8">
@@ -143,7 +143,7 @@ export default function VerifyPage() {
             </a>
           </div>
         </section>
-      </main>
+      </div>
     </SiteChrome>
   )
 }

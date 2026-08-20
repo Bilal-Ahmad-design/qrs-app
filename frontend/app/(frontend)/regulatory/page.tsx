@@ -6,57 +6,57 @@ export const metadata: Metadata = {
   description: 'Regulatory-ready risk management supporting Solvency II, NAIC RBC, ORSA, and Lloyd\'s/BMA requirements.',
 }
 
-export default function RegulatoryPage() {
-  const frameworks = [
-    {
-      name: 'Solvency II',
-      region: 'European Union',
-      description: 'European insurance regulation with SCR (Solvency Capital Requirement) and MCR requirements',
-      capabilities: [
-        'SCR calculation and reporting',
-        'Standard formula and internal model support',
-        'Quarterly/annual reporting alignment',
-        'Own funds and capital adequacy monitoring',
-      ],
-    },
-    {
-      name: 'NAIC RBC',
-      region: 'United States',
-      description: 'Risk-Based Capital requirements for US insurers and reinsurers',
-      capabilities: [
-        'RBC ratio calculation',
-        'Asset risk and underwriting risk components',
-        'Reserve adequacy assessment',
-        'Regulatory filing preparation',
-      ],
-    },
-    {
-      name: 'ORSA',
-      region: 'Multi-Region',
-      description: 'Own Risk and Solvency Assessment framework for risk management governance',
-      capabilities: [
-        'Risk identification and mapping',
-        'Stress testing and scenario analysis',
-        'Board-level risk reporting',
-        ' 3-year solvency projection modeling',
-      ],
-    },
-    {
-      name: 'Lloyd\'s / BMA',
-      region: 'Bermuda & Lloyd\'s London',
-      description: 'Bermuda Monetary Authority and Lloyd\'s of London regulatory requirements',
-      capabilities: [
-        'Bermuda insurance regulations compliance',
-        'Lloyd\'s capital requirements',
-        'Syndicate performance monitoring',
-        'Regulatory returns and filing support',
-      ],
-    },
-  ]
+const frameworks = [
+  {
+    name: 'Solvency II',
+    region: 'European Union',
+    description: 'European insurance regulation with SCR (Solvency Capital Requirement) and MCR requirements',
+    capabilities: [
+      'SCR calculation and reporting',
+      'Standard formula and internal model support',
+      'Quarterly/annual reporting alignment',
+      'Own funds and capital adequacy monitoring',
+    ],
+  },
+  {
+    name: 'NAIC RBC',
+    region: 'United States',
+    description: 'Risk-Based Capital requirements for US insurers and reinsurers',
+    capabilities: [
+      'RBC ratio calculation',
+      'Asset risk and underwriting risk components',
+      'Reserve adequacy assessment',
+      'Regulatory filing preparation',
+    ],
+  },
+  {
+    name: 'ORSA',
+    region: 'Multi-Region',
+    description: 'Own Risk and Solvency Assessment framework for risk management governance',
+    capabilities: [
+      'Risk identification and mapping',
+      'Stress testing and scenario analysis',
+      'Board-level risk reporting',
+      '3-year solvency projection modeling',
+    ],
+  },
+  {
+    name: 'Lloyd\'s / BMA',
+    region: 'Bermuda & Lloyd\'s London',
+    description: 'Bermuda Monetary Authority and Lloyd\'s of London regulatory requirements',
+    capabilities: [
+      'Bermuda insurance regulations compliance',
+      'Lloyd\'s capital requirements',
+      'Syndicate performance monitoring',
+      'Regulatory returns and filing support',
+    ],
+  },
+]
 
+export default function RegulatoryPage() {
   return (
     <SiteChrome>
-      <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
         <section className="px-6 py-20 text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
@@ -192,7 +192,7 @@ export default function RegulatoryPage() {
             </a>
           </div>
         </section>
-      </main>
+      </div>
     </SiteChrome>
   )
 }

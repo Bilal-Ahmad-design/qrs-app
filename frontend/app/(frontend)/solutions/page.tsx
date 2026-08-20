@@ -6,63 +6,63 @@ export const metadata: Metadata = {
   description: 'Tailored risk management solutions for underwriters, portfolio managers, reinsurance buyers, ILS managers, and CROs.',
 }
 
-export default function SolutionsPage() {
-  const solutions = [
-    {
-      role: 'Underwriters',
-      description: 'Real-time risk assessment and premium optimization',
-      features: [
-        'Portfolio concentration analysis',
-        'Geographic risk heatmaps',
-        'Scenario stress testing',
-        'Loss prediction models',
-      ],
-    },
-    {
-      role: 'Portfolio Managers',
-      description: 'Multi-dimensional risk insight for capital deployment',
-      features: [
-        'Aggregate risk exposure views',
-        'Correlation analysis across perils',
-        'Performance attribution modeling',
-        'Strategic rebalancing analysis',
-      ],
-    },
-    {
-      role: 'Reinsurance Buyers',
-      description: 'Evidence-driven program design and negotiation',
-      features: [
-        'Optimal layer structuring',
-        'Market rate benchmarking',
-        'Coverage gap identification',
-        'Vendor modeling comparison',
-      ],
-    },
-    {
-      role: 'ILS Managers',
-      description: 'Transparent pricing and risk-adjusted returns',
-      features: [
-        'Catastrophe bond valuation',
-        'Sidecar fund analytics',
-        'Tail risk quantification',
-        'Insurance-linked security pricing',
-      ],
-    },
-    {
-      role: 'Chief Risk Officers',
-      description: 'Enterprise-wide governance and regulatory compliance',
-      features: [
-        'Solvency II SCR calculation',
-        'NAIC RBC alignment',
-        'Risk appetite monitoring',
-        'Board-ready reporting',
-      ],
-    },
-  ]
+const solutions = [
+  {
+    role: 'Underwriters',
+    description: 'Real-time risk assessment and premium optimization',
+    features: [
+      'Portfolio concentration analysis',
+      'Geographic risk heatmaps',
+      'Scenario stress testing',
+      'Loss prediction models',
+    ],
+  },
+  {
+    role: 'Portfolio Managers',
+    description: 'Multi-dimensional risk insight for capital deployment',
+    features: [
+      'Aggregate risk exposure views',
+      'Correlation analysis across perils',
+      'Performance attribution modeling',
+      'Strategic rebalancing analysis',
+    ],
+  },
+  {
+    role: 'Reinsurance Buyers',
+    description: 'Evidence-driven program design and negotiation',
+    features: [
+      'Optimal layer structuring',
+      'Market rate benchmarking',
+      'Coverage gap identification',
+      'Vendor modeling comparison',
+    ],
+  },
+  {
+    role: 'ILS Managers',
+    description: 'Transparent pricing and risk-adjusted returns',
+    features: [
+      'Catastrophe bond valuation',
+      'Sidecar fund analytics',
+      'Tail risk quantification',
+      'Insurance-linked security pricing',
+    ],
+  },
+  {
+    role: 'Chief Risk Officers',
+    description: 'Enterprise-wide governance and regulatory compliance',
+    features: [
+      'Solvency II SCR calculation',
+      'NAIC RBC alignment',
+      'Risk appetite monitoring',
+      'Board-ready reporting',
+    ],
+  },
+]
 
+export default function SolutionsPage() {
   return (
     <SiteChrome>
-      <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
         <section className="px-6 py-20 text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
@@ -113,7 +113,7 @@ export default function SolutionsPage() {
             </a>
           </div>
         </section>
-      </main>
+      </div>
     </SiteChrome>
   )
 }
