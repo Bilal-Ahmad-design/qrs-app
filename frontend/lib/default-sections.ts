@@ -24,32 +24,62 @@ export const defaultHomeSections = [
   {
     id: 'active-models',
     title: 'Active Models',
-    heading: 'ACTIVE MODELS',
+    heading: 'ACTIVE / VALIDATED',
     sectionType: 'feature-grid',
     backgroundStyle: 'light-institutional',
     items: [
       {
-        title: 'North Atlantic Hurricane',
-        icon: '🌀',
+        title: 'Hurricane',
         status: 'validated',
-      },
-      {
-        title: 'California Wildfire',
-        icon: '🔥',
-        status: 'illustrative',
-      },
-      {
-        title: 'European Wind',
-        icon: '💨',
-        status: 'illustrative',
-      },
-      {
-        title: 'Japan Typhoon',
-        icon: '🌊',
-        status: 'illustrative',
       },
     ],
     order: 1,
+    published: true,
+  },
+  {
+    id: 'illustrative-models',
+    title: 'Illustrative Models',
+    heading: 'ILLUSTRATIVE',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light-institutional',
+    items: [
+      {
+        title: 'Flood',
+        status: 'illustrative',
+      },
+      {
+        title: 'Earthquake',
+        status: 'illustrative',
+      },
+      {
+        title: 'Severe Convective Storm',
+        status: 'illustrative',
+      },
+      {
+        title: 'Wildfire',
+        status: 'illustrative',
+      },
+    ],
+    order: 1.5,
+    published: true,
+  },
+  {
+    id: 'roadmap-models',
+    title: 'Roadmap',
+    heading: 'ROADMAP ONLY',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light-institutional',
+    items: [
+      {
+        title: 'Cyber',
+        status: 'roadmap',
+      },
+      {
+        title: 'Space Weather',
+        status: 'roadmap',
+      },
+    ],
+    order: 1.7,
     published: true,
   },
   {
@@ -103,22 +133,12 @@ export const defaultHomeSections = [
       {
         value: '$10B+',
         title: 'Insured Losses',
-        description: '2023-2024 catastrophic events driving capital constraints',
+        description: 'LA wildfires 2024 catastrophic event',
       },
       {
         value: '$8-12B',
         title: 'Excess Capital Trapped',
         description: 'Reinsurance capital unable to deploy due to model uncertainty',
-      },
-      {
-        value: '300%',
-        title: 'FAIR Plan Surge',
-        description: 'State insurance of last resort reaching capacity limits',
-      },
-      {
-        value: '14x',
-        title: 'Model Divergence',
-        description: 'Vendor modeling outputs diverge by factor of 14 on same exposure',
       },
     ],
     order: 4,
@@ -284,22 +304,18 @@ export const defaultPlatformSections = [
       {
         title: 'Upload Portfolio',
         description: 'Ingest exposure data in your native format',
-        icon: '📤',
       },
       {
         title: 'Run Model',
         description: 'Quantum-native catastrophe modeling engine',
-        icon: '⚙️',
       },
       {
         title: 'Verify Results',
         description: 'Cryptographic reproducibility certificate included',
-        icon: '✅',
       },
       {
         title: 'Deploy Capital',
         description: 'Verified metrics ready for institutional deployment',
-        icon: '🚀',
       },
     ],
     order: 1,
@@ -316,32 +332,26 @@ export const defaultPlatformSections = [
       {
         title: 'Multi-Peril Modeling',
         description: 'Hurricane, wildfire, wind, flood, earthquake, and more',
-        icon: '🌍',
       },
       {
         title: 'EP Curves',
         description: 'Exceedance probability analysis and risk distribution',
-        icon: '📊',
       },
       {
         title: 'Risk Maps',
         description: 'Exposure concentration heatmaps and geographic risk',
-        icon: '🗺️',
       },
       {
         title: 'Stress Testing',
         description: 'Historical and hypothetical scenario analysis',
-        icon: '⚡',
       },
       {
         title: 'Scenario Analysis',
         description: 'What-if portfolio impact assessment',
-        icon: '🔮',
       },
       {
         title: 'Accumulation Analysis',
         description: 'Multi-location risk aggregation and concentration',
-        icon: '🎯',
       },
     ],
     order: 2,
@@ -397,17 +407,14 @@ export const defaultPlatformSections = [
       {
         title: 'Automated Insights',
         description: 'AI identifies key risk drivers, anomalies, and opportunities',
-        icon: '🤖',
       },
       {
         title: 'Natural Language Interface',
         description: 'Ask questions about risk in plain English',
-        icon: '💬',
       },
       {
         title: 'Controlled Workflows',
         description: 'Every recommendation reviewed before institutional execution',
-        icon: '🔒',
       },
     ],
     order: 5,
@@ -424,22 +431,18 @@ export const defaultPlatformSections = [
       {
         title: 'Solvency II',
         description: 'European insurance regulation and SCR calculation',
-        icon: '🇪🇺',
       },
       {
         title: 'ORSA',
         description: 'Own Risk and Solvency Assessment frameworks',
-        icon: '📋',
       },
       {
         title: 'NAIC RBC',
         description: 'US Risk-Based Capital and reserve adequacy',
-        icon: '🇺🇸',
       },
       {
         title: 'Lloyd\'s/BMA',
         description: 'Bermuda Monetary Authority insurance regulations',
-        icon: '💼',
       },
     ],
     order: 6,
@@ -456,22 +459,18 @@ export const defaultPlatformSections = [
       {
         title: 'REST APIs',
         description: 'Full API access to all calculations and data streams',
-        icon: '🔌',
       },
       {
         title: 'Data Exchange',
         description: 'EDM XML, CSV, JSON, and custom format support',
-        icon: '🔄',
       },
       {
         title: 'Real-Time Streaming',
         description: 'Live data feeds, webhooks, and event notifications',
-        icon: '📡',
       },
       {
         title: 'Enterprise Auth',
         description: 'OAuth 2.0, SSO integration, role-based access control',
-        icon: '🔐',
       },
     ],
     order: 7,
@@ -502,13 +501,11 @@ export const defaultTrustSections = [
         title: 'Cryptographic Reproducibility',
         description:
           'Every calculation is cryptographically signed with our ECDSA seal. Independently verify any analysis using open-source verification tools.',
-        icon: '🔐',
       },
       {
         title: 'Compliance Certifications',
         description:
           'SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.',
-        icon: '✓',
       },
     ],
     order: 1,

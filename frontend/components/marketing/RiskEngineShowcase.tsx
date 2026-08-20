@@ -1,29 +1,24 @@
 import { ReactNode } from 'react'
 
 interface FeatureBlock {
-  icon: string
   title: string
   description: string
 }
 
 const features: FeatureBlock[] = [
   {
-    icon: '⚙️',
     title: 'Real-Time Calculation',
     description: 'Dynamic risk computations with microsecond latency',
   },
   {
-    icon: '📊',
     title: 'Multi-Dimensional',
     description: 'Portfolio-level, peril-level, and contract analytics simultaneously',
   },
   {
-    icon: '🔗',
     title: 'Composable Architecture',
     description: 'Mix and match models — use our built-ins or integrate yours',
   },
   {
-    icon: '✓',
     title: 'Verifiable',
     description: 'Every calculation cryptographically signed and independently verifiable',
   },
@@ -62,7 +57,6 @@ export function RiskEngineShowcase({
             key={feature.title}
             className="space-y-3 p-6 rounded-lg border border-light-accent-light bg-white hover:shadow-md transition-shadow"
           >
-            <div className="text-4xl">{feature.icon}</div>
             <h3 className="text-lg font-semibold text-ink-900">
               {feature.title}
             </h3>

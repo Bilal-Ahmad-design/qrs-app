@@ -23,7 +23,7 @@ export function ComplianceBadge({
   framework,
   region,
   status,
-  icon = '📋',
+  icon,
   description,
   className = '',
 }: ComplianceBadgeProps) {
@@ -33,7 +33,7 @@ export function ComplianceBadge({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 flex-1">
-          <span className="text-2xl leading-none">{icon}</span>
+          {icon && <span className="text-2xl leading-none">{icon}</span>}
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h4 className="font-semibold">{framework}</h4>

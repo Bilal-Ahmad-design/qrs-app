@@ -1,29 +1,24 @@
 interface VerificationStep {
   title: string
   description: string
-  icon: string
 }
 
 const verificationSteps: VerificationStep[] = [
   {
     title: 'Input Data',
     description: 'Portfolio data and model inputs',
-    icon: '📊',
   },
   {
     title: 'Cryptographic Signing',
     description: 'Mathematical proof of calculation',
-    icon: '🔐',
   },
   {
     title: 'Reproducible Results',
     description: 'Independent verification possible',
-    icon: '✓',
   },
   {
     title: 'Audit Trail',
     description: 'Complete lineage documented',
-    icon: '📋',
   },
 ]
 
@@ -58,9 +53,6 @@ export function VerificationFlow({
             {/* Step Card */}
             <div className="space-y-4">
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full bg-light-accent-light flex items-center justify-center text-3xl mb-4 shadow-lg">
-                  {step.icon}
-                </div>
                 <div className="text-center">
                   <h3 className="text-lg font-semibold text-ink-900 mb-2">
                     {step.title}
