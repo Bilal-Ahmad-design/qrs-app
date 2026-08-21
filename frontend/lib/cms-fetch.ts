@@ -1,8 +1,8 @@
 /**
- * Fetch content from Payload CMS
+ * Fetch content from Payload CMS (integrated in same Next.js app)
  */
 
-const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
 
 interface CMSPage {
   id: string
