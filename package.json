@@ -1,17 +1,24 @@
 {
   "name": "qrs-app",
   "version": "1.0.0",
-  "description": "QRS App - Frontend + CMS",
+  "description": "QRS App - Frontend + CMS (Monorepo)",
   "private": true,
   "workspaces": [
     "frontend",
     "qrs-cms"
   ],
   "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:cms\"",
     "dev:frontend": "cd frontend && npm run dev",
-    "dev:cms": "cd qrs-cms && node server.js",
+    "dev:cms": "cd qrs-cms && npm run dev",
+    "build": "npm run build:frontend && npm run build:cms",
     "build:frontend": "cd frontend && npm run build",
-    "build:cms": "echo 'CMS server does not require build'",
-    "build": "npm run build:frontend"
+    "build:cms": "cd qrs-cms && npm run build",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:cms\"",
+    "start:frontend": "cd frontend && npm start",
+    "start:cms": "cd qrs-cms && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
   }
 }
