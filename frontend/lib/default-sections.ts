@@ -573,12 +573,209 @@ export const defaultValidationSections = [
   },
 ]
 
+export const defaultVerifySections = [
+  {
+    id: 'hero',
+    title: 'Built to be Verified',
+    heading: 'Built to be Verified',
+    description:
+      'Every calculation is cryptographically signed. Every result can be independently verified. No trust required—only cryptography and open standards.',
+    sectionType: 'hero',
+    backgroundStyle: 'dark',
+    buttonText: 'Request Demo',
+    buttonUrl: '/contact',
+    order: 0,
+    published: true,
+  },
+  {
+    id: 'verification-seal',
+    title: 'Lineage Verified Seal',
+    heading: 'Lineage Verified Seal',
+    description:
+      'Every QRS result includes a cryptographic seal that proves the exact methodology, input data, digital signature, and timestamp for complete reproducibility.',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light',
+    items: [
+      {
+        title: 'Methodology',
+        description: 'The exact methodology and parameters used in the calculation',
+      },
+      {
+        title: 'Cryptographic Hash',
+        description: 'Hash of all input data and model assumptions',
+      },
+      {
+        title: 'Digital Signature',
+        description: 'ECDSA digital signature guaranteeing calculation integrity',
+      },
+      {
+        title: 'Timestamp & Audit Trail',
+        description: 'Timestamp and audit trail for reproducibility',
+      },
+    ],
+    order: 1,
+    published: true,
+  },
+  {
+    id: 'workflow',
+    title: 'Verification Workflow',
+    heading: 'Verification Workflow',
+    sectionType: 'workflow-steps',
+    backgroundStyle: 'light',
+    items: [
+      {
+        title: 'Run Analysis',
+        description: 'Execute your catastrophe model or risk analysis on QRS platform',
+      },
+      {
+        title: 'Receive Seal',
+        description: 'Automatically receive cryptographic Lineage Verified seal with results',
+      },
+      {
+        title: 'Independent Verify',
+        description: 'Share seal with auditors or stakeholders for independent verification',
+      },
+    ],
+    order: 2,
+    published: true,
+  },
+]
+
+export const defaultSolutionsSections = [
+  {
+    id: 'hero',
+    title: 'Solutions by Role',
+    heading: 'Solutions by Role',
+    description:
+      'Tailored quantitative risk management for every function in institutional insurance and investment',
+    sectionType: 'hero',
+    backgroundStyle: 'dark',
+    buttonText: 'Request Demo',
+    buttonUrl: '/contact',
+    order: 0,
+    published: true,
+  },
+  {
+    id: 'solutions-grid',
+    title: 'Role Solutions',
+    heading: 'Solutions for Every Role',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light',
+    items: [
+      {
+        title: 'Underwriters',
+        description:
+          'Real-time risk assessment and premium optimization with portfolio concentration analysis, risk heatmaps, and loss prediction.',
+      },
+      {
+        title: 'Portfolio Managers',
+        description:
+          'Multi-dimensional risk insight with aggregate exposure views, correlation analysis, and strategic rebalancing.',
+      },
+      {
+        title: 'Reinsurance Buyers',
+        description:
+          'Evidence-driven program design with optimal layer structuring, market benchmarking, and vendor comparison.',
+      },
+      {
+        title: 'ILS Managers',
+        description:
+          'Transparent pricing with catastrophe bond valuation, sidecar fund analytics, and tail risk quantification.',
+      },
+      {
+        title: 'Chief Risk Officers',
+        description:
+          'Enterprise-wide governance with Solvency II, NAIC RBC alignment, risk appetite monitoring, and board-ready reporting.',
+      },
+    ],
+    order: 1,
+    published: true,
+  },
+]
+
+export const defaultRegulatorySections = [
+  {
+    id: 'hero',
+    title: 'Regulatory & Compliance',
+    heading: 'Regulatory & Compliance',
+    description:
+      'Built from the ground up to support major regulatory frameworks and governance requirements',
+    sectionType: 'hero',
+    backgroundStyle: 'dark',
+    buttonText: 'Request Demo',
+    buttonUrl: '/contact',
+    order: 0,
+    published: true,
+  },
+  {
+    id: 'frameworks',
+    title: 'Regulatory Frameworks',
+    heading: 'Supported Regulatory Frameworks',
+    sectionType: 'regulatory-grid',
+    backgroundStyle: 'light',
+    items: [
+      {
+        title: 'Solvency II',
+        description: 'European insurance regulation with SCR calculation and reporting',
+      },
+      {
+        title: 'NAIC RBC',
+        description: 'Risk-Based Capital requirements for US insurers',
+      },
+      {
+        title: 'ORSA',
+        description: 'Own Risk and Solvency Assessment framework',
+      },
+      {
+        title: 'Lloyd\'s / BMA',
+        description: 'Bermuda Monetary Authority and Lloyd\'s of London requirements',
+      },
+    ],
+    order: 1,
+    published: true,
+  },
+  {
+    id: 'compliance-approach',
+    title: 'Compliance Approach',
+    heading: 'Compliance Approach',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light',
+    items: [
+      {
+        title: 'Governance Framework',
+        description:
+          'Regulatory governance with audit trails, cryptographic reproducibility, and complete lineage tracking.',
+      },
+      {
+        title: 'Evidence Workflow',
+        description:
+          'Automated evidence collection for SOC 2, ISO 27001, and industry-specific frameworks.',
+      },
+      {
+        title: 'Risk Quantification',
+        description:
+          'Precise risk measurement for capital adequacy, reserve validation, and solvency reporting.',
+      },
+      {
+        title: 'Auditor Integration',
+        description:
+          'Streamlined audit workflows with cryptographic verification capabilities.',
+      },
+    ],
+    order: 2,
+    published: true,
+  },
+]
+
 export const defaultSectionsByPage: Record<string, any[]> = {
   home: defaultHomeSections,
   about: defaultAboutSections,
   platform: defaultPlatformSections,
   trust: defaultTrustSections,
   validation: defaultValidationSections,
+  verify: defaultVerifySections,
+  solutions: defaultSolutionsSections,
+  regulatory: defaultRegulatorySections,
 }
 
 export function getDefaultSections(page: string) {

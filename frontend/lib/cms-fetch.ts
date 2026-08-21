@@ -431,3 +431,24 @@ export async function getPageSectionsByType(page: string, type: string) {
     return []
   }
 }
+
+export async function getSettings() {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/globals/settings`,
+      {
+        next: { revalidate: 3600 },
+      }
+    )
+
+    if (!response.ok) {
+      console.warn('CMS fetch failed for settings:', response.statusText)
+      return null
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.warn('CMS fetch error for settings:', error)
+    return null
+  }
+}
