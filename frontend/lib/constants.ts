@@ -10,6 +10,7 @@ export const COMPLIANCE_LINKS = {
   security: '/security/',
   vdp: '/security/vdp/',
   subprocessors: '/subprocessors/',
+  docs: '/docs/',
   cookies: '/cookies/',
   contact: '/contact/',
 };
@@ -21,5 +22,4 @@ export const NAV_LINKS = [
   { label: 'Regulatory', href: '/regulatory/' },
   { label: 'Trust', href: '/trust/' },
   { label: 'About', href: '/about/' },
-  { label: 'Docs', href: '/docs/' },
 ];

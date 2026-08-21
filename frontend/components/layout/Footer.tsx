@@ -26,6 +26,11 @@ export function Footer() {
                   Cookies
                 </Link>
               </li>
+              <li>
+                <Link href={COMPLIANCE_LINKS.docs} className="text-teal-500 hover:text-teal-600">
+                  Documentation
+                </Link>
+              </li>
             </ul>
           </div>
 
