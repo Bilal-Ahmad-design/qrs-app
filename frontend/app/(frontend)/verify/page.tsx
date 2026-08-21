@@ -8,14 +8,14 @@ export const metadata: Metadata = {
 export default function VerifyPage() {
   return (
     <main>
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
-        <section className="px-6 py-20 text-center max-w-4xl mx-auto">
+        <section className="px-6 py-24 text-center max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
               Built to be Verified
             </h1>
-            <p className="text-xl text-slate-300 mb-8">
+            <p className="text-xl text-slate-300">
               Every calculation is cryptographically signed. Every result can be independently verified.
               No trust required—only cryptography and open standards.
             </p>
@@ -23,11 +23,11 @@ export default function VerifyPage() {
         </section>
 
         {/* Verification Seal */}
-        <section className="px-6 py-16 bg-slate-800/50">
+        <section className="px-6 py-24 bg-slate-800/50">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-slate-900 border border-teal-500/30 rounded-lg p-8 mb-8">
+            <div className="bg-slate-900 border border-teal-500/30 rounded-lg p-8">
               <h2 className="text-2xl font-bold text-white mb-4">Lineage Verified Seal</h2>
-              <p className="text-slate-300 mb-4">
+              <p className="text-slate-300 mb-6">
                 Every QRS result includes a cryptographic seal that proves:
               </p>
               <ul className="space-y-3 text-slate-300">
@@ -53,9 +53,9 @@ export default function VerifyPage() {
         </section>
 
         {/* Verification Workflow */}
-        <section className="px-6 py-16">
+        <section className="px-6 py-24">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">Verification Workflow</h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-16">Verification Workflow</h2>
 
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
@@ -86,13 +86,13 @@ export default function VerifyPage() {
         </section>
 
         {/* Trust Messaging */}
-        <section className="px-6 py-16 bg-slate-800/50">
+        <section className="px-6 py-24 bg-slate-800/50">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-8">Why Verification Matters</h2>
+            <h2 className="text-3xl font-bold text-white mb-12">Why Verification Matters</h2>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Institutional Confidence</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Institutional Confidence</h3>
                 <p className="text-slate-300">
                   Institutional investors and regulators can independently verify every number
                   driving capital deployment decisions. No black boxes. No opaque models.
@@ -100,7 +100,7 @@ export default function VerifyPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Regulatory Audit Trail</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Regulatory Audit Trail</h3>
                 <p className="text-slate-300">
                   Complete lineage tracking and reproducibility certificates provide evidence
                   for regulatory compliance, audits, and solvency assessments.
@@ -108,7 +108,7 @@ export default function VerifyPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Competitive Advantage</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Competitive Advantage</h3>
                 <p className="text-slate-300">
                   Demonstrate rigor and transparency to stakeholders, regulators, and capital markets.
                   Built-in credibility for institutional deployment.
@@ -116,7 +116,7 @@ export default function VerifyPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Future-Proof Architecture</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Future-Proof Architecture</h3>
                 <p className="text-slate-300">
                   Verification capabilities are built into the platform architecture, not an afterthought.
                   Scales with your institution.
@@ -127,7 +127,7 @@ export default function VerifyPage() {
         </section>
 
         {/* CTA */}
-        <section className="px-6 py-16">
+        <section className="px-6 py-24">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready to verify risk?</h2>
             <p className="text-xl text-slate-300 mb-8">

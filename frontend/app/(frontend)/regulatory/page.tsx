@@ -55,9 +55,9 @@ const frameworks = [
 export default function RegulatoryPage() {
   return (
     <main>
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
-        <section className="px-6 py-20 text-center max-w-4xl mx-auto">
+        <section className="px-6 py-24 text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
             Regulatory & Compliance
           </h1>
@@ -67,7 +67,7 @@ export default function RegulatoryPage() {
         </section>
 
         {/* Regulatory Frameworks */}
-        <section className="px-6 py-16">
+        <section className="px-6 py-24">
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
               {frameworks.map((framework) => (
@@ -95,11 +95,11 @@ export default function RegulatoryPage() {
         </section>
 
         {/* Compliance Positioning */}
-        <section className="px-6 py-16 bg-slate-800/50">
+        <section className="px-6 py-24 bg-slate-800/50">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-8">Compliance Approach</h2>
+            <h2 className="text-3xl font-bold text-white mb-12">Compliance Approach</h2>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
                 <h3 className="text-xl font-semibold text-white mb-3">Governance Framework</h3>
                 <p className="text-slate-300">
@@ -136,9 +136,9 @@ export default function RegulatoryPage() {
         </section>
 
         {/* Governance Messaging */}
-        <section className="px-6 py-16">
+        <section className="px-6 py-24">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Governance & Control</h2>
+            <h2 className="text-3xl font-bold text-white mb-12 text-center">Governance & Control</h2>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
@@ -177,7 +177,7 @@ export default function RegulatoryPage() {
         </section>
 
         {/* CTA */}
-        <section className="px-6 py-16 bg-slate-800/50">
+        <section className="px-6 py-24 bg-slate-800/50">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready for regulatory confidence?</h2>
             <p className="text-lg text-slate-300 mb-8">

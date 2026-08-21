@@ -61,9 +61,9 @@ const solutions = [
 export default function SolutionsPage() {
   return (
     <main>
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="bg-gradient-to-b from-slate-900 to-slate-950">
         {/* Hero Section */}
-        <section className="px-6 py-20 text-center max-w-4xl mx-auto">
+        <section className="px-6 py-24 text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
             Solutions by Role
           </h1>
@@ -73,9 +73,9 @@ export default function SolutionsPage() {
         </section>
 
         {/* Solutions Grid */}
-        <section className="px-6 py-16">
+        <section className="px-6 py-24">
           <div className="max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
+            <div className="grid md:grid-cols-2 gap-8">
               {solutions.map((solution) => (
                 <div
                   key={solution.role}
@@ -98,7 +98,7 @@ export default function SolutionsPage() {
         </section>
 
         {/* CTA */}
-        <section className="px-6 py-16 bg-slate-800/50">
+        <section className="px-6 py-24 bg-slate-800/50">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">See your solution in action</h2>
             <p className="text-lg text-slate-300 mb-8">
