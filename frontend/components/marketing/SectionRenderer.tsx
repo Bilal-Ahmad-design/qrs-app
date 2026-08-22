@@ -101,16 +101,7 @@ export function SectionRenderer({
 
       return (
         <section className={`relative overflow-hidden py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center ${bgClass}`}>
-          {/* Background Image (always show as base layer) */}
-          {section.imageUrl && (
-            <img
-              src={getImageUrl(section.imageUrl)}
-              alt={section.title}
-              className="absolute inset-0 w-full h-full object-fill"
-            />
-          )}
-
-          {/* Background Video (layered on top of image) */}
+          {/* Background Video (muted, looping, no controls) */}
           {section.videoUrl && (
             <video
               className="absolute inset-0 w-full h-full object-fill"
@@ -119,13 +110,18 @@ export function SectionRenderer({
               loop
               playsInline
               poster={getImageUrl(section.imageUrl)}
-              onError={(e) => {
-                // If video fails, hide it and show image underneath
-                e.currentTarget.style.display = 'none'
-              }}
             >
               <source src={getVideoUrl(section.videoUrl)} type="video/mp4" />
             </video>
+          )}
+
+          {/* Background Image (fallback if no video or behind video) */}
+          {section.imageUrl && !section.videoUrl && (
+            <img
+              src={getImageUrl(section.imageUrl)}
+              alt={section.title}
+              className="absolute inset-0 w-full h-full object-fill"
+            />
           )}
 
           {/* Overlay for text readability - different colors based on page theme */}
