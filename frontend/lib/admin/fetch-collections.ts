@@ -30,7 +30,11 @@ export async function fetchCollection<T>(
     })
 
     if (!response.ok) {
-      console.warn(`Failed to fetch ${collection}:`, response.statusText)
+      if (response.status === 503) {
+        console.error(`❌ Payload CMS not running (${collection}). Start with: npm run cms`)
+      } else {
+        console.warn(`⚠️ Failed to fetch ${collection}: ${response.statusText}`)
+      }
       return { docs: [], totalDocs: 0 }
     }
 
@@ -40,7 +44,7 @@ export async function fetchCollection<T>(
       totalDocs: data.totalDocs || 0,
     }
   } catch (error) {
-    console.error(`Error fetching ${collection}:`, error)
+    console.error(`❌ Error fetching ${collection}:`, error instanceof Error ? error.message : error)
     return { docs: [], totalDocs: 0 }
   }
 }
