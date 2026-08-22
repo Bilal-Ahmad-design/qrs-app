@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, LogOut, Search, Settings, LayoutGrid, FileText, BookOpen, Image, Inbox, Link2, Users, History, Dot } from 'lucide-react'
+import { Menu, X, LogOut, Search, Settings, LayoutGrid, FileText, Image, Inbox, Link2, Users, History, Dot } from 'lucide-react'
 
 type NavItem = { label: string; href: string; icon: React.ReactNode; badge?: number; roles?: string[] }
 type NavGroup = { label: string; items: NavItem[] }
@@ -11,8 +11,8 @@ type NavGroup = { label: string; items: NavItem[] }
 const allNavGroups: NavGroup[] = [
   { label: 'Overview', items: [{ label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutGrid className="w-4 h-4" /> }] },
   { label: 'Content', items: [
-    { label: 'Pages', href: '/admin/content?type=pages', icon: <FileText className="w-4 h-4" />, roles: ['super-admin', 'admin', 'editor'] },
-    { label: 'Media', href: '/admin/content?type=media', icon: <Image className="w-4 h-4" />, roles: ['super-admin', 'admin', 'editor'] },
+    { label: 'Pages', href: '/admin/content/pages', icon: <FileText className="w-4 h-4" />, roles: ['super-admin', 'admin', 'editor'] },
+    { label: 'Media', href: '/admin/content/media', icon: <Image className="w-4 h-4" />, roles: ['super-admin', 'admin', 'editor'] },
   ]},
   { label: 'Engagement', items: [
     { label: 'Submissions', href: '/admin/submissions', icon: <Inbox className="w-4 h-4" />, badge: 0, roles: ['super-admin', 'admin'] },
