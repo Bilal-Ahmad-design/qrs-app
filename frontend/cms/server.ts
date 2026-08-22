@@ -2,12 +2,19 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 import config from './payload.config.js'
 import http from 'http'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { config as dotenvConfig } from 'dotenv'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+dotenvConfig({ path: path.resolve(__dirname, '../.env.local') })
 
 const PORT = 3001
 
 // Verify DATABASE_URL is loaded
 if (!process.env.DATABASE_URL) {
   console.error('❌ DATABASE_URL not set in environment')
+  console.error('   Make sure .env.local exists with DATABASE_URL set')
   process.exit(1)
 }
 console.log(`📦 Database configured: ${process.env.DATABASE_URL.substring(0, 50)}...`)
