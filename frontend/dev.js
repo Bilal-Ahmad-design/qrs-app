@@ -9,11 +9,10 @@ let payloadReady = false
 
 // Start Payload CMS server directly without npm wrapper
 console.log('📦 Starting Payload CMS server on port 3001...')
-const payloadServer = spawn('node', ['--loader', 'tsx', 'cms/server.ts'], {
+const payloadServer = spawn('node', ['--import', 'tsx', 'cms/server.ts'], {
   stdio: 'pipe',
   cwd: process.cwd(),
   shell: isWindows,
-  env: { ...process.env, NODE_OPTIONS: '--loader tsx' },
 })
 
 let payloadOutput = ''
