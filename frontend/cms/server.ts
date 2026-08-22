@@ -14,8 +14,9 @@ console.log(`📦 Database configured: ${process.env.DATABASE_URL.substring(0, 5
 
 async function start() {
   try {
+    console.log('🔄 Initializing Payload CMS...')
     const payload = await getPayload({ config })
-    console.log('✓ Payload initialized')
+    console.log('✓ Payload initialized successfully')
 
     const server = http.createServer(async (req, res) => {
       try {
@@ -90,7 +91,10 @@ async function start() {
       console.log(`  Admin: http://localhost:${PORT}/admin`)
     })
   } catch (error) {
-    console.error('❌ Failed to start Payload:', error)
+    console.error('❌ Failed to start Payload CMS:', error instanceof Error ? error.message : error)
+    if (error instanceof Error) {
+      console.error('Stack:', error.stack)
+    }
     process.exit(1)
   }
 }

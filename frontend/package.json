@@ -11,6 +11,7 @@
     "dev:frontend": "next dev",
     "cms": "payload run",
     "cms:server": "tsx cms/server.ts",
+    "seed:users": "tsx cms/seed-users.ts",
     "seed:sections": "tsx cms/seed-sections.ts",
     "seed:users": "tsx scripts/seed-users.ts",
     "build": "next build",
