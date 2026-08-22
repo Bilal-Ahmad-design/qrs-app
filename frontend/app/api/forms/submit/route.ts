@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { formSchemas, type FormType } from '@/lib/forms/schemas'
 import { sendEmail, emailTemplates, notifyAdmin } from '@/lib/email'
 import { verifyTurnstile } from '@/lib/turnstile'
@@ -51,13 +51,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email
-    const confirmationTemplate = emailTemplates[formType as FormType]
+    // Send confirmation email for form types with a dedicated template.
+    const recipient = data.email
+    const name = data.name || recipient
+    const confirmationTemplates: Partial<Record<FormType, () => string>> = {
+      contact: () => emailTemplates.contactConfirmation(name),
+      'demo-request': () => emailTemplates.demoConfirmation(name),
+      support: () => emailTemplates.supportConfirmation(name, data.caseNumber || 'Pending'),
+      newsletter: () => emailTemplates.newsletterWelcome(recipient),
+    }
+    const confirmationTemplate = confirmationTemplates[formType as FormType]
     if (confirmationTemplate) {
       await sendEmail({
-        to: data.email,
+        to: recipient,
         subject: `Confirmation: ${formType}`,
-        html: confirmationTemplate(data.name || data.email),
+        html: confirmationTemplate(),
         replyTo: process.env.ADMIN_EMAIL,
       })
     }
