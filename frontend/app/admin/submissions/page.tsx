@@ -1,17 +1,7 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
 import { Badge } from '@/components/admin/Badge'
-import { getFormSubmissions } from '@/lib/admin/fetch-collections'
+import { getFormSubmissions, type FormSubmission } from '@/lib/admin/fetch-collections'
 import { Mail, Eye } from 'lucide-react'
-
-interface FormSubmission {
-  id: string
-  formType: string
-  email: string
-  data: Record<string, any>
-  reviewStatus: 'pending' | 'reviewed' | 'responded' | 'archived'
-  submittedAt: string
-  turnstileVerified: boolean
-}
 
 const columns: DataTableColumn[] = [
   { key: 'type', label: 'Form Type', width: '150px' },

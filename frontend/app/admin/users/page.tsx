@@ -1,17 +1,7 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
 import { Badge } from '@/components/admin/Badge'
-import { fetchUsers } from '@/lib/admin/fetch-collections'
+import { fetchUsers, type PayloadUser } from '@/lib/admin/fetch-collections'
 import { UserPlus } from 'lucide-react'
-
-interface PayloadUser {
-  id: string
-  email: string
-  fullname?: string
-  role: string
-  isActive: boolean
-  lastLoginAt?: string
-  createdAt: string
-}
 
 const columns: DataTableColumn[] = [
   { key: 'fullname', label: 'Name', width: '200px' },

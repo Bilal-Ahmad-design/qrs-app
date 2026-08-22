@@ -1,17 +1,7 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
 import { Badge } from '@/components/admin/Badge'
-import { fetchMedia } from '@/lib/admin/fetch-collections'
+import { fetchMedia, type PayloadMedia } from '@/lib/admin/fetch-collections'
 import { Plus, Image as ImageIcon } from 'lucide-react'
-
-interface PayloadMedia {
-  id: string
-  filename: string
-  mimeType: string
-  filesize: number
-  alt?: string
-  createdAt: string
-  updatedAt: string
-}
 
 const columns: DataTableColumn[] = [
   { key: 'filename', label: 'Filename', width: '250px' },

@@ -1,16 +1,7 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
 import { Badge } from '@/components/admin/Badge'
-import { fetchPages } from '@/lib/admin/fetch-collections'
+import { fetchPages, type PayloadPage } from '@/lib/admin/fetch-collections'
 import { Plus } from 'lucide-react'
-
-interface PayloadPage {
-  id: string
-  title: string
-  slug: string
-  status: 'draft' | 'published'
-  description?: string
-  updatedAt: string
-}
 
 const columns: DataTableColumn[] = [
   { key: 'title', label: 'Title', width: '250px' },

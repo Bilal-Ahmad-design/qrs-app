@@ -47,32 +47,81 @@ export async function fetchCollection<T>(
 
 // Collection-specific fetchers
 
-export async function fetchUsers() {
-  return fetchCollection('users', { limit: 100 })
+export interface PayloadUser {
+  id: string
+  email: string
+  fullname?: string
+  role: string
+  isActive: boolean
+  lastLoginAt?: string
+  createdAt: string
 }
 
-export async function fetchPages() {
-  return fetchCollection('pages', { limit: 100 })
+export interface PayloadPage {
+  id: string
+  title: string
+  slug: string
+  status: 'draft' | 'published'
+  description?: string
+  updatedAt: string
+}
+
+export interface PayloadMedia {
+  id: string
+  filename: string
+  mimeType: string
+  filesize: number
+  alt?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface FormSubmission {
+  id: string
+  formType: string
+  email: string
+  data: Record<string, any>
+  reviewStatus: 'pending' | 'reviewed' | 'responded' | 'archived'
+  submittedAt: string
+  turnstileVerified: boolean
+}
+
+export interface AuditLog {
+  id: string
+  userId: string
+  action: string
+  collection: string
+  documentId: string
+  changes: Record<string, any>
+  createdAt: string
+}
+
+export async function fetchUsers(): Promise<{ docs: PayloadUser[]; totalDocs: number }> {
+  return fetchCollection<PayloadUser>('users', { limit: 100 })
+}
+
+export async function fetchPages(): Promise<{ docs: PayloadPage[]; totalDocs: number }> {
+  return fetchCollection<PayloadPage>('pages', { limit: 100 })
 }
 
 export async function fetchBlogPosts() {
   return fetchCollection('blog', { limit: 100 })
 }
 
-export async function fetchMedia() {
-  return fetchCollection('media', { limit: 100 })
+export async function fetchMedia(): Promise<{ docs: PayloadMedia[]; totalDocs: number }> {
+  return fetchCollection<PayloadMedia>('media', { limit: 100 })
 }
 
 export async function fetchFormSubmissions() {
   return fetchCollection('form-submissions', { limit: 100, sort: '-createdAt' })
 }
 
-export async function fetchAuditLogs() {
-  return fetchCollection('audit-logs', { limit: 50, sort: '-createdAt' })
+export async function fetchAuditLogs(): Promise<{ docs: AuditLog[]; totalDocs: number }> {
+  return fetchCollection<AuditLog>('audit-logs', { limit: 50, sort: '-createdAt' })
 }
 
-export async function getFormSubmissions() {
-  return fetchCollection('form-submissions', { limit: 100, sort: '-submittedAt' })
+export async function getFormSubmissions(): Promise<{ docs: FormSubmission[]; totalDocs: number }> {
+  return fetchCollection<FormSubmission>('form-submissions', { limit: 100, sort: '-submittedAt' })
 }
 
 export async function getCollectionStats() {
