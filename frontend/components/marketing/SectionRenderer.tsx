@@ -64,24 +64,34 @@ export function SectionRenderer({
   section,
   children,
 }: SectionRendererProps) {
-  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+  const cmsUrl = env.NEXT_PUBLIC_CMS_URL
   const bgClass = bgStyles[section.backgroundStyle || 'light']
   const textClass = textStyles[section.backgroundStyle || 'light']
 
-  // Helper to get image URLs - serve local media from frontend, CMS uploads from backend
+  // Helper to get image URLs - strip localhost URLs and use relative paths for production
   const getImageUrl = (url?: string) => {
     if (!url) return undefined
-    if (url.startsWith('http')) return url
-    if (url.startsWith('/media/')) return url // Local media files served from frontend
-    return `${cmsUrl}${url}` // CMS uploads from backend
+    // Strip localhost:3001 prefix for production
+    if (url.includes('localhost:3001')) {
+      return url.replace('http://localhost:3001', '')
+    }
+    if (url.startsWith('/media/')) return url // Local media files
+    if (url.startsWith('/')) return url // Already relative path
+    if (url.startsWith('http')) return url // External URL (e.g., CDN)
+    return cmsUrl ? `${cmsUrl}${url}` : `/${url}` // CMS uploads or relative
   }
 
-  // Helper to get video URLs - serve local media from frontend, CMS uploads from backend
+  // Helper to get video URLs - strip localhost URLs and use relative paths for production
   const getVideoUrl = (url?: string) => {
     if (!url) return undefined
-    if (url.startsWith('http')) return url
-    if (url.startsWith('/media/')) return url // Local media files served from frontend
-    return `${cmsUrl}${url}` // CMS uploads from backend
+    // Strip localhost:3001 prefix for production
+    if (url.includes('localhost:3001')) {
+      return url.replace('http://localhost:3001', '')
+    }
+    if (url.startsWith('/media/')) return url // Local media files
+    if (url.startsWith('/')) return url // Already relative path
+    if (url.startsWith('http')) return url // External URL (e.g., CDN)
+    return cmsUrl ? `${cmsUrl}${url}` : `/${url}` // CMS uploads or relative
   }
 
   switch (section.sectionType) {

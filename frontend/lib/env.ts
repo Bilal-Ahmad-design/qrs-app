@@ -9,6 +9,8 @@ export function getEnv(key: string, defaultValue?: string): string {
 
 export const env = {
   NEXT_PUBLIC_SITE_URL: getEnv('NEXT_PUBLIC_SITE_URL', 'https://qrsrisk.com'),
-  NEXT_PUBLIC_CMS_URL: getEnv('NEXT_PUBLIC_CMS_URL', 'http://localhost:3001'),
+  // CMS URL: use env var if set, otherwise empty string (defaults to relative /api/payload paths)
+  // On Vercel production, leave NEXT_PUBLIC_CMS_URL unset to use frontend origin
+  NEXT_PUBLIC_CMS_URL: process.env.NEXT_PUBLIC_CMS_URL || '',
   NODE_ENV: getEnv('NODE_ENV', 'development'),
 };
