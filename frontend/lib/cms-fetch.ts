@@ -3,11 +3,16 @@
  * All requests go through /api/payload proxy route handler
  */
 
-// Helper to get CMS URL - uses absolute URL for server-side, relative for client-side
+// Helper to get CMS URL - dynamic based on environment
 const getCMSURL = () => {
-  // Always use absolute URL in server components (no window check needed)
-  // process.env.NEXT_PUBLIC_CMS_URL is set to http://localhost:3000 in .env.local
-  return 'http://localhost:3000'
+  // Use environment variable, fallback to relative path for same-origin requests
+  // In production on Vercel, this allows NEXT_PUBLIC_CMS_URL to be configured dynamically
+  // If not set, defaults to same origin (port 3000 for local, Vercel domain for production)
+  if (process.env.NEXT_PUBLIC_CMS_URL) {
+    return process.env.NEXT_PUBLIC_CMS_URL
+  }
+  // Fallback: same origin (works for local and production)
+  return typeof window !== 'undefined' ? window.location.origin : ''
 }
 
 interface CMSPage {
