@@ -8,7 +8,7 @@ export function PrivacyRequestForm() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [turnstileToken, setTurnstileToken] = useState('');
-  const turnstileEnabled = isTurnstileConfigured();
+  const turnstileEnabled = isTurnstileConfigured;
 
   useEffect(() => {
     if (!turnstileEnabled || typeof window === 'undefined') return;
