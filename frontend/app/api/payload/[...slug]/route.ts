@@ -1,6 +1,9 @@
 export const runtime = 'nodejs'
 
-const PAYLOAD_URL = process.env.PAYLOAD_CMS_URL || 'http://localhost:3003'
+// Payload CMS runs on port 3001 when started via npm run cms
+// The frontend (Next.js) runs on port 3000
+// This route proxies requests from /api/payload/* to Payload CMS
+const PAYLOAD_URL = process.env.PAYLOAD_CMS_URL || 'http://localhost:3001'
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
   try {
