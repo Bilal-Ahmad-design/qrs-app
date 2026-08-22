@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
-import { createSession, setSessionCookie } from '@/lib/auth/session'
+import { createSession } from '@/lib/auth/session'
 import { findDevUserByEmail, verifyDevUserPassword } from '@/lib/auth/dev-users'
+import { getCMSApiUrl } from '@/lib/cms-url'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -11,7 +12,7 @@ const loginSchema = z.object({
 
 async function queryPayloadUsers(email: string) {
   try {
-    const url = new URL('/api/payload/users', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL(getCMSApiUrl('/api/payload/users'))
     url.searchParams.set('where[email][equals]', email)
 
     const response = await fetch(url.toString(), {
@@ -32,7 +33,7 @@ async function queryPayloadUsers(email: string) {
 
 async function logLoginAttempt(email: string, success: boolean, userId?: string) {
   try {
-    const url = new URL('/api/payload/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL(getCMSApiUrl('/api/payload/audit-logs'))
 
     await fetch(url.toString(), {
       method: 'POST',
@@ -70,8 +71,8 @@ export async function POST(request: NextRequest) {
     // Try to find user (Payload first, then fallback to dev users)
     let payloadUser = await queryPayloadUsers(email)
 
-    if (!payloadUser) {
-      // Fallback: check dev users (for development without Payload API)
+    if (!payloadUser && process.env.NODE_ENV !== 'production') {
+      // Development-only fallback when the local CMS is unavailable.
       const devUser = await findDevUserByEmail(email)
       if (devUser) {
         const passwordMatch = await verifyDevUserPassword(devUser, password)
@@ -108,6 +109,9 @@ export async function POST(request: NextRequest) {
         }
       }
 
+    }
+
+    if (!payloadUser) {
       await logLoginAttempt(email, false)
       return NextResponse.json(
         { error: 'Email or password is incorrect' },

@@ -11,8 +11,11 @@ function getToken(request: NextRequest) {
   const token = request.cookies.get('token')?.value
   if (!token) return null
 
+  const secret = process.env.JWT_SECRET
+  if (!secret) return null
+
   try {
-    return jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key')
+    return jwt.verify(token, secret)
   } catch {
     return null
   }

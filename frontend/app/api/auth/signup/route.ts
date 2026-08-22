@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createSession } from '@/lib/auth/session'
+import { getCMSApiUrl } from '@/lib/cms-url'
 
 const signupSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -10,7 +11,7 @@ const signupSchema = z.object({
 
 async function createPayloadUser(email: string, password: string, fullname: string) {
   try {
-    const url = new URL('/api/payload/users', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL(getCMSApiUrl('/api/payload/users'))
 
     const response = await fetch(url.toString(), {
       method: 'POST',
@@ -41,7 +42,7 @@ async function createPayloadUser(email: string, password: string, fullname: stri
 
 async function logSignup(email: string, success: boolean, userId?: string) {
   try {
-    const url = new URL('/api/payload/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL(getCMSApiUrl('/api/payload/audit-logs'))
 
     await fetch(url.toString(), {
       method: 'POST',

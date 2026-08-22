@@ -1,4 +1,5 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
+import { requirePermission } from '@/lib/auth/authorization'
 import { Badge } from '@/components/admin/Badge'
 import { fetchMedia, type PayloadMedia } from '@/lib/admin/fetch-collections'
 import { Plus, Image as ImageIcon } from 'lucide-react'
@@ -45,6 +46,7 @@ function getMimeTypeLabel(mimeType: string): string {
 }
 
 export default async function MediaPage() {
+  await requirePermission('content:update')
   const { docs: media, totalDocs } = await fetchMedia()
 
   const tableRows = media.map((file: PayloadMedia) => ({

@@ -3,16 +3,9 @@
  * All requests go through /api/payload proxy route handler
  */
 
-// Use the deployed CMS endpoint for server-side build and render requests.
-const getCMSURL = () => {
-  const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL
+import { getCMSUrl } from '@/lib/cms-url'
 
-  if (cmsUrl) {
-    return cmsUrl.replace(/\/$/, '')
-  }
-
-  return 'http://localhost:3000'
-}
+const getCMSURL = getCMSUrl
 
 interface CMSPage {
   id: string

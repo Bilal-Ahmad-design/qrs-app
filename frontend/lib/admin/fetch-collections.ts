@@ -1,3 +1,5 @@
+import { getCMSUrl } from '@/lib/cms-url'
+
 /**
  * Generic Payload collection fetcher
  * Handles all GET operations from Payload CMS
@@ -10,7 +12,7 @@ export interface FetchOptions {
   where?: Record<string, any>
 }
 
-const CMS_BASE_URL = (process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000').replace(/\/$/, '')
+const CMS_BASE_URL = getCMSUrl()
 
 export async function fetchCollection<T>(
   collection: string,

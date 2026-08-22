@@ -1,4 +1,5 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
+import { requirePermission } from '@/lib/auth/authorization'
 import { Badge } from '@/components/admin/Badge'
 import { fetchPages, type PayloadPage } from '@/lib/admin/fetch-collections'
 import { Plus } from 'lucide-react'
@@ -30,6 +31,7 @@ function formatDate(dateString: string): string {
 }
 
 export default async function PagesPage() {
+  await requirePermission('content:update')
   const { docs: pages, totalDocs } = await fetchPages()
 
   const tableRows = pages.map((page: PayloadPage) => ({

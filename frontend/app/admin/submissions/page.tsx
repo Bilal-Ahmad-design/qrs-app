@@ -1,4 +1,5 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
+import { requirePermission } from '@/lib/auth/authorization'
 import { Badge } from '@/components/admin/Badge'
 import { getFormSubmissions, type FormSubmission } from '@/lib/admin/fetch-collections'
 import { Mail, Eye } from 'lucide-react'
@@ -52,6 +53,7 @@ function getMessagePreview(data: Record<string, any>): string {
 }
 
 export default async function SubmissionsPage() {
+  await requirePermission('forms:update')
   const { docs: submissions, totalDocs } = await getFormSubmissions()
 
   const tableRows = submissions.map((submission: FormSubmission) => ({

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth/session'
+import { getCMSApiUrl } from '@/lib/cms-url'
 
 async function logLogout(userId: string, email: string) {
   try {
-    const url = new URL('/api/payload/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL(getCMSApiUrl('/api/payload/audit-logs'))
 
     await fetch(url.toString(), {
       method: 'POST',
