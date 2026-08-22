@@ -11,12 +11,14 @@ dotenvConfig({ path: path.resolve(__dirname, '../.env.local') })
 
 const PORT = 3001
 
-// Verify DATABASE_URL is loaded
-if (!process.env.DATABASE_URL) {
-  console.error('❌ DATABASE_URL not set in environment')
-  console.error('   Make sure .env.local exists with DATABASE_URL set')
+// Use unpooled connection for Payload CMS (pooled connections have issues with pg driver)
+const dbUrl = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL
+if (!dbUrl) {
+  console.error('❌ DATABASE_URL or DATABASE_URL_UNPOOLED not set in environment')
+  console.error('   Make sure .env.local exists with database credentials')
   process.exit(1)
 }
+process.env.DATABASE_URL = dbUrl
 console.warn(`📦 Database configured: ${process.env.DATABASE_URL.substring(0, 50)}...`)
 
 async function start() {
