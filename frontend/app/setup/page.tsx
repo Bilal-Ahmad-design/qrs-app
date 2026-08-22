@@ -1,110 +1,98 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function SetupPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-
-  const createTestUser = async () => {
-    setLoading(true)
-    setError('')
-    setMessage('')
-
-    try {
-      // Create a test user directly via signup
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: 'bilal@qrs.example.com',
-          password: 'Admin123!',
-          fullname: 'Bilal Ahmad',
-        }),
-      })
-
-      if (response.ok) {
-        setMessage('✅ Test user created! Redirecting to login...')
-        setTimeout(() => {
-          router.push('/login')
-        }, 2000)
-      } else {
-        const data = await response.json()
-        setError(data.error || 'Failed to create user')
-      }
-    } catch (err) {
-      setError(String(err))
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-ink-900 px-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-outfit font-bold text-cream-50 mb-2">QRS Setup</h1>
-          <p className="text-cream-50 text-opacity-70">Create your first test user</p>
+    <div className="min-h-screen bg-ink-900 px-4 py-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-outfit font-bold text-cream-50 mb-2">QRS Admin Setup</h1>
+          <p className="text-cream-50 text-opacity-70">Development test credentials</p>
         </div>
 
         <div className="bg-ink-800 rounded-lg p-8 border border-teal-700 border-opacity-20">
-          {error && (
-            <div className="mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-500 rounded text-red-200 text-sm">
-              {error}
-            </div>
-          )}
+          <div className="mb-8">
+            <h2 className="text-xl font-outfit font-bold text-cream-50 mb-4">✅ Ready to Log In</h2>
+            <p className="text-cream-50 text-opacity-80 font-poppins mb-6">
+              These test credentials are pre-configured and ready to use. Choose a role below and log in to the admin dashboard.
+            </p>
+          </div>
 
-          {message && (
-            <div className="mb-4 p-3 bg-teal-500 bg-opacity-20 border border-teal-500 rounded text-teal-200 text-sm">
-              {message}
-            </div>
-          )}
-
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="block text-sm font-poppins text-cream-50 mb-2">Email</label>
-              <input
-                type="email"
-                value="bilal@qrs.example.com"
-                disabled
-                className="w-full px-3 py-2 bg-ink-700 border border-teal-700 border-opacity-20 rounded text-cream-50 font-poppins text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-poppins text-cream-50 mb-2">Password</label>
-              <input
-                type="password"
-                value="Admin123!"
-                disabled
-                className="w-full px-3 py-2 bg-ink-700 border border-teal-700 border-opacity-20 rounded text-cream-50 font-poppins text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-poppins text-cream-50 mb-2">Name</label>
-              <input
-                type="text"
-                value="Bilal Ahmad"
-                disabled
-                className="w-full px-3 py-2 bg-ink-700 border border-teal-700 border-opacity-20 rounded text-cream-50 font-poppins text-sm"
-              />
+          <div className="space-y-4 mb-8">
+            <div className="grid gap-4">
+              {[
+                {
+                  email: 'jordan@qrs.example.com',
+                  password: 'Password123!',
+                  fullname: 'Jordan Markwith',
+                  role: 'Super Admin',
+                  desc: 'Full system access',
+                },
+                {
+                  email: 'bilal@qrs.example.com',
+                  password: 'Password123!',
+                  fullname: 'Bilal Ahmad',
+                  role: 'Admin',
+                  desc: 'Operations & submissions',
+                },
+                {
+                  email: 'editor@qrs.example.com',
+                  password: 'Password123!',
+                  fullname: 'Content Editor',
+                  role: 'Editor',
+                  desc: 'Create & edit content',
+                },
+                {
+                  email: 'reviewer@qrs.example.com',
+                  password: 'Password123!',
+                  fullname: 'Content Reviewer',
+                  role: 'Reviewer',
+                  desc: 'Review & approve content',
+                },
+                {
+                  email: 'readonly@qrs.example.com',
+                  password: 'Password123!',
+                  fullname: 'Read-Only User',
+                  role: 'Read-Only',
+                  desc: 'View-only access',
+                },
+              ].map(user => (
+                <div
+                  key={user.email}
+                  className="p-4 bg-ink-700 border border-teal-700 border-opacity-20 rounded-lg hover:border-opacity-40 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="font-poppins font-semibold text-cream-50">{user.fullname}</p>
+                      <p className="text-xs text-cream-50 text-opacity-60 font-poppins">{user.role}</p>
+                      <p className="text-xs text-cream-50 text-opacity-50 font-mono mt-1">{user.desc}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 items-center mb-2">
+                    <code className="text-xs bg-ink-900 px-2 py-1 rounded text-teal-300 font-mono flex-1">
+                      {user.email}
+                    </code>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <code className="text-xs bg-ink-900 px-2 py-1 rounded text-teal-300 font-mono flex-1">
+                      {user.password}
+                    </code>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <button
-            onClick={createTestUser}
-            disabled={loading}
-            className="w-full px-4 py-2 bg-teal-500 text-ink-900 font-poppins font-semibold rounded hover:bg-teal-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          <Link
+            href="/login"
+            className="block w-full px-4 py-3 bg-teal-500 text-ink-900 font-poppins font-semibold rounded hover:bg-teal-600 transition-colors text-center"
           >
-            {loading ? 'Creating...' : 'Create Test User'}
-          </button>
+            Go to Login
+          </Link>
 
           <p className="text-xs text-cream-50 text-opacity-60 text-center mt-4 font-poppins">
-            Click the button above to create a test user account. You'll be redirected to login.
+            All test users share the same password. Choose any email above and use <code className="bg-ink-700 px-1 rounded">Password123!</code>
           </p>
         </div>
       </div>

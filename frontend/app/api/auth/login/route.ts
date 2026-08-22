@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { createSession, setSessionCookie } from '@/lib/auth/session'
+import { findDevUserByEmail, verifyDevUserPassword } from '@/lib/auth/dev-users'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -66,10 +67,47 @@ export async function POST(request: NextRequest) {
 
     const { email, password } = validation.data
 
-    // Query Payload for user
-    const payloadUser = await queryPayloadUsers(email)
+    // Try to find user (Payload first, then fallback to dev users)
+    let payloadUser = await queryPayloadUsers(email)
 
     if (!payloadUser) {
+      // Fallback: check dev users (for development without Payload API)
+      const devUser = await findDevUserByEmail(email)
+      if (devUser) {
+        const passwordMatch = await verifyDevUserPassword(devUser, password)
+        if (passwordMatch) {
+          // Create session for dev user
+          const sessionToken = await createSession({
+            id: devUser.id,
+            email: devUser.email,
+            fullname: devUser.fullname,
+            role: devUser.role,
+          })
+
+          const response = NextResponse.json({
+            success: true,
+            user: {
+              id: devUser.id,
+              email: devUser.email,
+              fullname: devUser.fullname,
+              role: devUser.role,
+            },
+          })
+
+          response.cookies.set({
+            name: 'payload-session',
+            value: sessionToken,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60,
+            path: '/',
+          })
+
+          return response
+        }
+      }
+
       await logLoginAttempt(email, false)
       return NextResponse.json(
         { error: 'Email or password is incorrect' },
