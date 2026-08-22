@@ -4,6 +4,7 @@ const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
 
 const nextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ['drizzle-kit', 'esbuild', 'esbuild-register'],
   redirects: async () => {
     try {
       const controller = new AbortController()
