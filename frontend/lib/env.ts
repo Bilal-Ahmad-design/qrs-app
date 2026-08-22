@@ -12,3 +12,17 @@ export const env = {
   NEXT_PUBLIC_CMS_URL: process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3001',
   NODE_ENV: getEnv('NODE_ENV', 'development'),
 };
+
+export function getCMSAssetUrl(path?: string): string | undefined {
+  if (!path) return undefined
+
+  const cmsUrl = env.NEXT_PUBLIC_CMS_URL.replace(/\/$/, '')
+
+  if (/^https?:\/\/localhost(?::\d+)?(?:\/|$)/.test(path)) {
+    const { pathname, search, hash } = new URL(path)
+    return `${cmsUrl}${pathname}${search}${hash}`
+  }
+
+  if (path.startsWith('http')) return path
+  return `${cmsUrl}${path.startsWith('/') ? path : `/${path}`}`
+}
