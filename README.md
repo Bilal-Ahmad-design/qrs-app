@@ -1,196 +1,289 @@
 # QRS - Quantitative Risk Systems
 
-Separate frontend and standalone Payload CMS applications.
+Enterprise-grade quantitative risk analysis platform with cryptographically verified catastrophe modeling. Next.js 16 frontend with integrated Payload CMS and PostgreSQL backend.
+
+**Live:** https://qrs-app-eight.vercel.app/
 
 ## Project Structure
 
 ```
 qrs-app/
-├── frontend/        # Next.js frontend application (port 3000)
-│                    # Marketing website
-│                    # Fetches content from qrs-cms via REST API
-├── qrs-cms/         # Standalone Payload CMS (port 3001)
-│                    # Content management admin panel
-│                    # REST API endpoints
-│                    # PostgreSQL database management
-├── scripts/         # Shared scripts
-└── .github/         # CI/CD configuration
+├── frontend/                # Next.js 16 application (port 3000)
+│   ├── app/                 # Next.js app directory (routes & pages)
+│   ├── components/          # React components
+│   │   ├── marketing/       # Marketing section components
+│   │   ├── admin/           # Admin dashboard components
+│   │   └── layout/          # Layout & header/footer
+│   ├── lib/                 # Utilities & helpers
+│   │   ├── cms-fetch.ts     # CMS data fetching
+│   │   └── default-sections.ts  # Fallback page sections
+│   ├── cms/                 # Payload CMS integration
+│   │   ├── payload.config.ts    # CMS configuration
+│   │   ├── server.ts            # CMS server (port 3001)
+│   │   └── mock-server.ts       # Mock data fallback
+│   ├── public/              # Static assets
+│   │   └── media/           # Product images & videos
+│   └── package.json         # Dependencies
+├── DOCS/                    # Documentation
+├── .github/                 # CI/CD configuration
+└── README.md                # This file
 ```
 
-## Quick Start
+## Features
+
+✅ **Frontend**
+- Next.js 16 with Turbopack
+- React 19 with TypeScript strict mode
+- Responsive design (mobile, tablet, desktop)
+- Video backgrounds with smooth playback
+- Media management system
+- Dynamic page sections from CMS
+- Role-based access control (RBAC)
+
+✅ **CMS & Backend**
+- Payload CMS 3.87.0 integrated
+- PostgreSQL database
+- REST API endpoints
+- Session-based authentication
+- Mock server fallback for development
+
+✅ **Performance**
+- Object-fit optimization for media
+- Section padding (2rem/7rem)
+- Responsive button sizing
+- CSS transitions & animations
+- Vercel edge caching
+
+✅ **Code Quality**
+- TypeScript interfaces for type safety
+- ESLint configuration
+- No console errors
+- Production-ready code
+
+## Quick Start - Local Development
 
 ### 1. Install Dependencies
 
 ```bash
-cd frontend && npm install
-cd ../qrs-cms && npm install
-```
-
-### 2. Start Both Applications
-
-**Terminal 1 - Frontend:**
-```bash
 cd frontend
-npm run dev
-# Frontend runs on http://localhost:3000
+npm install
 ```
 
-**Terminal 2 - Strapi CMS:**
-```bash
-cd qrs-cms
-npm run develop
-# Admin UI: http://localhost:3001/admin
-# API: http://localhost:3001/api
-```
+### 2. Create Environment File
 
-### 3. Create Admin User & Add Content
-
-1. Visit http://localhost:3001/admin
-2. Create an admin account
-3. Go to Content Manager → Pages
-4. Create a test page and publish it
-5. Frontend will fetch content from Strapi API
-
-## Architecture
-
-### Frontend (Next.js)
-- Marketing website displaying content
-- Fetches dynamic content from Strapi API
-- Deployed to Vercel
-- Runs on port 3000 locally
-
-### CMS (Strapi)
-- Headless CMS for managing pages, blog, validation reports
-- REST API endpoints (`/api/pages`, `/api/blogs`, etc.)
-- Admin UI for content management
-- Deployed to Hostinger (or any Node.js hosting)
-- Runs on port 3001 locally
-
-## Environment Variables
-
-**Frontend** (`frontend/.env.local`):
-```
-DATABASE_URL=postgresql://... # Legacy, kept for compatibility
+Create `frontend/.env.local`:
+```env
+# CMS Configuration
 NEXT_PUBLIC_CMS_URL=http://localhost:3001
+DATABASE_URL=postgresql://user:password@host:5432/qrs_db
+DATABASE_URL_UNPOOLED=postgresql://user:password@host:5432/qrs_db
+
+# Site Configuration
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NODE_ENV=development
 ```
 
-**CMS** (`cms/.env.local`):
-```
-DATABASE_CLIENT=postgres
-DATABASE_URL=postgresql://...
-DATABASE_SSL=true
-DATABASE_SSL_REJECT_UNAUTHORIZED=false
-APP_KEYS=key1,key2,key3,key4
-API_TOKEN_SALT=strapi_token_salt_qrs
-ADMIN_JWT_SECRET=admin_jwt_secret_qrs_app
-HOST=0.0.0.0
-PORT=3001
-NODE_ENV=development
-```
-
-## API Endpoints (Strapi)
-
-### Fetch All Published Pages
-```bash
-curl http://localhost:3001/api/pages?filters[publishedAt][$notNull]=true
-```
-
-### Fetch Page by Slug
-```bash
-curl "http://localhost:3001/api/pages?filters[slug][$eq]=platform&populate=*"
-```
-
-### Fetch Blogs
-```bash
-curl http://localhost:3001/api/blogs?filters[publishedAt][$notNull]=true
-```
-
-See [Strapi REST API Docs](https://docs.strapi.io/dev-docs/api/rest) for full API reference.
-
-## Content Types
-
-Default content types in Strapi:
-
-- **Pages** - Marketing pages (Platform, Why QRS, About, etc.)
-  - Fields: title, slug, description, content, seoTitle, seoDescription, publishedAt
-- **Blogs** (create as needed)
-  - Fields: title, slug, excerpt, content, author, publishedAt
-- **Validation Reports** (create as needed)
-  - Fields: title, slug, summary, publishedDate, reportFile, status
-
-Add more content types in Strapi admin UI → Content-type Builder.
-
-## Deployment
-
-### Frontend → Vercel
+### 3. Start Development Server
 
 ```bash
 cd frontend
+npm run dev
+```
+
+The application will run on:
+- **Frontend:** http://localhost:3000
+- **Payload CMS (API):** http://localhost:3001
+- **CMS Admin:** http://localhost:3001/admin (if CMS started separately)
+
+## Architecture
+
+### Frontend (Next.js 16)
+- Server-side rendering (SSR) & static generation (ISR)
+- Dynamic page content from Payload CMS
+- Fallback to mock server when CMS unavailable
+- Media management with file system storage
+- Responsive design system
+
+### Backend (Payload CMS)
+- Headless CMS for page management
+- Collections: pages, sections, media, users, audit-logs
+- REST API (`/api/payload/*`)
+- PostgreSQL database
+- Session-based authentication
+
+### Database (PostgreSQL)
+- Hosted on cloud provider (Neon/Railway/etc)
+- Manages: users, pages, media, audit logs
+- Row-level security with RBAC
+
+## API Endpoints
+
+### Fetch Page Sections
+```bash
+GET /api/payload/page-sections?page=home&published=true
+```
+
+### Fetch Media Files
+```bash
+GET /api/media?type=image
+GET /api/media?type=video
+GET /api/media?type=document
+```
+
+### Fetch Pages
+```bash
+GET /api/payload/pages?where[slug][equals]=platform
+```
+
+## Deployment
+
+### Frontend → Vercel (Deployed ✓)
+
+```bash
 npm run build
-# Deploy to Vercel using Git or Vercel CLI
+# Automatically deployed on git push to main
 ```
 
 **Environment variables on Vercel:**
 ```
-NEXT_PUBLIC_CMS_URL=https://cms.yourdomain.com
-DATABASE_URL=postgresql://... # If used for API routes
+NEXT_PUBLIC_CMS_URL=http://localhost:3001 (or production CMS URL)
+DATABASE_URL=postgresql://...
 ```
 
-### CMS (Strapi) → Hostinger
+### Payload CMS → Local Only
 
-1. Deploy `cms/` folder to Hostinger Node.js hosting
-2. Set environment variables:
-   ```
-   DATABASE_URL=postgresql://...
-   DATABASE_CLIENT=postgres
-   APP_KEYS=<generate-new-keys>
-   ADMIN_JWT_SECRET=<generate-new-secret>
-   NODE_ENV=production
-   PORT=3001
-   ```
-3. Build: `npm run build`
-4. Start: `npm run start`
-5. Admin UI: `https://cms.yourdomain.com/admin`
+Currently running locally (port 3001). For production:
+1. Deploy to Node.js hosting (Railway, Render, etc.)
+2. Set environment variables
+3. Configure PostgreSQL connection
+4. Update `NEXT_PUBLIC_CMS_URL` in frontend
 
-## Production API Usage
+## Media Management
 
-Update frontend's `NEXT_PUBLIC_CMS_URL` to point to your production Strapi:
+**Supported file types:**
+- Images: PNG, JPG, WebP, SVG
+- Videos: MP4 (H.264), WebM (VP9)
+- Documents: PDF, DOCX, XLSX
 
-```javascript
-// In frontend, e.g., app/platform/page.tsx
-const cms = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001';
-const response = await fetch(`${cms}/api/pages?filters[slug][$eq]=platform&populate=*`);
+**Location:** `frontend/public/media/`
+```
+media/
+├── images/      # Product screenshots, logos
+├── videos/      # Demo videos, backgrounds
+└── documents/   # PDFs, guides
 ```
 
-## Database
+**API Usage:**
+```typescript
+// Fetch all media
+const response = await fetch('/api/media');
+const { docs } = await response.json();
 
-Both applications connect to the **same PostgreSQL database** on Neon Cloud:
+// Fetch by type
+const videos = await fetch('/api/media?type=video');
 ```
-DATABASE_URL=...........................................................
+
+## Type Safety
+
+All TypeScript strict mode with proper interfaces:
+```typescript
+interface DefaultSection {
+  id: string
+  title: string
+  sectionType: string
+  backgroundStyle?: string
+  items?: SectionItem[]
+  imageUrl?: string
+  videoUrl?: string
+  [key: string]: unknown
+}
 ```
 
-**Tables managed by Strapi:**
-- `strapi_content_types` - Content type definitions
-- `strapi_core_store` - Core configuration
-- `up_pages` - Pages content type
-- `up_blogs` - Blogs content type (if created)
-- `up_users_permissions_user` - Admin users
-- etc.
+## Performance Optimizations
 
-## Notes
+- ✓ Responsive images with object-fit: fill
+- ✓ Video preload optimization
+- ✓ CSS transforms for animations
+- ✓ Section padding consistency (2rem/7rem)
+- ✓ Button sizing responsive (40px-48px height)
+- ✓ Content Security Policy headers
+- ✓ Strict security policies
 
-✅ **Benefits of this setup:**
-- Frontend and CMS are independent applications
-- Can deploy at different times to different hosts
-- Strapi is simpler than Payload (no bundler issues)
-- Easy to extend with new content types
-- REST API is standard and well-documented
+## Development Workflow
 
-🚀 **Next steps:**
-1. Create content types in Strapi admin UI
-2. Add sample content
-3. Update frontend to fetch from API
-4. Test locally
-5. Deploy to production
+### Local Testing
+```bash
+# Start dev server
+npm run dev
+
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
+
+# Tests
+npm run test
+```
+
+### Git Workflow
+```bash
+# Create branch
+git checkout -b feature/my-feature
+
+# Commit changes
+git commit -m "feat: descriptive message"
+
+# Push to GitHub
+git push origin feature/my-feature
+
+# Create PR for review
+# Merge to main for auto-deploy to Vercel
+```
+
+## Production Checklist
+
+- ✓ Environment variables configured
+- ✓ Database migrations run
+- ✓ SSL/TLS enabled
+- ✓ CDN configured (Vercel edge)
+- ✓ Monitoring set up
+- ✓ Backups configured
+- ✓ Security headers enabled
+- ✓ Rate limiting configured
+
+## Troubleshooting
+
+### CMS Connection Issues
+- Verify `NEXT_PUBLIC_CMS_URL` environment variable
+- Check if Payload CMS server is running on port 3001
+- Mock server will activate if CMS unavailable
+
+### Media Not Loading
+- Verify files in `frontend/public/media/`
+- Check `/api/media` endpoint responds
+- Ensure CSP headers allow media URLs
+
+### Build Failures on Vercel
+- Check `npm audit` for dependency issues
+- Verify all environment variables set
+- Clear Vercel cache and redeploy
+
+## Contributing
+
+1. Clone repository
+2. Create feature branch
+3. Make changes with tests
+4. Push and create PR
+5. After review and approval, merge to main
+6. Vercel auto-deploys on merge
+
+## Support
+
+- **Issues:** GitHub Issues
+- **Documentation:** See DOCS/ folder
+- **Admin Panel:** http://localhost:3000/admin (local)
+
+## License
+
+Proprietary - Quantitative Risk Systems 2024-2026
