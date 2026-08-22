@@ -6,6 +6,7 @@ import { ProductEvidence } from '@/components/marketing/ProductEvidence'
 import { RegulatoryGrid } from '@/components/marketing/RegulatoryGrid'
 import { SecurityComplianceSection } from '@/components/marketing/SecurityComplianceSection'
 import { SecurityFeaturesGrid } from '@/components/marketing/SecurityFeaturesGrid'
+import { FeatureGridCards } from '@/components/marketing/FeatureGridCards'
 import { env } from '@/lib/env'
 
 interface SectionItem {
@@ -32,7 +33,6 @@ interface PageSection {
   buttonUrl?: string
   secondaryButtonText?: string
   secondaryButtonUrl?: string
-  content?: Record<string, any>
   leftTitle?: string
   leftDescription?: string
   rightTitle?: string
@@ -196,36 +196,7 @@ export function SectionRenderer({
               </h2>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {section.items?.map((item) => (
-                <DataCard
-                  key={item.title}
-                  variant={
-                    section.backgroundStyle === 'dark' ||
-                    section.backgroundStyle === 'deep-dark'
-                      ? 'dark'
-                      : 'light'
-                  }
-                  status={item.status}
-                >
-                  {item.icon && <div className="text-4xl mb-4">{item.icon}</div>}
-                  {item.title && (
-                    <h3 className="text-lg font-semibold mb-3">
-                      {item.title}
-                    </h3>
-                  )}
-                  {item.description && (
-                    <p className="text-sm">{item.description}</p>
-                  )}
-                  {item.link && (
-                    <a
-                      href={item.link}
-                      className="text-teal-600 font-semibold inline-flex items-center mt-4 group hover:translate-x-1 transition-transform"
-                    >
-                      Learn more →
-                    </a>
-                  )}
-                </DataCard>
-              ))}
+              <FeatureGridCards items={section.items || []} backgroundStyle={section.backgroundStyle} />
             </div>
           </div>
         </section>

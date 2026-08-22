@@ -108,27 +108,52 @@ const mockData = {
     {
       id: '1',
       page: 'home',
-      title: 'Hero Section',
+      sectionType: 'hero',
+      title: 'Home Hero',
+      subtitle: 'Enterprise Risk Platform',
+      heading: 'Run catastrophe models in seconds',
+      description: 'Release billions in trapped capital',
+      backgroundStyle: 'light-institutional',
       order: 1,
-      videoUrl: '/media/videos/demo-app.mp4',
-      imageUrl: '/media/images/Terminal.png',
       published: true,
+      videoUrl: '/uploads/hero-background.mp4',
+      imageUrl: '/uploads/dashboard-screenshot.png',
+      buttonText: 'Start Free Trial',
+      buttonUrl: '/signup',
+      secondaryButtonText: 'Learn More',
+      secondaryButtonUrl: '/platform',
       createdAt: new Date().toISOString(),
     },
     {
       id: '2',
       page: 'home',
-      title: 'Features Overview',
+      sectionType: 'feature-grid',
+      title: 'Home Features',
+      heading: 'Enterprise-Grade Capabilities',
+      description: 'Built for institutional investors and risk managers',
+      backgroundStyle: 'light',
       order: 2,
       published: true,
+      items: [
+        { icon: 'zap', title: 'Lightning Fast', description: 'Run models in seconds, not hours', status: 'validated' },
+        { icon: 'lock', title: 'Enterprise Security', description: 'SOC 2 Type II compliant infrastructure', status: 'validated' },
+        { icon: 'bar-chart-3', title: 'Advanced Analytics', description: 'Deep insights into catastrophe risk', status: 'validated' },
+        { icon: 'globe', title: 'Global Coverage', description: 'Models for perils worldwide', status: 'validated' },
+      ],
       createdAt: new Date().toISOString(),
     },
     {
       id: '3',
       page: 'home',
-      title: 'Testimonials',
+      sectionType: 'cta',
+      title: 'Home CTA',
+      heading: 'Ready to transform your risk analysis?',
+      description: 'Join leading institutions using QRS for better decisions',
+      backgroundStyle: 'deep-dark',
       order: 3,
       published: true,
+      buttonText: 'Get Started Free',
+      buttonUrl: '/signup',
       createdAt: new Date().toISOString(),
     },
   ],
@@ -244,9 +269,9 @@ const server = http.createServer((req, res) => {
       // Get collection with pagination
       // Note: for page-sections, 'page' is a filter, not pagination
       const isPageSectionsCollection = collectionName === 'page-sections'
-      const paginationPage = isPageSectionsCollection ? 1 : parseInt(searchParams.get('page') || '1')
+      const page = isPageSectionsCollection ? 1 : parseInt(searchParams.get('page') || '1')
       const limit = parseInt(searchParams.get('limit') || '10')
-      const skip = (paginationPage - 1) * limit
+      const skip = (page - 1) * limit
 
       let filtered = [...(collectionData as any[])]
 

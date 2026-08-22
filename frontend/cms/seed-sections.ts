@@ -1,6 +1,4 @@
 import 'dotenv/config'
-import { fileURLToPath } from 'url'
-import path from 'path'
 import { getPayload } from 'payload'
 import config from './payload.config'
 
@@ -11,7 +9,7 @@ if (!process.env.DATABASE_URL) {
   process.exit(1)
 }
 
-console.log('[Seed] Database URL configured:', process.env.DATABASE_URL.substring(0, 50) + '...')
+console.warn('[Seed] Database URL configured:', process.env.DATABASE_URL.substring(0, 50) + '...')
 
 const sections = [
   // HOME PAGE
@@ -43,25 +41,25 @@ const sections = [
     published: true,
     items: [
       {
-        icon: '⚡',
+        icon: 'zap',
         title: 'Lightning Fast',
         description: 'Run models in seconds, not hours',
         status: 'validated',
       },
       {
-        icon: '🔒',
+        icon: 'lock',
         title: 'Enterprise Security',
         description: 'SOC 2 Type II compliant infrastructure',
         status: 'validated',
       },
       {
-        icon: '📊',
+        icon: 'bar-chart-3',
         title: 'Advanced Analytics',
         description: 'Deep insights into catastrophe risk',
         status: 'validated',
       },
       {
-        icon: '🌍',
+        icon: 'globe',
         title: 'Global Coverage',
         description: 'Models for perils worldwide',
         status: 'validated',
@@ -107,25 +105,25 @@ const sections = [
     published: true,
     items: [
       {
-        icon: '📈',
+        icon: 'trending-up',
         title: 'Portfolio Analysis',
         description: 'Analyze risk across your entire portfolio',
         status: 'validated',
       },
       {
-        icon: '🔍',
+        icon: 'search',
         title: 'Detailed Reports',
         description: 'Comprehensive risk reports and metrics',
         status: 'validated',
       },
       {
-        icon: '🔗',
+        icon: 'link-2',
         title: 'API Integration',
         description: 'Integrate with your existing systems',
         status: 'validated',
       },
       {
-        icon: '⚙️',
+        icon: 'settings',
         title: 'Customization',
         description: 'Tailor the platform to your needs',
         status: 'validated',
@@ -158,25 +156,25 @@ const sections = [
     published: true,
     items: [
       {
-        icon: '🏢',
+        icon: 'building-2',
         title: 'Insurance Solutions',
         description: 'Underwriting and portfolio management',
         status: 'validated',
       },
       {
-        icon: '🌐',
+        icon: 'globe',
         title: 'Reinsurance',
         description: 'Treaty evaluation and pricing',
         status: 'validated',
       },
       {
-        icon: '💼',
+        icon: 'briefcase',
         title: 'Asset Owners',
         description: 'Portfolio risk assessment',
         status: 'validated',
       },
       {
-        icon: '🎯',
+        icon: 'target',
         title: 'Capital Markets',
         description: 'Securitization and risk transfer',
         status: 'validated',
@@ -260,25 +258,25 @@ const sections = [
     published: true,
     items: [
       {
-        icon: '🔐',
+        icon: 'lock',
         title: 'SOC 2 Type II',
         description: 'Independently audited and certified',
         status: 'validated',
       },
       {
-        icon: '🛡️',
+        icon: 'shield',
         title: 'Encryption',
         description: 'End-to-end encryption for all data',
         status: 'validated',
       },
       {
-        icon: '🔍',
+        icon: 'search',
         title: 'Compliance',
         description: 'GDPR, HIPAA, and other standards',
         status: 'validated',
       },
       {
-        icon: '⚡',
+        icon: 'eye',
         title: 'Monitoring',
         description: '24/7 security monitoring',
         status: 'validated',
@@ -311,25 +309,25 @@ const sections = [
     published: true,
     items: [
       {
-        icon: '🔬',
+        icon: 'microscope',
         title: 'Scientific Testing',
         description: 'Peer-reviewed validation',
         status: 'validated',
       },
       {
-        icon: '📊',
+        icon: 'bar-chart-3',
         title: 'Backtesting',
         description: 'Historical accuracy verification',
         status: 'validated',
       },
       {
-        icon: '🎯',
+        icon: 'target',
         title: 'Industry Benchmarks',
         description: 'Compared against industry standards',
         status: 'validated',
       },
       {
-        icon: '✅',
+        icon: 'check-circle',
         title: 'Continuous Improvement',
         description: 'Regular model updates and refinements',
         status: 'validated',
@@ -362,25 +360,25 @@ const sections = [
     published: true,
     items: [
       {
-        icon: '🚀',
+        icon: 'rocket',
         title: 'Innovation',
         description: 'Cutting-edge risk modeling technology',
         status: 'validated',
       },
       {
-        icon: '👥',
+        icon: 'users',
         title: 'Expertise',
         description: 'Team of world-class scientists',
         status: 'validated',
       },
       {
-        icon: '🌍',
+        icon: 'globe',
         title: 'Global Reach',
         description: 'Serving clients worldwide',
         status: 'validated',
       },
       {
-        icon: '💡',
+        icon: 'lightbulb',
         title: 'Thought Leadership',
         description: 'Advancing the industry forward',
         status: 'validated',
@@ -391,24 +389,26 @@ const sections = [
 
 async function seedSections() {
   try {
-    console.log('[Seed] Connecting to Payload...')
+    console.warn('[Seed] Connecting to Payload...')
     const payload = await getPayload({ config })
 
-    console.log(`[Seed] Creating ${sections.length} page sections...`)
+    console.warn(`[Seed] Creating ${sections.length} page sections...`)
 
     for (const section of sections) {
       try {
         const result = await payload.create({
           collection: 'page-sections',
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: section as any,
         })
-        console.log(`✓ Created: ${result.page} - ${result.title}`)
-      } catch (error: any) {
-        console.warn(`✗ Failed to create ${section.title}: ${error.message}`)
+        console.warn(`✓ Created: ${result.page} - ${result.title}`)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        console.warn(`✗ Failed to create ${section.title}: ${message}`)
       }
     }
 
-    console.log('[Seed] ✅ Seeding complete!')
+    console.warn('[Seed] ✅ Seeding complete!')
     process.exit(0)
   } catch (error) {
     console.error('[Seed] ❌ Error:', error)
