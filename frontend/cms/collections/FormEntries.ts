@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const FormEntries: CollectionConfig = {
   slug: 'form-entries',
@@ -23,7 +24,7 @@ export const FormEntries: CollectionConfig = {
       name: 'email',
       type: 'text',
       required: true,
-      label: '📧 Email Address',
+      label: 'ðŸ“§ Email Address',
       admin: {
         readOnly: true,
       },
@@ -35,8 +36,8 @@ export const FormEntries: CollectionConfig = {
       required: true,
       label: 'Form Type',
       options: [
-        { label: '💬 Contact Form', value: 'contact' },
-        { label: '🔐 Privacy Request', value: 'privacy-request' },
+        { label: 'ðŸ’¬ Contact Form', value: 'contact' },
+        { label: 'ðŸ” Privacy Request', value: 'privacy-request' },
       ],
       admin: {
         readOnly: true,
@@ -54,7 +55,7 @@ export const FormEntries: CollectionConfig = {
 
     {
       type: 'collapsible',
-      label: '📝 Form Data',
+      label: 'ðŸ“ Form Data',
       fields: [
         {
           name: 'formData',
@@ -79,7 +80,7 @@ export const FormEntries: CollectionConfig = {
 
     {
       type: 'collapsible',
-      label: '✉️ Email Status',
+      label: 'âœ‰ï¸ Email Status',
       fields: [
         {
           name: 'adminEmailSent',
@@ -97,9 +98,9 @@ export const FormEntries: CollectionConfig = {
           defaultValue: 'pending',
           label: 'Admin Email Status',
           options: [
-            { label: '⏳ Pending', value: 'pending' },
-            { label: '✅ Sent', value: 'sent' },
-            { label: '❌ Failed', value: 'failed' },
+            { label: 'â³ Pending', value: 'pending' },
+            { label: 'âœ… Sent', value: 'sent' },
+            { label: 'âŒ Failed', value: 'failed' },
           ],
           admin: {
             readOnly: true,
@@ -122,9 +123,9 @@ export const FormEntries: CollectionConfig = {
           defaultValue: 'pending',
           label: 'Confirmation Email Status',
           options: [
-            { label: '⏳ Pending', value: 'pending' },
-            { label: '✅ Sent', value: 'sent' },
-            { label: '❌ Failed', value: 'failed' },
+            { label: 'â³ Pending', value: 'pending' },
+            { label: 'âœ… Sent', value: 'sent' },
+            { label: 'âŒ Failed', value: 'failed' },
           ],
           admin: {
             readOnly: true,
@@ -145,7 +146,7 @@ export const FormEntries: CollectionConfig = {
 
     {
       type: 'collapsible',
-      label: '🔍 Review & Response',
+      label: 'ðŸ” Review & Response',
       fields: [
         {
           name: 'reviewStatus',
@@ -154,11 +155,11 @@ export const FormEntries: CollectionConfig = {
           defaultValue: 'pending',
           label: 'Review Status',
           options: [
-            { label: '⏳ Pending', value: 'pending' },
-            { label: '👀 In Review', value: 'reviewing' },
-            { label: '✅ Responded', value: 'responded' },
-            { label: '❓ Needs Info', value: 'needs-info' },
-            { label: '🚫 Spam', value: 'spam' },
+            { label: 'â³ Pending', value: 'pending' },
+            { label: 'ðŸ‘€ In Review', value: 'reviewing' },
+            { label: 'âœ… Responded', value: 'responded' },
+            { label: 'â“ Needs Info', value: 'needs-info' },
+            { label: 'ðŸš« Spam', value: 'spam' },
           ],
         },
 
@@ -197,7 +198,7 @@ export const FormEntries: CollectionConfig = {
 
     {
       type: 'collapsible',
-      label: '🔒 Security & Metadata',
+      label: 'ðŸ”’ Security & Metadata',
       fields: [
         {
           name: 'ipAddress',
@@ -239,3 +240,4 @@ export const FormEntries: CollectionConfig = {
     },
   ],
 }
+

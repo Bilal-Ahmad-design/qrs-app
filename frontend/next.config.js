@@ -1,14 +1,20 @@
 /** @type {import('next').NextConfig} */
 
-const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
 
 const nextConfig = {
   reactStrictMode: true,
   redirects: async () => {
     try {
-      const response = await fetch(`${cmsUrl}/api/redirects?limit=1000`, {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 5000)
+
+      const response = await fetch(`${cmsUrl}/api/payload/redirects?limit=1000`, {
         headers: { 'Accept': 'application/json' },
+        signal: controller.signal,
       })
+      clearTimeout(timeout)
+
       if (!response.ok) return []
 
       const data = await response.json()
@@ -17,7 +23,8 @@ const nextConfig = {
         destination: redirect.destinationPath,
         permanent: redirect.type === '301',
       }))
-    } catch {
+    } catch (error) {
+      console.warn('Failed to load redirects from CMS, using empty list')
       return []
     }
   },
@@ -48,7 +55,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: `default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: ${cmsUrl}; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: ${cmsUrl}; media-src 'self' data: ${cmsUrl} https:; upgrade-insecure-requests;`,
+            value: `default-src 'self'; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: ${cmsUrl}; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https: ${cmsUrl}; media-src 'self' data: ${cmsUrl} https:; upgrade-insecure-requests;`,
           },
           {
             key: 'Cross-Origin-Opener-Policy',

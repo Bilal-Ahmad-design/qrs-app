@@ -1,22 +1,27 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { hasPermission } from '../lib/rbac/roles'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const Blog: CollectionConfig = {
   slug: 'blog',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'author', 'publishedAt', 'status'],
+    defaultColumns: ['title', 'slug', 'author', 'status', 'publishedAt'],
+    group: 'Content',
   },
-  versions: { drafts: true },
+  versions: {
+    drafts: true,
+  },
   access: {
     read: ({ req: { user } }) => {
       if (!user) return { status: { equals: 'published' } }
-      if (['editor', 'admin', 'super-admin', 'reviewer'].includes(user.role)) return true
+      if (hasPermission(user?.role as any, 'content:read')) return true
       return { status: { equals: 'published' } }
     },
-    create: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
-    update: ({ req: { user } }) => ['editor', 'admin', 'super-admin'].includes(user?.role),
-    delete: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
+    create: ({ req: { user } }) => hasPermission(user?.role as any, 'content:create'),
+    update: ({ req: { user } }) => hasPermission(user?.role as any, 'content:update'),
+    delete: ({ req: { user } }) => hasPermission(user?.role as any, 'content:delete'),
   },
   fields: [
     {
@@ -30,11 +35,17 @@ export const Blog: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
+      admin: {
+        description: 'URL-friendly slug for the blog post',
+      },
     },
     {
       name: 'excerpt',
       type: 'textarea',
       required: true,
+      admin: {
+        description: 'Brief summary for listings and previews',
+      },
     },
     {
       name: 'content',
@@ -43,21 +54,45 @@ export const Blog: CollectionConfig = {
       editor: lexicalEditor(),
     },
     {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+    },
+    {
       name: 'author',
       type: 'relationship',
       relationTo: 'users',
       required: true,
     },
     {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
+      name: 'category',
+      type: 'select',
+      options: [
+        { label: 'Security', value: 'security' },
+        { label: 'Engineering', value: 'engineering' },
+        { label: 'Product', value: 'product' },
+        { label: 'Company', value: 'company' },
+        { label: 'Research', value: 'research' },
+      ],
     },
     {
-      name: 'publishedAt',
-      type: 'date',
-      required: true,
-      defaultValue: () => new Date().toISOString(),
+      name: 'tags',
+      type: 'array',
+      fields: [
+        {
+          name: 'tag',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      name: 'readingTime',
+      type: 'number',
+      admin: {
+        readOnly: true,
+        description: 'Estimated reading time in minutes (auto-calculated)',
+      },
     },
     {
       name: 'status',
@@ -66,17 +101,44 @@ export const Blog: CollectionConfig = {
       options: [
         { label: 'Draft', value: 'draft' },
         { label: 'Published', value: 'published' },
+        { label: 'Archived', value: 'archived' },
       ],
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      required: false,
     },
     {
       name: 'seo',
       type: 'group',
       fields: [
-        { name: 'title', type: 'text' },
-        { name: 'description', type: 'textarea' },
-        { name: 'keywords', type: 'array', fields: [{ name: 'keyword', type: 'text' }] },
+        {
+          name: 'title',
+          type: 'text',
+          admin: { description: 'Meta title for search engines' },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          admin: { description: 'Meta description for search results' },
+        },
+        {
+          name: 'keywords',
+          type: 'array',
+          fields: [{ name: 'keyword', type: 'text' }],
+        },
+        {
+          name: 'canonical',
+          type: 'text',
+          admin: { description: 'Canonical URL' },
+        },
       ],
     },
   ],
   timestamps: true,
+  hooks: {
+    afterChange: [auditAfterChangeHook('blog')],
+    afterDelete: [auditAfterDeleteHook('blog')],
+  },
 }

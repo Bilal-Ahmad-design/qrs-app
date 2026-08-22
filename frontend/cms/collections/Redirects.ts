@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const Redirects: CollectionConfig = {
   slug: 'redirects',
@@ -24,4 +25,8 @@ export const Redirects: CollectionConfig = {
     { name: 'notes', type: 'textarea' },
   ],
   timestamps: true,
+  hooks: {
+    afterChange: [auditAfterChangeHook('redirects')],
+    afterDelete: [auditAfterDeleteHook('redirects')],
+  },
 }

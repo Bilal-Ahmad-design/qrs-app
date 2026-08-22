@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const EmailLogs: CollectionConfig = {
   slug: 'email-logs',
@@ -89,10 +90,10 @@ export const EmailLogs: CollectionConfig = {
       defaultValue: 'pending',
       label: 'Status',
       options: [
-        { label: '⏳ Pending', value: 'pending' },
-        { label: '✅ Sent', value: 'sent' },
-        { label: '❌ Failed', value: 'failed' },
-        { label: '⚠️ Bounced', value: 'bounced' },
+        { label: 'â³ Pending', value: 'pending' },
+        { label: 'âœ… Sent', value: 'sent' },
+        { label: 'âŒ Failed', value: 'failed' },
+        { label: 'âš ï¸ Bounced', value: 'bounced' },
       ],
       admin: {
         readOnly: true,
@@ -140,3 +141,4 @@ export const EmailLogs: CollectionConfig = {
     },
   ],
 }
+

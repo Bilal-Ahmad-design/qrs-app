@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const ValidationReports: CollectionConfig = {
   slug: 'validation-reports',
@@ -33,4 +34,10 @@ export const ValidationReports: CollectionConfig = {
     },
   ],
   timestamps: true,
+
+  hooks: {
+    afterChange: [auditAfterChangeHook('')],
+    afterDelete: [auditAfterDeleteHook('')],
+  },
 }
+

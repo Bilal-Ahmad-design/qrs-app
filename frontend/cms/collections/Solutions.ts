@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const Solutions: CollectionConfig = {
   slug: 'solutions',
@@ -140,3 +141,4 @@ export const Solutions: CollectionConfig = {
     },
   ],
 }
+

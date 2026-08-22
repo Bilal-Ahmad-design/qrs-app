@@ -1,78 +1,37 @@
-/**
- * Payload CMS API Route Handler
- *
- * This route proxies all Payload CMS API requests
- * Runs at: /api/payload/...
- */
+export const runtime = 'nodejs'
 
-import payload from 'payload'
-
-let initPromise: Promise<any>
-
-async function initPayload() {
-  if (!initPromise) {
-    initPromise = import('@/cms/payload.config').then(({ default: config }) =>
-      payload.init({
-        config,
-        secret: process.env.PAYLOAD_SECRET,
-      })
-    )
-  }
-  return initPromise
-}
-
-export async function GET(request: Request, { params }: { params: { slug: string[] } }) {
-  const payloadInstance = await initPayload()
-  const url = new URL(request.url)
-  const path = `/${params.slug.join('/')}`
-
-  return await payloadInstance.router.handle(
-    new Request(new URL(`${url.origin}/api${path}${url.search}`, url.origin), {
-      method: 'GET',
-      headers: request.headers,
-    })
+// Temporary: Return error message while Payload is being configured
+export async function GET(request: Request) {
+  return new Response(
+    JSON.stringify({ error: 'Payload CMS API not available yet. Use /api/page-sections for mock data.' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
   )
 }
 
-export async function POST(request: Request, { params }: { params: { slug: string[] } }) {
-  const payloadInstance = await initPayload()
-  const url = new URL(request.url)
-  const path = `/${params.slug.join('/')}`
-  const body = await request.clone().text()
-
-  return await payloadInstance.router.handle(
-    new Request(new URL(`${url.origin}/api${path}${url.search}`, url.origin), {
-      method: 'POST',
-      headers: request.headers,
-      body,
-    })
+export async function POST(request: Request) {
+  return new Response(
+    JSON.stringify({ error: 'Payload CMS API not available yet' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
   )
 }
 
-export async function PUT(request: Request, { params }: { params: { slug: string[] } }) {
-  const payloadInstance = await initPayload()
-  const url = new URL(request.url)
-  const path = `/${params.slug.join('/')}`
-  const body = await request.clone().text()
-
-  return await payloadInstance.router.handle(
-    new Request(new URL(`${url.origin}/api${path}${url.search}`, url.origin), {
-      method: 'PUT',
-      headers: request.headers,
-      body,
-    })
+export async function PATCH(request: Request) {
+  return new Response(
+    JSON.stringify({ error: 'Payload CMS API not available yet' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
   )
 }
 
-export async function DELETE(request: Request, { params }: { params: { slug: string[] } }) {
-  const payloadInstance = await initPayload()
-  const url = new URL(request.url)
-  const path = `/${params.slug.join('/')}`
+export async function PUT(request: Request) {
+  return new Response(
+    JSON.stringify({ error: 'Payload CMS API not available yet' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
+  )
+}
 
-  return await payloadInstance.router.handle(
-    new Request(new URL(`${url.origin}/api${path}${url.search}`, url.origin), {
-      method: 'DELETE',
-      headers: request.headers,
-    })
+export async function DELETE(request: Request) {
+  return new Response(
+    JSON.stringify({ error: 'Payload CMS API not available yet' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
   )
 }

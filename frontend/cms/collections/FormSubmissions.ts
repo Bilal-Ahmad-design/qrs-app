@@ -1,5 +1,6 @@
 import { CollectionConfig } from 'payload'
 import { hasPermission } from '../lib/rbac/roles'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
@@ -57,4 +58,8 @@ export const FormSubmissions: CollectionConfig = {
     },
   ],
   timestamps: true,
+  hooks: {
+    afterChange: [auditAfterChangeHook('form-submissions')],
+    afterDelete: [auditAfterDeleteHook('form-submissions')],
+  },
 }

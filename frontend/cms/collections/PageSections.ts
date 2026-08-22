@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const PageSections: CollectionConfig = {
   slug: 'page-sections',
@@ -9,6 +10,7 @@ export const PageSections: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'page', 'sectionType', 'order', 'published'],
+    group: 'Content',
   },
   access: {
     read: () => true,
@@ -28,7 +30,7 @@ export const PageSections: CollectionConfig = {
       name: 'page',
       type: 'select',
       required: true,
-      label: '📄 Page',
+      label: 'ðŸ“„ Page',
       options: [
         { label: 'Home', value: 'home' },
         { label: 'Platform', value: 'platform' },
@@ -44,7 +46,7 @@ export const PageSections: CollectionConfig = {
       name: 'sectionType',
       type: 'select',
       required: true,
-      label: '🎨 Section Type',
+      label: 'ðŸŽ¨ Section Type',
       options: [
         { label: 'Hero', value: 'hero' },
         { label: 'Feature Grid', value: 'feature-grid' },
@@ -92,7 +94,7 @@ export const PageSections: CollectionConfig = {
     {
       name: 'backgroundStyle',
       type: 'select',
-      label: '🎨 Background Color',
+      label: 'ðŸŽ¨ Background Color',
       options: [
         { label: 'Light (cream-50)', value: 'light' },
         { label: 'White', value: 'white' },
@@ -111,7 +113,7 @@ export const PageSections: CollectionConfig = {
     {
       name: 'published',
       type: 'checkbox',
-      label: '✅ Published',
+      label: 'âœ… Published',
       defaultValue: true,
     },
     {
@@ -267,3 +269,4 @@ export const PageSections: CollectionConfig = {
     },
   ],
 }
+

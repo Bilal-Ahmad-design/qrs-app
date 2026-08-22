@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const Documentation: CollectionConfig = {
   slug: 'documentation',
@@ -157,3 +158,4 @@ export const Documentation: CollectionConfig = {
     },
   ],
 }
+

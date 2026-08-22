@@ -1,94 +1,148 @@
-import { GlobalConfig } from 'payload'
+﻿import { GlobalConfig } from 'payload'
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
-  admin: {
-    group: 'Configuration',
-  },
   access: {
     read: () => true,
-    update: ({ req: { user } }) => ['admin', 'super-admin'].includes(user?.role),
+    update: ({ req: { user } }) => user?.role === 'super-admin' || user?.role === 'admin',
   },
   fields: [
     {
-      name: 'hero',
-      type: 'group',
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          defaultValue: 'Streamlined QRS Monitoring',
-        },
-        {
-          name: 'subtitle',
-          type: 'text',
-          defaultValue: 'Enterprise-grade portfolio intelligence',
-        },
-        {
-          name: 'cta_text',
-          type: 'text',
-          defaultValue: 'Request Demo',
-        },
-        {
-          name: 'background_image',
-          type: 'upload',
-          relationTo: 'media',
-        },
-      ],
+      name: 'siteName',
+      type: 'text',
+      required: true,
+      defaultValue: 'QRS - Quantitative Risk Systems',
+      admin: {
+        description: 'Primary site name',
+      },
     },
     {
-      name: 'kpis',
-      type: 'group',
-      fields: [
-        {
-          name: 'portfolio_tiv',
-          type: 'text',
-          defaultValue: '$15.2T',
-          admin: { description: 'Portfolio Total Insurable Value' },
-        },
-        {
-          name: 'monitored_policies',
-          type: 'text',
-          defaultValue: '250K+',
-          admin: { description: 'Number of monitored insurance policies' },
-        },
-        {
-          name: 'avg_var_reduction',
-          type: 'text',
-          defaultValue: '42%',
-          admin: { description: 'Average Value at Risk reduction' },
-        },
-        {
-          name: 'active_users',
-          type: 'text',
-          defaultValue: '5K+',
-          admin: { description: 'Active platform users' },
-        },
-      ],
+      name: 'tagline',
+      type: 'text',
+      defaultValue: 'Cryptographically verified catastrophe modeling and risk deployment',
+      admin: {
+        description: 'Site tagline for meta descriptions',
+      },
     },
     {
-      name: 'branding',
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Main logo (light theme)',
+      },
+    },
+    {
+      name: 'logoDark',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Logo for dark backgrounds',
+      },
+    },
+    {
+      name: 'favicon',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Favicon for browser tabs',
+      },
+    },
+    {
+      name: 'contactEmails',
       type: 'group',
       fields: [
         {
-          name: 'company_name',
-          type: 'text',
-          defaultValue: 'QRS',
-        },
-        {
-          name: 'tagline',
-          type: 'text',
-          defaultValue: 'The Intelligent QRS Platform',
-        },
-        {
-          name: 'support_email',
+          name: 'support',
           type: 'email',
-          defaultValue: 'support@qrs.io',
+          defaultValue: 'support@qrs.app',
         },
         {
-          name: 'support_phone',
+          name: 'sales',
+          type: 'email',
+          defaultValue: 'sales@qrs.app',
+        },
+        {
+          name: 'security',
+          type: 'email',
+          defaultValue: 'security@qrs.app',
+        },
+        {
+          name: 'legal',
+          type: 'email',
+          defaultValue: 'legal@qrs.app',
+        },
+      ],
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      fields: [
+        {
+          name: 'platform',
+          type: 'select',
+          options: [
+            { label: 'Twitter', value: 'twitter' },
+            { label: 'LinkedIn', value: 'linkedin' },
+            { label: 'GitHub', value: 'github' },
+            { label: 'YouTube', value: 'youtube' },
+          ],
+        },
+        {
+          name: 'url',
           type: 'text',
-          defaultValue: '+1 (555) 123-4567',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'announcementBar',
+      type: 'group',
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: false,
+        },
+        {
+          name: 'message',
+          type: 'textarea',
+        },
+        {
+          name: 'backgroundColor',
+          type: 'text',
+          defaultValue: '#000',
+        },
+      ],
+    },
+    {
+      name: 'maintenanceMode',
+      type: 'group',
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: false,
+        },
+        {
+          name: 'message',
+          type: 'textarea',
+        },
+      ],
+    },
+    {
+      name: 'analytics',
+      type: 'group',
+      fields: [
+        {
+          name: 'gaTrackingId',
+          type: 'text',
+          admin: { description: 'Google Analytics tracking ID' },
+        },
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: true,
         },
       ],
     },

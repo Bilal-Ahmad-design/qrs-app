@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const RegulatoryCompliance: CollectionConfig = {
   slug: 'regulatory-compliance',
@@ -140,3 +141,4 @@ export const RegulatoryCompliance: CollectionConfig = {
     },
   ],
 }
+

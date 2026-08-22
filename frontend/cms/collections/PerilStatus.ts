@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const PerilStatus: CollectionConfig = {
   slug: 'peril-status',
@@ -25,4 +26,10 @@ export const PerilStatus: CollectionConfig = {
     { name: 'order', type: 'number', defaultValue: 0 },
   ],
   timestamps: true,
+
+  hooks: {
+    afterChange: [auditAfterChangeHook('')],
+    afterDelete: [auditAfterDeleteHook('')],
+  },
 }
+

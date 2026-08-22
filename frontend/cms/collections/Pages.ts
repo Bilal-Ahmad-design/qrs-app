@@ -1,12 +1,14 @@
 import { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { hasPermission } from '../lib/rbac/roles'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
+    group: 'Content',
   },
   versions: {
     drafts: true,
@@ -149,4 +151,8 @@ export const Pages: CollectionConfig = {
     },
   ],
   timestamps: true,
+  hooks: {
+    afterChange: [auditAfterChangeHook('pages')],
+    afterDelete: [auditAfterDeleteHook('pages')],
+  },
 }

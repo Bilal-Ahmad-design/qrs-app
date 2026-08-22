@@ -1,8 +1,9 @@
 /**
- * Fetch content from Payload CMS (integrated in same Next.js app)
+ * Fetch content from Payload CMS (integrated in same Next.js app on port 3000)
+ * All requests go through /api/payload proxy route handler
  */
 
-const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
+const CMS_URL = '/api/payload'
 
 interface CMSPage {
   id: string
@@ -391,7 +392,7 @@ export async function getPageSections(page: string) {
     const response = await fetch(
       `${CMS_URL}/api/page-sections?page=${encodeURIComponent(page)}&published=true&sort=order&limit=100`,
       {
-        next: { revalidate: 0 },
+        next: { revalidate: 60 },
       }
     )
 
@@ -401,9 +402,10 @@ export async function getPageSections(page: string) {
     }
 
     const data = await response.json()
-    return data.docs || []
+    return data.docs || data || []
   } catch (error) {
     console.warn(`CMS fetch error for page sections "${page}":`, error)
+    // Fallback: return empty array and let frontend use default sections
     return []
   }
 }
@@ -450,5 +452,133 @@ export async function getSettings() {
   } catch (error) {
     console.warn('CMS fetch error for settings:', error)
     return null
+  }
+}
+
+// Admin collection fetchers
+
+export async function getBlogPosts(limit = 100) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/blog?limit=${limit}`,
+      {
+        next: { revalidate: 300 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn('CMS fetch error for blog posts:', error)
+    return []
+  }
+}
+
+export async function getMediaFiles(limit = 100) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/media?limit=${limit}`,
+      {
+        next: { revalidate: 300 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn('CMS fetch error for media:', error)
+    return []
+  }
+}
+
+export async function getAdminPages(limit = 100) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/pages?limit=${limit}`,
+      {
+        next: { revalidate: 300 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn('CMS fetch error for admin pages:', error)
+    return []
+  }
+}
+
+export async function getFormSubmissions(limit = 100) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/form-submissions?limit=${limit}&sort=-createdAt`,
+      {
+        next: { revalidate: 0 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn('CMS fetch error for form submissions:', error)
+    return []
+  }
+}
+
+export async function getAuditLogs(limit = 100) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/audit-logs?limit=${limit}&sort=-createdAt`,
+      {
+        next: { revalidate: 0 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn('CMS fetch error for audit logs:', error)
+    return []
+  }
+}
+
+export async function getAdminUsers(limit = 100) {
+  try {
+    const response = await fetch(
+      `${CMS_URL}/api/users?limit=${limit}&sort=-createdAt`,
+      {
+        next: { revalidate: 300 },
+      }
+    )
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.warn('CMS fetch error for users:', error)
+    return []
   }
 }

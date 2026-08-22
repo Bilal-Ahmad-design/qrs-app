@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const EmailSettings: CollectionConfig = {
   slug: 'email-settings',
@@ -23,7 +24,7 @@ export const EmailSettings: CollectionConfig = {
       type: 'text',
       required: true,
       defaultValue: 'Default SMTP Configuration',
-      label: '📧 Configuration Name',
+      label: 'ðŸ“§ Configuration Name',
       admin: {
         description: 'Name for this SMTP configuration',
       },
@@ -32,7 +33,7 @@ export const EmailSettings: CollectionConfig = {
     // SMTP Settings Section
     {
       type: 'collapsible',
-      label: '🔧 SMTP Server Settings',
+      label: 'ðŸ”§ SMTP Server Settings',
       fields: [
         {
           name: 'smtpHost',
@@ -77,7 +78,7 @@ export const EmailSettings: CollectionConfig = {
           name: 'smtpSecure',
           type: 'checkbox',
           defaultValue: true,
-          label: '🔒 Use TLS/SSL',
+          label: 'ðŸ”’ Use TLS/SSL',
           admin: {
             description: 'Enable secure connection (TLS or SSL)',
           },
@@ -88,7 +89,7 @@ export const EmailSettings: CollectionConfig = {
     // Email Receiving Settings
     {
       type: 'collapsible',
-      label: '📨 Email Receiving Settings',
+      label: 'ðŸ“¨ Email Receiving Settings',
       fields: [
         {
           name: 'contactFormEmail',
@@ -135,7 +136,7 @@ export const EmailSettings: CollectionConfig = {
     // Email Sending Settings
     {
       type: 'collapsible',
-      label: '✉️ Email Sending Settings',
+      label: 'âœ‰ï¸ Email Sending Settings',
       fields: [
         {
           name: 'sendContactConfirmation',
@@ -187,7 +188,7 @@ QRS Risk Systems Privacy Team`,
     // Status & Testing
     {
       type: 'collapsible',
-      label: '✅ Status & Testing',
+      label: 'âœ… Status & Testing',
       fields: [
         {
           name: 'isActive',
@@ -229,3 +230,4 @@ QRS Risk Systems Privacy Team`,
     },
   ],
 }
+

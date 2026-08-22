@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+﻿import { CollectionConfig } from 'payload'
+import { auditAfterChangeHook, auditAfterDeleteHook } from '../lib/audit'
 
 export const PlatformCapability: CollectionConfig = {
   slug: 'platform-capability',
@@ -132,3 +133,4 @@ export const PlatformCapability: CollectionConfig = {
     },
   ],
 }
+
