@@ -3,7 +3,7 @@ import { getSession } from '@/lib/auth/session'
 
 async function logLogout(userId: string, email: string) {
   try {
-    const url = new URL('/api/payload/api/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL('/api/payload/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
 
     await fetch(url.toString(), {
       method: 'POST',

@@ -10,7 +10,7 @@ const loginSchema = z.object({
 
 async function queryPayloadUsers(email: string) {
   try {
-    const url = new URL('/api/payload/api/users', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL('/api/payload/users', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
     url.searchParams.set('where[email][equals]', email)
 
     const response = await fetch(url.toString(), {
@@ -31,7 +31,7 @@ async function queryPayloadUsers(email: string) {
 
 async function logLoginAttempt(email: string, success: boolean, userId?: string) {
   try {
-    const url = new URL('/api/payload/api/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
+    const url = new URL('/api/payload/audit-logs', process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000')
 
     await fetch(url.toString(), {
       method: 'POST',

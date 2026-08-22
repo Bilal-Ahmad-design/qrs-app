@@ -20,6 +20,7 @@ const navGroups: NavGroup[] = [
     { label: 'Redirects', href: '/admin/redirects', icon: <Link2 className="w-4 h-4" /> },
   ]},
   { label: 'System', items: [
+    
     { label: 'Users', href: '/admin/users', icon: <Users className="w-4 h-4" /> },
     { label: 'Settings', href: '/admin/settings', icon: <Settings className="w-4 h-4" /> },
     { label: 'Audit Logs', href: '/admin/logs', icon: <History className="w-4 h-4" /> },
