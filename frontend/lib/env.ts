@@ -9,6 +9,6 @@ export function getEnv(key: string, defaultValue?: string): string {
 
 export const env = {
   NEXT_PUBLIC_SITE_URL: getEnv('NEXT_PUBLIC_SITE_URL', 'https://qrsrisk.com'),
-  NEXT_PUBLIC_CMS_URL: getEnv('NEXT_PUBLIC_CMS_URL', 'http://localhost:3001'),
+  NEXT_PUBLIC_CMS_URL: process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3001',
   NODE_ENV: getEnv('NODE_ENV', 'development'),
 };
