@@ -18,7 +18,7 @@ export function DeviceFrame({ imageSrc, imageAlt }: DeviceFrameProps) {
 
         {/* Screen Display Area */}
         <div className="relative w-full bg-black" style={{ aspectRatio: '16 / 10' }}>
-          {imageSrc && imageSrc.startsWith('http') ? (
+          {imageSrc ? (
             <img
               src={imageSrc}
               alt={imageAlt || 'Dashboard screenshot'}
