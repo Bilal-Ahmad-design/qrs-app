@@ -121,7 +121,6 @@ export default async function SubmissionsPage() {
         rows={tableRows}
         state={submissions.length === 0 ? 'empty' : 'idle'}
         emptyMessage="No form submissions yet"
-        emptyAction={{ label: 'Test Contact Form', onClick: () => {} }}
       />
     </div>
   )

@@ -86,7 +86,6 @@ export default async function MediaPage() {
         rows={tableRows}
         state={media.length === 0 ? 'empty' : 'idle'}
         emptyMessage="No media files found"
-        emptyAction={{ label: 'Upload First File', onClick: () => {} }}
       />
     </div>
   )

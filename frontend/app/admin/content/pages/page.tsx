@@ -70,7 +70,6 @@ export default async function PagesPage() {
         rows={tableRows}
         state={pages.length === 0 ? 'empty' : 'idle'}
         emptyMessage="No pages found"
-        emptyAction={{ label: 'Create First Page', onClick: () => {} }}
       />
     </div>
   )

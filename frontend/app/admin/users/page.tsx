@@ -73,7 +73,6 @@ export default async function UsersPage() {
         rows={tableRows}
         state={users.length === 0 ? 'empty' : 'idle'}
         emptyMessage="No users found"
-        emptyAction={{ label: 'Create First User', onClick: () => {} }}
       />
     </div>
   )
