@@ -1,257 +1,137 @@
-'use client'
+import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
+import { Badge } from '@/components/admin/Badge'
+import { getFormSubmissions } from '@/lib/admin/fetch-collections'
+import { Mail, Eye } from 'lucide-react'
 
-import { useState } from 'react'
-import { Search, Trash2 } from 'lucide-react'
-import { EditModal } from '@/components/admin/EditModal'
-
-type SubmissionStatus = 'new' | 'reviewed' | 'resolved'
-
-interface Submission {
+interface FormSubmission {
   id: string
-  type: string
-  name: string
+  formType: string
   email: string
-  status: SubmissionStatus
-  assignee: string
-  submitted: string
+  data: Record<string, any>
+  reviewStatus: 'pending' | 'reviewed' | 'responded' | 'archived'
+  submittedAt: string
+  turnstileVerified: boolean
 }
 
-export default function SubmissionsPage() {
-  const [submissions, setSubmissions] = useState<Submission[]>([
-    { id: '1', type: 'Contact Form', name: 'Sarah Chen', email: 'sarah@company.com', status: 'new', assignee: 'Unassigned', submitted: '2 hours ago' },
-    { id: '2', type: 'Demo Request', name: 'John Smith', email: 'john@acme.io', status: 'reviewed', assignee: 'alice@example.com', submitted: '5 hours ago' },
-    { id: '3', type: 'Support Ticket', name: 'Maya Patel', email: 'maya@startup.io', status: 'new', assignee: 'Unassigned', submitted: '8 hours ago' },
-    { id: '4', type: 'Contact Form', name: 'Alex Rodriguez', email: 'alex@fortune500.com', status: 'resolved', assignee: 'bob@example.com', submitted: '1 day ago' },
-    { id: '5', type: 'Feedback', name: 'Lisa Wong', email: 'lisa@tech.io', status: 'new', assignee: 'Unassigned', submitted: '2 days ago' },
-  ])
+const columns: DataTableColumn[] = [
+  { key: 'type', label: 'Form Type', width: '150px' },
+  { key: 'email', label: 'Email', width: '200px' },
+  { key: 'message', label: 'Message', width: '300px' },
+  { key: 'status', label: 'Status', width: '120px' },
+  { key: 'date', label: 'Submitted', width: '150px' },
+  { key: 'actions', label: 'Actions', width: '150px' },
+]
 
-  const [selectedSubmission, setSelectedSubmission] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState<SubmissionStatus | 'all'>('all')
-  const [search, setSearch] = useState('')
-  const [editingItem, setEditingItem] = useState<Submission | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+const formTypeLabels: Record<string, string> = {
+  'demo-request': 'Demo Request',
+  'validation-report-request': 'Validation Report',
+  'newsletter': 'Newsletter',
+  'contact': 'Contact',
+  'privacy-request': 'Privacy Request',
+  'press': 'Press Inquiry',
+  'rfp': 'RFP Response',
+  'partner': 'Partner Inquiry',
+  'escalation': 'Escalation',
+}
 
-  const filtered = statusFilter === 'all' ? submissions : submissions.filter(s => s.status === statusFilter)
-  const searchFiltered = filtered.filter(s =>
-    s.name.toLowerCase().includes(search.toLowerCase()) ||
-    s.email.toLowerCase().includes(search.toLowerCase()) ||
-    s.type.toLowerCase().includes(search.toLowerCase())
-  )
+function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
 
-  const unreadCount = submissions.filter(s => s.status === 'new').length
+  if (diffMins < 1) return 'just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  if (diffDays < 7) return `${diffDays}d ago`
+  return date.toLocaleDateString()
+}
 
-  const statusColors: Record<SubmissionStatus, string> = {
-    new: 'bg-teal-900 bg-opacity-30 text-teal-300',
-    reviewed: 'bg-yellow-900 bg-opacity-30 text-yellow-400',
-    resolved: 'bg-green-900 bg-opacity-30 text-green-400',
+function getMessagePreview(data: Record<string, any>): string {
+  // Try common form field names
+  const message = data.message || data.description || data.content || data.body || ''
+  if (typeof message === 'string') {
+    return message.substring(0, 60) + (message.length > 60 ? '...' : '')
   }
+  return 'No message'
+}
 
-  const handleEdit = (item: Submission) => {
-    setEditingItem(item)
-    setIsModalOpen(true)
-  }
+export default async function SubmissionsPage() {
+  const { docs: submissions, totalDocs } = await getFormSubmissions()
 
-  const handleSave = async (data: Record<string, any>) => {
-    try {
-      const response = await fetch(`/api/form-submissions/${editingItem?.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to save')
-      }
+  const tableRows = submissions.map((submission: FormSubmission) => ({
+    type: (
+      <Badge variant="info">
+        {formTypeLabels[submission.formType] || submission.formType}
+      </Badge>
+    ),
+    email: (
+      <div className="flex items-center gap-2">
+        <Mail className="w-4 h-4 text-cream-50 opacity-50" />
+        <span className="text-xs">{submission.email}</span>
+      </div>
+    ),
+    message: (
+      <span className="text-xs text-cream-50 text-opacity-80">
+        {getMessagePreview(submission.data)}
+      </span>
+    ),
+    status: (
+      <Badge
+        variant={
+          submission.reviewStatus === 'pending'
+            ? 'warning'
+            : submission.reviewStatus === 'responded'
+              ? 'success'
+              : 'default'
+        }
+      >
+        {submission.reviewStatus.charAt(0).toUpperCase() + submission.reviewStatus.slice(1)}
+      </Badge>
+    ),
+    date: formatDate(submission.submittedAt),
+    actions: (
+      <div className="flex gap-2">
+        <button className="text-xs px-2 py-1 bg-ink-700 rounded hover:bg-ink-600 text-cream-50 transition-colors flex items-center gap-1">
+          <Eye className="w-3 h-3" />
+          View
+        </button>
+        {submission.reviewStatus === 'pending' && (
+          <button className="text-xs px-2 py-1 bg-teal-500 bg-opacity-20 rounded hover:bg-opacity-30 text-teal-300 transition-colors">
+            Review
+          </button>
+        )}
+      </div>
+    ),
+  }))
 
-      if (editingItem) {
-        setSubmissions(submissions.map(s =>
-          s.id === editingItem.id ? { ...s, ...data } : s
-        ))
-      }
-    } catch (error) {
-      throw error instanceof Error ? error : new Error('Failed to save changes')
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/form-submissions/${id}`, {
-        method: 'DELETE',
-      })
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to delete')
-      }
-      setSubmissions(submissions.filter(s => s.id !== id))
-      setDeleteConfirm(null)
-    } catch (error) {
-      console.error('Failed to delete:', error)
-      alert(error instanceof Error ? error.message : 'Failed to delete submission')
-    }
-  }
-
-  const editFields = [
-    { name: 'name', label: 'Name', type: 'text' as const },
-    { name: 'email', label: 'Email', type: 'text' as const },
-    { name: 'type', label: 'Form Type', type: 'text' as const },
-    { name: 'status', label: 'Status', type: 'select' as const, options: [
-      { value: 'new', label: 'New' },
-      { value: 'reviewed', label: 'Reviewed' },
-      { value: 'resolved', label: 'Resolved' },
-    ]},
-    { name: 'assignee', label: 'Assignee', type: 'text' as const },
-  ]
+  const pendingCount = submissions.filter((s: FormSubmission) => s.reviewStatus === 'pending')
+    .length
 
   return (
-    <div className="flex-1 bg-ink-900">
-      <div className="flex h-full">
-        {/* Left Sidebar - Filters */}
-        <div className="w-64 border-r border-teal-700 border-opacity-20 bg-ink-800 p-6 space-y-6">
-          <div className="border-b border-teal-700 border-opacity-20 pb-6">
-            <h1 className="text-2xl font-outfit font-bold text-cream-50">Submissions</h1>
-            <span className="inline-block mt-2 px-2 py-1 bg-teal-500 text-ink-900 rounded text-xs font-poppins font-semibold">{unreadCount} New</span>
-          </div>
-
-          <div>
-            <label className="text-xs font-poppins font-semibold text-cream-50 text-opacity-60 block mb-3">Status</label>
-            <div className="space-y-2">
-              {(['all', 'new', 'reviewed', 'resolved'] as const).map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setStatusFilter(status)}
-                  className={`w-full text-left px-3 py-2 rounded text-sm font-poppins transition-colors ${
-                    statusFilter === status
-                      ? 'bg-teal-500 text-ink-900 font-medium'
-                      : 'text-cream-50 hover:bg-ink-700'
-                  }`}
-                >
-                  {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs font-poppins font-semibold text-cream-50 text-opacity-60 block mb-3">Form Type</label>
-            <div className="space-y-2">
-              {['Contact Form', 'Demo Request', 'Support Ticket', 'Feedback'].map((type) => (
-                <label key={type} className="flex items-center gap-2 text-sm font-poppins text-cream-50 cursor-pointer hover:text-opacity-80">
-                  <input type="checkbox" className="rounded" />
-                  {type}
-                </label>
-              ))}
-            </div>
-          </div>
+    <div className="p-8 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-outfit font-bold text-cream-50 mb-2">Form Submissions</h1>
+          <p className="text-cream-50 text-opacity-70">
+            Real-time submissions from contact & privacy forms ({totalDocs} total, {pendingCount} pending)
+          </p>
         </div>
-
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-6xl space-y-4">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-3 w-4 h-4 text-cream-50 text-opacity-40" />
-              <input
-                type="text"
-                placeholder="Search submissions..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-4 py-2 pl-10 rounded-md bg-ink-800 border border-teal-700 border-opacity-20 text-cream-50 placeholder-cream-50 placeholder-opacity-40 text-sm font-poppins"
-              />
-            </div>
-
-            {/* Table */}
-            <div className="bg-ink-800 border border-teal-700 border-opacity-20 rounded-md overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-teal-700 border-opacity-20 bg-ink-700">
-                      <th className="text-left px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Type</th>
-                      <th className="text-left px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Name</th>
-                      <th className="text-left px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Email</th>
-                      <th className="text-left px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Status</th>
-                      <th className="text-left px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Assignee</th>
-                      <th className="text-left px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Submitted</th>
-                      <th className="text-right px-4 py-3 text-xs font-poppins font-semibold text-cream-50 text-opacity-60">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {searchFiltered.map((submission) => (
-                      <tr
-                        key={submission.id}
-                        onClick={() => setSelectedSubmission(submission.id)}
-                        className={`border-b border-teal-700 border-opacity-20 hover:bg-ink-700 transition-colors cursor-pointer ${
-                          selectedSubmission === submission.id ? 'bg-ink-700' : ''
-                        }`}
-                      >
-                        <td className="px-4 py-3 text-cream-50 font-poppins">{submission.type}</td>
-                        <td className="px-4 py-3 text-cream-50 font-poppins">{submission.name}</td>
-                        <td className="px-4 py-3 text-cream-50 text-opacity-80 font-mono text-xs">{submission.email}</td>
-                        <td className="px-4 py-3">
-                          <span className={`inline-block px-2 py-1 rounded text-xs font-poppins ${statusColors[submission.status]}`}>
-                            {submission.status.charAt(0).toUpperCase() + submission.status.slice(1)}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-cream-50 text-opacity-60 text-xs">{submission.assignee}</td>
-                        <td className="px-4 py-3 text-cream-50 text-opacity-60 text-xs">{submission.submitted}</td>
-                        <td className="px-4 py-3 text-right space-x-2" onClick={(e) => e.stopPropagation()}>
-                          <button
-                            onClick={() => handleEdit(submission)}
-                            className="text-teal-400 hover:text-teal-300 text-xs font-poppins transition-colors"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => setDeleteConfirm(submission.id)}
-                            className="text-red-400 hover:text-red-300 text-xs font-poppins transition-colors"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+        {pendingCount > 0 && (
+          <div className="px-4 py-2 bg-amber-500 bg-opacity-20 border border-amber-500 rounded text-amber-200 font-poppins text-sm font-semibold">
+            {pendingCount} pending
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Delete Confirmation */}
-      {deleteConfirm && (
-        <div className="fixed inset-0 bg-ink-900 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-ink-800 border border-teal-700 border-opacity-20 rounded-md p-6 max-w-sm">
-            <h3 className="text-lg font-outfit font-bold text-cream-50 mb-4">Delete Submission?</h3>
-            <p className="text-sm text-cream-50 text-opacity-60 mb-6 font-poppins">This action cannot be undone.</p>
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setDeleteConfirm(null)}
-                className="px-4 py-2 text-cream-50 hover:bg-ink-700 rounded text-sm font-poppins transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleDelete(deleteConfirm)}
-                className="px-4 py-2 bg-red-900 text-cream-50 hover:bg-red-800 rounded text-sm font-poppins transition-colors"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <EditModal
-        isOpen={isModalOpen}
-        title="Edit Submission"
-        item={editingItem}
-        fields={editFields}
-        onClose={() => {
-          setIsModalOpen(false)
-          setEditingItem(null)
-        }}
-        onSave={handleSave}
+      <DataTable
+        columns={columns}
+        rows={tableRows}
+        state={submissions.length === 0 ? 'empty' : 'idle'}
+        emptyMessage="No form submissions yet"
+        emptyAction={{ label: 'Test Contact Form', onClick: () => {} }}
       />
     </div>
   )

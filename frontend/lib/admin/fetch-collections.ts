@@ -71,25 +71,28 @@ export async function fetchAuditLogs() {
   return fetchCollection('audit-logs', { limit: 50, sort: '-createdAt' })
 }
 
+export async function getFormSubmissions() {
+  return fetchCollection('form-submissions', { limit: 100, sort: '-submittedAt' })
+}
+
 export async function getCollectionStats() {
   try {
-    const [users, pages, blog, submissions] = await Promise.all([
+    const [users, pages, submissions] = await Promise.all([
       fetchUsers(),
       fetchPages(),
-      fetchBlogPosts(),
-      fetchFormSubmissions(),
+      getFormSubmissions(),
     ])
 
     return {
       totalUsers: users.totalDocs,
       totalPages: pages.totalDocs,
-      totalBlogPosts: blog.totalDocs,
       newSubmissions: submissions.docs.filter(
-        (s: any) => new Date(s.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        (s: any) => s.reviewStatus === 'pending'
       ).length,
+      totalSubmissions: submissions.totalDocs,
     }
   } catch (error) {
     console.error('Error getting collection stats:', error)
-    return { totalUsers: 0, totalPages: 0, totalBlogPosts: 0, newSubmissions: 0 }
+    return { totalUsers: 0, totalPages: 0, newSubmissions: 0, totalSubmissions: 0 }
   }
 }
