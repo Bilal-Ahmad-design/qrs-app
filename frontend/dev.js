@@ -5,18 +5,52 @@ import { platform } from 'os'
 console.log('🚀 Starting Next.js + Payload CMS (unified on port 3000)...\n')
 
 const isWindows = platform() === 'win32'
+let payloadReady = false
 
 // Start Payload CMS server (port 3001)
-console.log('📦 Starting Payload CMS server...')
+console.log('📦 Starting Payload CMS server on port 3001...')
 const payloadServer = spawn('npm', ['run', 'cms:server'], {
-  stdio: 'inherit',
+  stdio: ['inherit', 'pipe', 'pipe'],
   cwd: process.cwd(),
   shell: isWindows,
 })
 
-// Wait a moment for Payload to start, then start Next.js
+// Listen for Payload startup completion
+payloadServer.stdout?.on('data', (data) => {
+  const output = data.toString()
+  console.log('[Payload CMS]', output)
+
+  // Check if Payload is ready
+  if (output.includes('running on http://localhost:3001')) {
+    payloadReady = true
+    console.log('\n✓ Payload CMS ready!\n')
+  }
+})
+
+payloadServer.stderr?.on('data', (data) => {
+  const output = data.toString()
+  console.error('[Payload CMS]', output)
+})
+
+// Wait for Payload to be ready, then start Next.js
+const checkPayloadReady = setInterval(() => {
+  if (payloadReady) {
+    clearInterval(checkPayloadReady)
+    startNextJS()
+  }
+}, 500)
+
+// Timeout after 30 seconds
 setTimeout(() => {
-  console.log('\n🌐 Starting Next.js frontend...\n')
+  if (!payloadReady) {
+    console.warn('\n⚠️  Payload CMS taking longer to start, starting Next.js anyway...')
+    clearInterval(checkPayloadReady)
+    startNextJS()
+  }
+}, 30000)
+
+function startNextJS() {
+  console.log('🌐 Starting Next.js frontend on port 3000...\n')
 
   // Start Next.js (proxies to Payload CMS on port 3001)
   const nextjs = spawn('npx', ['next', 'dev'], {
@@ -44,7 +78,7 @@ setTimeout(() => {
     payloadServer.kill()
     setTimeout(() => process.exit(0), 1000)
   })
-}, 3000)
+}
 
 // Handle Payload startup errors
 payloadServer.on('error', (err) => {
