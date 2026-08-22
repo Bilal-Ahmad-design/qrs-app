@@ -1,0 +1,20 @@
+# Development scripts (Node.js, not TypeScript)
+dev.js
+check-services.js
+check-services.mjs
+public/create-placeholders.js
+
+# Build outputs
+.next/
+dist/
+build/
+node_modules/
+
+# CMS folder (development only)
+cms/
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
