@@ -8,10 +8,10 @@ const COLLECTION_ENDPOINTS: Record<string, string> = {
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { collection: string; id: string } }
+  { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
   try {
-    const { collection, id } = params
+    const { collection, id } = await params
 
     if (!COLLECTION_ENDPOINTS[collection]) {
       return NextResponse.json(
@@ -53,10 +53,10 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { collection: string; id: string } }
+  { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
   try {
-    const { collection, id } = params
+    const { collection, id } = await params
 
     if (!COLLECTION_ENDPOINTS[collection]) {
       return NextResponse.json(
