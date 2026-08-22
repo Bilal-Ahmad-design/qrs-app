@@ -1,7 +1,5 @@
 'use client'
 
-import { IconRenderer } from '@/components/marketing/IconRenderer'
-
 interface RegulatoryItem {
   title?: string
   description?: string
@@ -16,11 +14,6 @@ interface RegulatoryGridProps {
 }
 
 export function RegulatoryGrid({ items, title, description }: RegulatoryGridProps) {
-  const isIconName = (iconStr?: string) => {
-    if (!iconStr) return false
-    // Check if it's a Lucide icon name (contains hyphens or is a known single word icon)
-    return /^[a-z]+-[a-z]+|^(zap|lock|globe|search|shield|eye|rocket|users|lightbulb)$/.test(iconStr)
-  }
   return (
     <section className="py-28 bg-light-bg-primary">
       <div className="max-w-screen-xl mx-auto px-6">
@@ -48,19 +41,7 @@ export function RegulatoryGrid({ items, title, description }: RegulatoryGridProp
             >
               <div className="flex items-start gap-4">
                 {item.icon && (
-                  <div className="flex-shrink-0 mt-1">
-                    {isIconName(item.icon) ? (
-                      <IconRenderer
-                        iconName={item.icon}
-                        size={28}
-                        className="text-light-accent-primary"
-                      />
-                    ) : (
-                      <div className="text-3xl text-light-accent-primary font-bold">
-                        {item.icon}
-                      </div>
-                    )}
-                  </div>
+                  <div className="text-3xl flex-shrink-0 mt-1">{item.icon}</div>
                 )}
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold text-light-text-primary mb-2">
