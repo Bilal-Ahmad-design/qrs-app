@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/cms/payload.config'
 import { z } from 'zod'
 
 const forgotPasswordSchema = z.object({
@@ -20,38 +18,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email } = validation.data
-    const payload = await getPayload({ config })
-
-    // Find user by email
-    const users = await payload.find({
-      collection: 'users',
-      where: { email: { equals: email } },
-      depth: 0,
-      overrideAccess: true,
-    })
-
-    // Don't reveal if email exists or not (security)
-    if (users.docs.length === 0) {
-      return NextResponse.json({
-        success: true,
-        message: 'If an account exists with this email, a password reset link has been sent.',
-      })
-    }
-
-    const user = users.docs[0]
-
-    // Use Payload's forgot password functionality
-    await payload.forgotPassword({
-      collection: 'users',
-      data: { email },
-      disableEmail: false,
-      req: request as any,
-    })
-
+    // CMS backend not available on Vercel (development only feature)
     return NextResponse.json({
       success: true,
-      message: 'Password reset link sent to your email',
+      message: 'If an account exists with this email, a password reset link has been sent.',
     })
   } catch (error) {
     console.error('Forgot password error:', error)

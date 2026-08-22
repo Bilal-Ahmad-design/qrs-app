@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/cms/payload.config'
 import { z } from 'zod'
 
 const resetPasswordSchema = z.object({
@@ -21,30 +19,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { token, password } = validation.data
-    const payload = await getPayload({ config })
-
-    // Use Payload's reset password functionality
-    const result = await payload.resetPassword({
-      collection: 'users',
-      data: {
-        token,
-        password,
-      },
-      overrideAccess: true,
-    } as any)
-
-    if (!result) {
-      return NextResponse.json(
-        { error: 'Invalid or expired reset token' },
-        { status: 400 }
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Password reset successfully. You can now log in with your new password.',
-    })
+    // CMS backend not available on Vercel (development only feature)
+    return NextResponse.json(
+      { error: 'Password reset service not available. Please use the local development environment.' },
+      { status: 503 }
+    )
   } catch (error) {
     console.error('Reset password error:', error)
     return NextResponse.json(
