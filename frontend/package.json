@@ -29,6 +29,7 @@
     "@faceless-ui/scroll-info": "2.0.0",
     "@payloadcms/db-postgres": "^3.87.0",
     "@payloadcms/richtext-lexical": "^3.87.0",
+    "autoprefixer": "^10.4.0",
     "bcryptjs": "^3.0.3",
     "cookie": "^0.6.0",
     "crypto-js": "^4.2.0",
@@ -40,9 +41,11 @@
     "nodemailer": "^6.9.13",
     "payload": "^3.87.0",
     "pg": "^8.22.0",
+    "postcss": "^8.4.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "sharp": "^0.33.0",
+    "tailwindcss": "3.4.19",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -57,11 +60,8 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitest/ui": "^1.6.0",
-    "autoprefixer": "^10.4.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "16.2.10",
-    "postcss": "^8.4.0",
-    "tailwindcss": "3.4.19",
     "tsx": "^4.17.0",
     "typescript": "^5.7.0",
     "vitest": "^1.6.0"
