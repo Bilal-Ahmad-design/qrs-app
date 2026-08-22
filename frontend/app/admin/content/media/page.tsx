@@ -3,6 +3,9 @@ import { Badge } from '@/components/admin/Badge'
 import { fetchMedia, type PayloadMedia } from '@/lib/admin/fetch-collections'
 import { Plus, Image as ImageIcon } from 'lucide-react'
 
+// Admin data is authenticated and must be fetched at request time.
+export const dynamic = 'force-dynamic'
+
 const columns: DataTableColumn[] = [
   { key: 'filename', label: 'Filename', width: '250px' },
   { key: 'type', label: 'Type', width: '120px' },

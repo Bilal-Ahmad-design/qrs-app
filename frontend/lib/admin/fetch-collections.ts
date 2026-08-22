@@ -10,7 +10,7 @@ export interface FetchOptions {
   where?: Record<string, any>
 }
 
-const CMS_BASE_URL = 'http://localhost:3000'
+const CMS_BASE_URL = (process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000').replace(/\/$/, '')
 
 export async function fetchCollection<T>(
   collection: string,

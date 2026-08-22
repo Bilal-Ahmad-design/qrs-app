@@ -3,6 +3,9 @@ import { Badge } from '@/components/admin/Badge'
 import { fetchUsers, type PayloadUser } from '@/lib/admin/fetch-collections'
 import { UserPlus } from 'lucide-react'
 
+// Admin data is authenticated and must be fetched at request time.
+export const dynamic = 'force-dynamic'
+
 const columns: DataTableColumn[] = [
   { key: 'fullname', label: 'Name', width: '200px' },
   { key: 'email', label: 'Email', width: '250px' },
