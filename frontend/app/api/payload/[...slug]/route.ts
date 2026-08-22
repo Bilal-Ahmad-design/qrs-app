@@ -1,46 +1,71 @@
 export const runtime = 'nodejs'
 
-// Payload CMS API stub - use Payload admin interface for user management
-// This route is disabled to prevent Turbopack build issues
-// Instead, create users through http://localhost:3000/admin/payload
+const PAYLOAD_URL = process.env.PAYLOAD_CMS_URL || 'http://localhost:3003'
 
-export async function GET(request: Request) {
-  return new Response(
-    JSON.stringify({
-      error: 'Payload API not available',
-      message: 'Create users via Payload admin: http://localhost:3000/admin/payload'
-    }),
-    { status: 503, headers: { 'Content-Type': 'application/json' } }
-  )
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+  try {
+    const { slug } = await params
+    const path = slug.join('/')
+    const url = new URL(request.url)
+    const queryString = url.search
+
+    const response = await fetch(`${PAYLOAD_URL}/api/${path}${queryString}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(request.headers.get('authorization') && {
+          authorization: request.headers.get('authorization')!,
+        }),
+      },
+    })
+
+    const data = await response.json()
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  } catch (error) {
+    console.error('Payload proxy error:', error)
+    return new Response(
+      JSON.stringify({
+        error: 'Failed to fetch from Payload CMS',
+        message: 'Make sure Payload is running: npm run cms',
+      }),
+      { status: 503, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
 }
 
-export async function POST(request: Request) {
-  return new Response(
-    JSON.stringify({
-      error: 'Payload API not available',
-      message: 'Create users via Payload admin: http://localhost:3000/admin/payload'
-    }),
-    { status: 503, headers: { 'Content-Type': 'application/json' } }
-  )
-}
+export async function POST(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+  try {
+    const { slug } = await params
+    const path = slug.join('/')
+    const body = await request.text()
 
-export async function PATCH(request: Request) {
-  return new Response(
-    JSON.stringify({ error: 'Payload API not available' }),
-    { status: 503, headers: { 'Content-Type': 'application/json' } }
-  )
-}
+    const response = await fetch(`${PAYLOAD_URL}/api/${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(request.headers.get('authorization') && {
+          authorization: request.headers.get('authorization')!,
+        }),
+      },
+      body,
+    })
 
-export async function PUT(request: Request) {
-  return new Response(
-    JSON.stringify({ error: 'Payload API not available' }),
-    { status: 503, headers: { 'Content-Type': 'application/json' } }
-  )
-}
-
-export async function DELETE(request: Request) {
-  return new Response(
-    JSON.stringify({ error: 'Payload API not available' }),
-    { status: 503, headers: { 'Content-Type': 'application/json' } }
-  )
+    const data = await response.json()
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  } catch (error) {
+    console.error('Payload proxy error:', error)
+    return new Response(
+      JSON.stringify({
+        error: 'Failed to create in Payload CMS',
+        message: 'Make sure Payload is running: npm run cms',
+      }),
+      { status: 503, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
 }
