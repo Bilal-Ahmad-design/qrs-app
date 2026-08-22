@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
     const clientIp =
       request.headers.get('x-forwarded-for')?.split(',')[0] ||
       request.headers.get('x-real-ip') ||
-      request.ip ||
       'unknown'
 
     const turnstileValid = await verifyTurnstile(data.turnstileToken, clientIp)
