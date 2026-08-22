@@ -1,36 +1,46 @@
-import { initializePayload } from '@/cms/payload-server'
-
 export const runtime = 'nodejs'
 
-async function handleRequest(request: Request): Promise<Response> {
-  try {
-    const handler = await initializePayload()
-    return await handler(request)
-  } catch (error) {
-    console.error('Payload error:', error)
-    return new Response(
-      JSON.stringify({ error: 'Payload CMS error', details: String(error) }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    )
-  }
-}
+// Payload CMS API stub - use Payload admin interface for user management
+// This route is disabled to prevent Turbopack build issues
+// Instead, create users through http://localhost:3000/admin/payload
 
 export async function GET(request: Request) {
-  return handleRequest(request)
+  return new Response(
+    JSON.stringify({
+      error: 'Payload API not available',
+      message: 'Create users via Payload admin: http://localhost:3000/admin/payload'
+    }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
+  )
 }
 
 export async function POST(request: Request) {
-  return handleRequest(request)
+  return new Response(
+    JSON.stringify({
+      error: 'Payload API not available',
+      message: 'Create users via Payload admin: http://localhost:3000/admin/payload'
+    }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
+  )
 }
 
 export async function PATCH(request: Request) {
-  return handleRequest(request)
+  return new Response(
+    JSON.stringify({ error: 'Payload API not available' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
+  )
 }
 
 export async function PUT(request: Request) {
-  return handleRequest(request)
+  return new Response(
+    JSON.stringify({ error: 'Payload API not available' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
+  )
 }
 
 export async function DELETE(request: Request) {
-  return handleRequest(request)
+  return new Response(
+    JSON.stringify({ error: 'Payload API not available' }),
+    { status: 503, headers: { 'Content-Type': 'application/json' } }
+  )
 }

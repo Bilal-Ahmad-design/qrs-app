@@ -57,19 +57,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         if (response.ok) {
           const data = await response.json()
           setUser(data.user)
+          setLoading(false)
         } else {
-          router.push('/login')
+          // Not authenticated, redirect to login
+          setLoading(false)
+          router.push('/login?redirect=' + pathname)
         }
       } catch (error) {
         console.error('Failed to fetch user:', error)
-        router.push('/login')
-      } finally {
         setLoading(false)
+        router.push('/login?redirect=' + pathname)
       }
     }
 
     fetchUser()
-  }, [router])
+  }, [router, pathname])
 
   const handleLogout = async () => {
     try {
@@ -80,12 +82,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-ink-900">
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-cream-50 font-poppins">Loading...</p>
+          <p className="text-cream-50 font-poppins">Checking authentication...</p>
         </div>
       </div>
     )
