@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const isDev = process.env.NODE_ENV === 'development'
+  const [email, setEmail] = useState(isDev ? 'jordan@qrs.example.com' : '')
+  const [password, setPassword] = useState(isDev ? 'Password123!' : '')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -56,6 +57,12 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-white mb-2">QRS Admin</h1>
             <p className="text-slate-400">Sign in to your account</p>
           </div>
+
+          {isDev && (
+            <div className="mb-6 p-4 bg-teal-500/10 border border-teal-500/50 rounded text-teal-300 text-sm">
+              <strong>Dev Credentials:</strong> jordan@qrs.example.com / Password123!
+            </div>
+          )}
 
           {error && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded text-red-400 text-sm">

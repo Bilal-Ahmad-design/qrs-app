@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     const url = new URL(request.url)
     const queryString = url.search
 
-    const response = await fetch(`${PAYLOAD_URL}/api/${path}${queryString}`, {
+    const response = await fetch(`${PAYLOAD_URL}/api/payload/${path}${queryString}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ slu
     const path = slug.join('/')
     const body = await request.text()
 
-    const response = await fetch(`${PAYLOAD_URL}/api/${path}`, {
+    const response = await fetch(`${PAYLOAD_URL}/api/payload/${path}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

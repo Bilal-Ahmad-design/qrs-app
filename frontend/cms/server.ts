@@ -1,110 +1,82 @@
+#!/usr/bin/env node
+
+/**
+ * Payload CMS Proxy Server
+ * This script starts a simple HTTP server that proxies to Payload's built-in server
+ * avoiding the tsx/module loading issues with getPayload()
+ */
+
 import 'dotenv/config'
-import { getPayload } from 'payload'
-import config from './payload.config.js'
 import http from 'http'
+import { spawn } from 'child_process'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { config as dotenvConfig } from 'dotenv'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-dotenvConfig({ path: path.resolve(__dirname, '../.env.local') })
-
 const PORT = 3001
+const PAYLOAD_DEV_PORT = 3002
 
-// Use unpooled connection for Payload CMS (pooled connections have issues with pg driver)
-const dbUrl = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL
-if (!dbUrl) {
-  console.error('❌ DATABASE_URL or DATABASE_URL_UNPOOLED not set in environment')
-  console.error('   Make sure .env.local exists with database credentials')
-  process.exit(1)
-}
-process.env.DATABASE_URL = dbUrl
-console.warn(`📦 Database configured: ${process.env.DATABASE_URL.substring(0, 50)}...`)
+console.warn(`📦 Starting Payload CMS via CLI on port ${PAYLOAD_DEV_PORT}...`)
 
-async function start() {
-  try {
-    console.warn('🔄 Initializing Payload CMS...')
-    const payload = await getPayload({ config })
-    console.warn('✓ Payload initialized successfully')
+// Start Payload dev server via CLI from frontend directory (where payload.config.ts is)
+const payloadProc = spawn('npx', ['payload', 'dev'], {
+  stdio: 'inherit',
+  cwd: __dirname.replace(/\\cms$/, ''), // Go up from cms/ to frontend/
+  shell: true,
+})
 
-    const server = http.createServer(async (req, res) => {
-      try {
-        // Set CORS headers
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS')
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+// Wait for Payload to start, then start our proxy
+setTimeout(() => {
+  console.warn(`🔄 Starting proxy server on port ${PORT}...`)
 
-        if (req.method === 'OPTIONS') {
-          res.writeHead(200)
-          res.end()
-          return
-        }
-
-        // Parse JSON body
-        let body = ''
-        req.on('data', chunk => (body += chunk))
-        req.on('end', async () => {
-          try {
-            // Create a mock request object for Payload
-            const method = req.method?.toUpperCase() || 'GET'
-
-            // Simple routing for collections API
-            if (req.url?.startsWith('/api/collections/')) {
-              const collection = req.url.split('/')[3]
-              const id = req.url.split('/')[4]
-
-              if (method === 'GET' && id) {
-                const doc = await payload.findByID({ collection, id })
-                res.writeHead(200, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify(doc))
-              } else if (method === 'GET') {
-                const docs = await payload.find({ collection })
-                res.writeHead(200, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify(docs))
-              } else if (method === 'POST') {
-                const doc = await payload.create({ collection, data: JSON.parse(body) })
-                res.writeHead(201, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify(doc))
-              } else if (method === 'PATCH' && id) {
-                const doc = await payload.update({ collection, id, data: JSON.parse(body) })
-                res.writeHead(200, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify(doc))
-              } else if (method === 'DELETE' && id) {
-                await payload.delete({ collection, id })
-                res.writeHead(200, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify({ success: true }))
-              } else {
-                res.writeHead(404)
-                res.end('Not found')
-              }
-            } else {
-              res.writeHead(404)
-              res.end('Not found')
-            }
-          } catch (error) {
-            console.error('Error handling request:', error instanceof Error ? error.message : error)
-            res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }))
-          }
-        })
-      } catch (error) {
-        console.error('Server error:', error instanceof Error ? error.message : error)
-        res.writeHead(500)
-        res.end('Server error')
+  const proxyServer = http.createServer(async (req, res) => {
+    try {
+      // Proxy all requests to Payload's dev server
+      const options = {
+        hostname: 'localhost',
+        port: PAYLOAD_DEV_PORT,
+        path: req.url,
+        method: req.method,
+        headers: req.headers,
       }
-    })
 
-    server.listen(PORT, () => {
-      console.warn(`✓ Payload CMS server running on http://localhost:${PORT}`)
-      console.warn(`  Admin: http://localhost:${PORT}/admin`)
-    })
-  } catch (error) {
-    console.error('❌ Failed to start Payload CMS:', error instanceof Error ? error.message : error)
-    if (error instanceof Error) {
-      console.error('Stack:', error.stack)
+      const proxyReq = http.request(options, (proxyRes) => {
+        res.writeHead(proxyRes.statusCode || 200, proxyRes.headers)
+        proxyRes.pipe(res)
+      })
+
+      proxyReq.on('error', (error) => {
+        console.warn('⚠️  Proxy error:', error.message)
+        res.writeHead(503)
+        res.end('Payload server not responding')
+      })
+
+      req.pipe(proxyReq)
+    } catch (error) {
+      console.warn('Server error:', error instanceof Error ? error.message : error)
+      res.writeHead(500)
+      res.end()
     }
-    process.exit(1)
-  }
-}
+  })
 
-start()
+  proxyServer.listen(PORT, () => {
+    console.warn(`running on http://localhost:${PORT}`)
+  })
+
+  process.on('SIGINT', () => {
+    console.log('\n⏹️  Shutting down...')
+    proxyServer.close()
+    payloadProc.kill()
+    process.exit(0)
+  })
+}, 2000)
+
+payloadProc.on('error', (error) => {
+  console.warn('❌ Payload process error:', error.message)
+  process.exit(1)
+})
+
+payloadProc.on('exit', (code) => {
+  console.warn(`\n❌ Payload process exited with code ${code}`)
+  process.exit(code || 1)
+})

@@ -28,7 +28,7 @@ interface CMSPage {
 export async function getPageBySlug(slug: string): Promise<CMSPage | null> {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/pages?where[slug][equals]=${slug}`,
+      `${getCMSURL()}/api/payload/pages?where[slug][equals]=${slug}`,
       {
         next: { revalidate: 3600 },
       }
@@ -50,7 +50,7 @@ export async function getPageBySlug(slug: string): Promise<CMSPage | null> {
 export async function getAllPages(): Promise<CMSPage[]> {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/pages?where[status][equals]=published&limit=100`,
+      `${getCMSURL()}/api/payload/pages?where[status][equals]=published&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -72,7 +72,7 @@ export async function getAllPages(): Promise<CMSPage[]> {
 export async function getValidationReports() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/validation-reports?where[status][equals]=published&limit=100`,
+      `${getCMSURL()}/api/payload/validation-reports?where[status][equals]=published&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -93,7 +93,7 @@ export async function getValidationReports() {
 export async function getPerilStatuses() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/peril-status?sort=-order`,
+      `${getCMSURL()}/api/payload/peril-status?sort=-order`,
       {
         next: { revalidate: 3600 },
       }
@@ -114,7 +114,7 @@ export async function getPerilStatuses() {
 export async function getRedirectBySource(sourcePath: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/redirects?where[sourcePath][equals]=${encodeURIComponent(sourcePath)}`,
+      `${getCMSURL()}/api/payload/redirects?where[sourcePath][equals]=${encodeURIComponent(sourcePath)}`,
       {
         next: { revalidate: 300 },
       }
@@ -135,7 +135,7 @@ export async function getRedirectBySource(sourcePath: string) {
 export async function getTrustCenter() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/globals/trust-center`,
+      `${getCMSURL()}/api/payload/globals/trust-center`,
       {
         next: { revalidate: 3600 },
       }
@@ -155,7 +155,7 @@ export async function getTrustCenter() {
 export async function getProductShowcaseItems() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/product-showcase?where[published][equals]=true&sort=order&limit=100`,
+      `${getCMSURL()}/api/payload/product-showcase?where[published][equals]=true&sort=order&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -176,7 +176,7 @@ export async function getProductShowcaseItems() {
 export async function getProductShowcaseByCategory(category: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/product-showcase?where[category][equals]=${category}&where[published][equals]=true&limit=100`,
+      `${getCMSURL()}/api/payload/product-showcase?where[category][equals]=${category}&where[published][equals]=true&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -200,7 +200,7 @@ export async function getProductShowcaseByCategory(category: string) {
 export async function getSolutions() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/solutions?where[published][equals]=true&sort=order&limit=100`,
+      `${getCMSURL()}/api/payload/solutions?where[published][equals]=true&sort=order&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -221,7 +221,7 @@ export async function getSolutions() {
 export async function getSolutionByRole(roleTitle: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/solutions?where[roleTitle][equals]=${roleTitle}&where[published][equals]=true`,
+      `${getCMSURL()}/api/payload/solutions?where[roleTitle][equals]=${roleTitle}&where[published][equals]=true`,
       {
         next: { revalidate: 3600 },
       }
@@ -242,7 +242,7 @@ export async function getSolutionByRole(roleTitle: string) {
 export async function getRegulatoryCompliance() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/regulatory-compliance?where[published][equals]=true&sort=region,framework&limit=100`,
+      `${getCMSURL()}/api/payload/regulatory-compliance?where[published][equals]=true&sort=region,framework&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -263,7 +263,7 @@ export async function getRegulatoryCompliance() {
 export async function getRegulatoryByRegion(region: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/regulatory-compliance?where[region][equals]=${region}&where[published][equals]=true&limit=100`,
+      `${getCMSURL()}/api/payload/regulatory-compliance?where[region][equals]=${region}&where[published][equals]=true&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -287,7 +287,7 @@ export async function getRegulatoryByRegion(region: string) {
 export async function getPlatformCapabilities() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/platform-capability?where[published][equals]=true&sort=order&limit=100`,
+      `${getCMSURL()}/api/payload/platform-capability?where[published][equals]=true&sort=order&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -308,7 +308,7 @@ export async function getPlatformCapabilities() {
 export async function getPlatformCapabilityByCategory(category: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/platform-capability?where[category][equals]=${category}&where[published][equals]=true&limit=100`,
+      `${getCMSURL()}/api/payload/platform-capability?where[category][equals]=${category}&where[published][equals]=true&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -332,7 +332,7 @@ export async function getPlatformCapabilityByCategory(category: string) {
 export async function getDocumentation() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/documentation?where[published][equals]=true&sort=section,order&limit=100`,
+      `${getCMSURL()}/api/payload/documentation?where[published][equals]=true&sort=section,order&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -353,7 +353,7 @@ export async function getDocumentation() {
 export async function getDocumentationBySection(section: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/documentation?where[section][equals]=${section}&where[published][equals]=true&sort=order&limit=100`,
+      `${getCMSURL()}/api/payload/documentation?where[section][equals]=${section}&where[published][equals]=true&sort=order&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -374,7 +374,7 @@ export async function getDocumentationBySection(section: string) {
 export async function getDocumentationBySlug(slug: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/documentation?where[slug][equals]=${slug}&where[published][equals]=true`,
+      `${getCMSURL()}/api/payload/documentation?where[slug][equals]=${slug}&where[published][equals]=true`,
       {
         next: { revalidate: 3600 },
       }
@@ -395,7 +395,7 @@ export async function getDocumentationBySlug(slug: string) {
 export async function getPageSections(page: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/page-sections?page=${encodeURIComponent(page)}&published=true&sort=order&limit=100`,
+      `${getCMSURL()}/api/payload/page-sections?page=${encodeURIComponent(page)}&published=true&sort=order&limit=100`,
       {
         next: { revalidate: 60 },
       }
@@ -418,7 +418,7 @@ export async function getPageSections(page: string) {
 export async function getPageSectionsByType(page: string, type: string) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/page-sections?where[page][equals]=${page}&where[sectionType][equals]=${type}&where[published][equals]=true&sort=order&limit=100`,
+      `${getCMSURL()}/api/payload/page-sections?where[page][equals]=${page}&where[sectionType][equals]=${type}&where[published][equals]=true&sort=order&limit=100`,
       {
         next: { revalidate: 3600 },
       }
@@ -442,7 +442,7 @@ export async function getPageSectionsByType(page: string, type: string) {
 export async function getSettings() {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/globals/settings`,
+      `${getCMSURL()}/api/payload/globals/settings`,
       {
         next: { revalidate: 3600 },
       }
@@ -465,7 +465,7 @@ export async function getSettings() {
 export async function getBlogPosts(limit = 100) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/blog?limit=${limit}`,
+      `${getCMSURL()}/api/payload/blog?limit=${limit}`,
       {
         next: { revalidate: 300 },
       }
@@ -486,7 +486,7 @@ export async function getBlogPosts(limit = 100) {
 export async function getMediaFiles(limit = 100) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/media?limit=${limit}`,
+      `${getCMSURL()}/api/payload/media?limit=${limit}`,
       {
         next: { revalidate: 300 },
       }
@@ -507,7 +507,7 @@ export async function getMediaFiles(limit = 100) {
 export async function getAdminPages(limit = 100) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/pages?limit=${limit}`,
+      `${getCMSURL()}/api/payload/pages?limit=${limit}`,
       {
         next: { revalidate: 300 },
       }
@@ -528,7 +528,7 @@ export async function getAdminPages(limit = 100) {
 export async function getFormSubmissions(limit = 100) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/form-submissions?limit=${limit}&sort=-createdAt`,
+      `${getCMSURL()}/api/payload/form-submissions?limit=${limit}&sort=-createdAt`,
       {
         next: { revalidate: 0 },
       }
@@ -549,7 +549,7 @@ export async function getFormSubmissions(limit = 100) {
 export async function getAuditLogs(limit = 100) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/audit-logs?limit=${limit}&sort=-createdAt`,
+      `${getCMSURL()}/api/payload/audit-logs?limit=${limit}&sort=-createdAt`,
       {
         next: { revalidate: 0 },
       }
@@ -570,7 +570,7 @@ export async function getAuditLogs(limit = 100) {
 export async function getAdminUsers(limit = 100) {
   try {
     const response = await fetch(
-      `${getCMSURL()}/api/payload/api/users?limit=${limit}&sort=-createdAt`,
+      `${getCMSURL()}/api/payload/users?limit=${limit}&sort=-createdAt`,
       {
         next: { revalidate: 300 },
       }

@@ -88,7 +88,7 @@ export function SecurityFeaturesGrid({
   const [titleColor, descColor] = cardTextClass.split(' ')
 
   return (
-    <section className={`py-28 lg:py-48 ${bgClass}`}>
+    <section className={`py-28 ${bgClass}`}>
       <div className="max-w-screen-xl mx-auto px-6">
         {(title || description) && (
           <div className="text-center mb-24">

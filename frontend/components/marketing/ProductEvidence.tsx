@@ -20,17 +20,17 @@ export function ProductEvidence({ items, title, description }: ProductEvidencePr
   const itemsArray = items || []
   const selectedItem = itemsArray[selectedIndex] || itemsArray[0]
 
-  // Map placeholder URLs to use next/image compatible paths
+  // Map image URLs - serve from frontend for local media files
   const getImageUrl = (url?: string) => {
     if (!url) return '/placeholder-product.png'
     // If it's already a full URL, use as-is
     if (url.startsWith('http')) return url
-    // If it's a relative path from CMS uploads, add server prefix
-    return `http://localhost:3001${url}`
+    // Relative paths are served from Next.js frontend (same domain)
+    return url
   }
 
   return (
-    <section className="py-24 lg:py-40 bg-light-bg-primary">
+    <section className="py-28 bg-light-bg-primary">
       <div className="max-w-screen-xl mx-auto px-6">
         {(title || description) && (
           <div className="text-center mb-20">
@@ -54,7 +54,7 @@ export function ProductEvidence({ items, title, description }: ProductEvidencePr
               <img
                 src={getImageUrl(selectedItem.imageUrl)}
                 alt={selectedItem.title || 'Product screenshot'}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-fill"
               />
               {/* Overlay for placeholder images */}
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />

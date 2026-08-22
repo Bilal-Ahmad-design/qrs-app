@@ -68,33 +68,49 @@ export function SectionRenderer({
   const bgClass = bgStyles[section.backgroundStyle || 'light']
   const textClass = textStyles[section.backgroundStyle || 'light']
 
+  // Helper to get image URLs - serve local media from frontend, CMS uploads from backend
+  const getImageUrl = (url?: string) => {
+    if (!url) return undefined
+    if (url.startsWith('http')) return url
+    if (url.startsWith('/media/')) return url // Local media files served from frontend
+    return `${cmsUrl}${url}` // CMS uploads from backend
+  }
+
+  // Helper to get video URLs - serve local media from frontend, CMS uploads from backend
+  const getVideoUrl = (url?: string) => {
+    if (!url) return undefined
+    if (url.startsWith('http')) return url
+    if (url.startsWith('/media/')) return url // Local media files served from frontend
+    return `${cmsUrl}${url}` // CMS uploads from backend
+  }
+
   switch (section.sectionType) {
     case 'hero': {
       const isLightBg = section.backgroundStyle === 'light-institutional' || section.backgroundStyle === 'light'
       const bgClass = isLightBg ? 'bg-light-bg-primary' : 'bg-ink-900'
 
       return (
-        <section className={`relative overflow-hidden py-20 lg:py-32 ${bgClass}`}>
+        <section className={`relative overflow-hidden py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center ${bgClass}`}>
           {/* Background Video (muted, looping, no controls) */}
           {section.videoUrl && (
             <video
-              className="absolute inset-0 w-full h-full object-cover"
-              autoPlay={typeof window !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches}
+              className="absolute inset-0 w-full h-full object-fill"
+              autoPlay
               muted
               loop
               playsInline
-              poster={`${cmsUrl}${section.imageUrl || '/placeholder.png'}`}
+              poster={getImageUrl(section.imageUrl)}
             >
-              <source src={`${cmsUrl}${section.videoUrl}`} type="video/mp4" />
+              <source src={getVideoUrl(section.videoUrl)} type="video/mp4" />
             </video>
           )}
 
           {/* Background Image (fallback if no video or behind video) */}
           {section.imageUrl && !section.videoUrl && (
             <img
-              src={`${cmsUrl}${section.imageUrl}`}
+              src={getImageUrl(section.imageUrl)}
               alt={section.title}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-fill"
             />
           )}
 
@@ -108,35 +124,35 @@ export function SectionRenderer({
           )}
 
           {/* Content overlay */}
-          <div className="relative z-10">
-            <div className="max-w-screen-xl mx-auto px-6">
-              <div className="text-center mb-16">
+          <div className="relative z-10 w-full">
+            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center">
                 {section.subtitle && (
-                  <div className="mb-6 inline-block px-4 py-2 rounded-full bg-light-accent-light/20 border border-light-accent-primary/40">
-                    <span className="text-sm font-semibold text-light-accent-light">
+                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-light-accent-light/20 border border-light-accent-primary/40">
+                    <span className="text-xs sm:text-sm font-semibold text-light-accent-light">
                       {section.subtitle}
                     </span>
                   </div>
                 )}
                 <h1
-                  className="text-3xl sm:text-4xl lg:text-7xl font-bold mb-6 leading-tight text-white/70"
+                  className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white"
                   dangerouslySetInnerHTML={{ __html: section.heading || section.title }}
                 />
                 {section.description && (
                   <p
-                    className="text-base sm:text-lg lg:text-xl mb-12 max-w-3xl mx-auto leading-relaxed text-white"
+                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 sm:mb-12 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed text-white"
                     dangerouslySetInnerHTML={{
                       __html: section.description,
                     }}
                   />
                 )}
                 {(section.buttonText || section.secondaryButtonText) && (
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                     {section.buttonText && (
                       <Button
                         href={section.buttonUrl || '#'}
                         variant="primary"
-                        className="px-8 py-4 text-lg"
+                        className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg"
                       >
                         {section.buttonText}
                       </Button>
@@ -145,7 +161,7 @@ export function SectionRenderer({
                       <Button
                         href={section.secondaryButtonUrl || '#'}
                         variant="secondary"
-                        className="px-8 py-4 text-lg text-white/70 border-l-light-accent-primary/40"
+                        className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg text-white border-light-accent-primary/40"
                       >
                         {section.secondaryButtonText}
                       </Button>
@@ -162,7 +178,7 @@ export function SectionRenderer({
 
     case 'feature-grid':
       return (
-        <section className={`${bgClass} py-28 lg:py-48`}>
+        <section className={`${bgClass} py-28`}>
           <div className="max-w-screen-xl mx-auto px-6">
             {section.title && (
               <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-24 text-center ${textClass}`}>
@@ -207,7 +223,7 @@ export function SectionRenderer({
 
     case 'text-image':
       return (
-        <section className={`${bgClass} py-28 lg:py-48`}>
+        <section className={`${bgClass} py-28`}>
           <div className="max-w-screen-xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-28 items-center">
               <div>
@@ -244,9 +260,9 @@ export function SectionRenderer({
               {section.imageUrl && (
                 <div className="rounded-xl overflow-hidden shadow-2xl">
                   <img
-                    src={section.imageUrl.startsWith('http') ? section.imageUrl : `${cmsUrl}${section.imageUrl}`}
+                    src={getImageUrl(section.imageUrl)}
                     alt={section.title}
-                    className="w-full h-auto object-cover"
+                    className="w-full h-auto object-fill"
                   />
                 </div>
               )}
@@ -257,7 +273,7 @@ export function SectionRenderer({
 
     case 'cta':
       return (
-        <section className={`${bgClass} py-32 lg:py-48`}>
+        <section className={`${bgClass} py-28`}>
           <div className="max-w-4xl mx-auto px-6 text-center">
             {section.heading && (
               <h2
@@ -295,7 +311,7 @@ export function SectionRenderer({
 
     case 'stats':
       return (
-        <section className={`${bgClass} py-28 lg:py-48`}>
+        <section className={`${bgClass} py-28`}>
           <div className="max-w-screen-xl mx-auto px-6">
             {section.title && (
               <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-24 text-center ${textClass}`}>
@@ -384,7 +400,7 @@ export function SectionRenderer({
 
     default:
       return (
-        <section className={`${bgClass} py-28 lg:py-48`}>
+        <section className={`${bgClass} py-28`}>
           <div className="max-w-screen-xl mx-auto px-6">
             {section.heading && (
               <h2 className={`text-3xl lg:text-4xl font-semibold mb-8 ${textClass}`}>

@@ -4,7 +4,37 @@
  * All sections are editable from Payload CMS admin panel
  */
 
-export const defaultHomeSections = [
+interface SectionItem {
+  title?: string
+  description?: string
+  [key: string]: unknown
+}
+
+interface DefaultSection {
+  id: string
+  title: string
+  heading?: string
+  subtitle?: string
+  description?: string
+  sectionType: string
+  backgroundStyle?: string
+  items?: SectionItem[]
+  imageUrl?: string
+  videoUrl?: string
+  buttonText?: string
+  buttonUrl?: string
+  secondaryButtonText?: string
+  secondaryButtonUrl?: string
+  leftTitle?: string
+  leftDescription?: string
+  rightTitle?: string
+  rightDescription?: string
+  order?: number
+  published?: boolean
+  [key: string]: unknown
+}
+
+export const defaultHomeSections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Hero Section',
@@ -14,6 +44,8 @@ export const defaultHomeSections = [
       'Every number cryptographically signed and independently verifiable.',
     sectionType: 'hero',
     backgroundStyle: 'light-institutional',
+    videoUrl: '/media/videos/demo-app.mp4',
+    imageUrl: '/media/images/Terminal.png',
     buttonText: 'Request Demo',
     buttonUrl: '/platform',
     secondaryButtonText: 'Request Validation Report',
@@ -215,7 +247,7 @@ export const defaultHomeSections = [
   },
 ]
 
-export const defaultAboutSections = [
+export const defaultAboutSections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'About QRS',
@@ -279,7 +311,7 @@ export const defaultAboutSections = [
   },
 ]
 
-export const defaultPlatformSections = [
+export const defaultPlatformSections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Quantitative Risk Platform',
@@ -288,7 +320,7 @@ export const defaultPlatformSections = [
       'Enterprise-grade risk analytics built for institutional investors, asset managers, and reinsurance professionals.',
     sectionType: 'hero',
     backgroundStyle: 'light-institutional',
-    imageUrl: '/placeholder-platform-hero.png',
+    imageUrl: '/media/images/Terminal.png',
     buttonText: 'Request Demo',
     buttonUrl: '/contact',
     order: 0,
@@ -368,17 +400,17 @@ export const defaultPlatformSections = [
       {
         title: 'Risk Map',
         description: 'Geographic exposure visualization and concentration analysis',
-        imageUrl: '/placeholder-risk-map.png',
+        imageUrl: '/media/images/Risk_Map.png',
       },
       {
         title: 'EP Curve Analysis',
         description: 'Probability distribution and loss exceedance charts',
-        imageUrl: '/placeholder-ep-curve.png',
+        imageUrl: '/media/images/EP_Overlay.png',
       },
       {
         title: 'War Room Dashboard',
         description: 'Real-time event response and portfolio impact tracking',
-        imageUrl: '/placeholder-war-room.png',
+        imageUrl: '/media/images/War_Room_Dashboard.png',
       },
     ],
     order: 3,
@@ -392,7 +424,7 @@ export const defaultPlatformSections = [
       'Enterprise architecture built for precision, auditability, and institutional scale. Our quantum-native approach enables real-time risk quantification with cryptographic reproducibility at every step.',
     sectionType: 'text-image',
     backgroundStyle: 'light-institutional',
-    imageUrl: '/placeholder-quantum-arch.png',
+    imageUrl: '/media/images/Terminal.png',
     order: 4,
     published: true,
   },
@@ -478,7 +510,7 @@ export const defaultPlatformSections = [
   },
 ]
 
-export const defaultTrustSections = [
+export const defaultTrustSections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Built for Trust',
@@ -513,7 +545,7 @@ export const defaultTrustSections = [
   },
 ]
 
-export const defaultValidationSections = [
+export const defaultValidationSections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Internally Benchmarked',
@@ -573,7 +605,7 @@ export const defaultValidationSections = [
   },
 ]
 
-export const defaultVerifySections = [
+export const defaultVerifySections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Built to be Verified',
@@ -641,7 +673,7 @@ export const defaultVerifySections = [
   },
 ]
 
-export const defaultSolutionsSections = [
+export const defaultSolutionsSections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Solutions by Role',
@@ -693,7 +725,7 @@ export const defaultSolutionsSections = [
   },
 ]
 
-export const defaultRegulatorySections = [
+export const defaultRegulatorySections: DefaultSection[] = [
   {
     id: 'hero',
     title: 'Regulatory & Compliance',
@@ -767,7 +799,7 @@ export const defaultRegulatorySections = [
   },
 ]
 
-export const defaultSectionsByPage: Record<string, any[]> = {
+export const defaultSectionsByPage: Record<string, DefaultSection[]> = {
   home: defaultHomeSections,
   about: defaultAboutSections,
   platform: defaultPlatformSections,

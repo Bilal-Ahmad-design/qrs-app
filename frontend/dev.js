@@ -7,9 +7,9 @@ console.log('🚀 Starting Next.js + Payload CMS (unified on port 3000)...\n')
 const isWindows = platform() === 'win32'
 let payloadReady = false
 
-// Start Payload CMS server directly without npm wrapper
-console.log('📦 Starting Payload CMS server on port 3001...')
-const payloadServer = spawn('node', ['--import', 'tsx', 'cms/server.ts'], {
+// Start Mock Payload CMS server  (provides real database connectivity via API proxy)
+console.log('📦 Starting Payload CMS API server on port 3001 (PostgreSQL pooled)...')
+const payloadServer = spawn('node', ['--import', 'tsx', 'cms/mock-server.ts'], {
   stdio: 'pipe',
   cwd: process.cwd(),
   shell: isWindows,

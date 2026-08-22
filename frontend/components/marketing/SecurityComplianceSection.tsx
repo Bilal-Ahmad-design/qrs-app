@@ -29,7 +29,7 @@ export function SecurityComplianceSection({
   items,
 }: SecurityComplianceSectionProps) {
   return (
-    <section className="py-28 lg:py-48 bg-light-bg-primary">
+    <section className="py-28 bg-light-bg-primary">
       <div className="max-w-screen-xl mx-auto px-6">
         {(title || description) && (
           <div className="text-center mb-24">

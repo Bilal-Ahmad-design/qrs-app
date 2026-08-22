@@ -22,7 +22,7 @@ export function DeviceFrame({ imageSrc, imageAlt }: DeviceFrameProps) {
             <img
               src={imageSrc}
               alt={imageAlt || 'Dashboard screenshot'}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-fill"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">

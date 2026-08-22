@@ -35,14 +35,14 @@ export function HeroDeviceFrame({ imageSrc, imageAlt }: HeroDeviceFrameProps) {
                   <img
                     src={imageSrc}
                     alt={imageAlt || 'Dashboard screenshot'}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-fill"
                   />
                 ) : (
                   <Image
                     src="/hero-placeholder.svg"
                     alt={imageAlt || 'QRS Dashboard'}
                     fill
-                    className="object-cover"
+                    className="object-fill"
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                   />
