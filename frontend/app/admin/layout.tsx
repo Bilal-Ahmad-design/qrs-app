@@ -5,27 +5,34 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Menu, X, LogOut, Search, Settings, LayoutGrid, FileText, BookOpen, Image, Inbox, Link2, Users, History, Dot } from 'lucide-react'
 
-type NavItem = { label: string; href: string; icon: React.ReactNode; badge?: number }
+type NavItem = { label: string; href: string; icon: React.ReactNode; badge?: number; roles?: string[] }
 type NavGroup = { label: string; items: NavItem[] }
 
-const navGroups: NavGroup[] = [
+const allNavGroups: NavGroup[] = [
   { label: 'Overview', items: [{ label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutGrid className="w-4 h-4" /> }] },
   { label: 'Content', items: [
-    { label: 'Pages', href: '/admin/content?type=pages', icon: <FileText className="w-4 h-4" /> },
-    // { label: 'Blog', href: '/admin/content?type=blog', icon: <BookOpen className="w-4 h-4" /> },
-    { label: 'Media', href: '/admin/content?type=media', icon: <Image className="w-4 h-4" /> },
+    { label: 'Pages', href: '/admin/content?type=pages', icon: <FileText className="w-4 h-4" />, roles: ['super-admin', 'admin', 'editor'] },
+    { label: 'Media', href: '/admin/content?type=media', icon: <Image className="w-4 h-4" />, roles: ['super-admin', 'admin', 'editor'] },
   ]},
   { label: 'Engagement', items: [
-    { label: 'Submissions', href: '/admin/submissions', icon: <Inbox className="w-4 h-4" />, badge: 0 },
-    { label: 'Redirects', href: '/admin/redirects', icon: <Link2 className="w-4 h-4" /> },
+    { label: 'Submissions', href: '/admin/submissions', icon: <Inbox className="w-4 h-4" />, badge: 0, roles: ['super-admin', 'admin'] },
+    { label: 'Redirects', href: '/admin/redirects', icon: <Link2 className="w-4 h-4" />, roles: ['super-admin', 'admin'] },
   ]},
   { label: 'System', items: [
-    
-    { label: 'Users', href: '/admin/users', icon: <Users className="w-4 h-4" /> },
-    { label: 'Settings', href: '/admin/settings', icon: <Settings className="w-4 h-4" /> },
-    { label: 'Audit Logs', href: '/admin/logs', icon: <History className="w-4 h-4" /> },
+    { label: 'Users', href: '/admin/users', icon: <Users className="w-4 h-4" />, roles: ['super-admin', 'admin'] },
+    { label: 'Settings', href: '/admin/settings', icon: <Settings className="w-4 h-4" />, roles: ['super-admin', 'admin'] },
+    { label: 'Audit Logs', href: '/admin/logs', icon: <History className="w-4 h-4" />, roles: ['super-admin', 'admin'] },
   ]},
 ]
+
+function filterNavByRole(groups: NavGroup[], userRole: string): NavGroup[] {
+  return groups
+    .map(group => ({
+      ...group,
+      items: group.items.filter(item => !item.roles || item.roles.includes(userRole)),
+    }))
+    .filter(group => group.items.length > 0)
+}
 
 interface User {
   id: string
@@ -104,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
         <nav className="flex-1 overflow-y-auto py-4">
-          {navGroups.map((group) => (
+          {filterNavByRole(allNavGroups, user?.role || 'read-only').map((group) => (
             <div key={group.label} className="mb-6">
               {!collapsed && <div className="px-4 py-2 text-xs font-outfit font-semibold text-cream-50 opacity-60 uppercase tracking-wide">{group.label}</div>}
               <div className="space-y-1">
