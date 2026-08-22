@@ -14,8 +14,8 @@ export interface DevUser {
 }
 
 // Pre-hashed passwords (all passwords are "Password123!")
-// To create new hashes: await bcrypt.hash('Password123!', 10)
-const PASSWORD_HASH = '$2a$10$2EFZiTbVYG.wB1rKxhp4ZeaDxC9yLNVLFqFPxK0qV6T8d8kQfCkru'
+// Generated with: bcrypt.hash('Password123!', 10)
+const PASSWORD_HASH = '$2b$10$HU5WTdB.NcTlke5DI6Jf8u98ic/f/DiMNMl9WdI7ZKdJx0z7sSBau'
 
 export const DEV_USERS: DevUser[] = [
   {
