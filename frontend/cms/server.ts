@@ -17,13 +17,13 @@ if (!process.env.DATABASE_URL) {
   console.error('   Make sure .env.local exists with DATABASE_URL set')
   process.exit(1)
 }
-console.log(`📦 Database configured: ${process.env.DATABASE_URL.substring(0, 50)}...`)
+console.warn(`📦 Database configured: ${process.env.DATABASE_URL.substring(0, 50)}...`)
 
 async function start() {
   try {
-    console.log('🔄 Initializing Payload CMS...')
+    console.warn('🔄 Initializing Payload CMS...')
     const payload = await getPayload({ config })
-    console.log('✓ Payload initialized successfully')
+    console.warn('✓ Payload initialized successfully')
 
     const server = http.createServer(async (req, res) => {
       try {
@@ -45,7 +45,6 @@ async function start() {
           try {
             // Create a mock request object for Payload
             const method = req.method?.toUpperCase() || 'GET'
-            const url = new URL(`http://localhost:${PORT}${req.url}`)
 
             // Simple routing for collections API
             if (req.url?.startsWith('/api/collections/')) {
@@ -80,22 +79,22 @@ async function start() {
               res.writeHead(404)
               res.end('Not found')
             }
-          } catch (error: any) {
-            console.error('Error handling request:', error)
+          } catch (error) {
+            console.error('Error handling request:', error instanceof Error ? error.message : error)
             res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: error.message }))
+            res.end(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }))
           }
         })
-      } catch (error: any) {
-        console.error('Server error:', error)
+      } catch (error) {
+        console.error('Server error:', error instanceof Error ? error.message : error)
         res.writeHead(500)
         res.end('Server error')
       }
     })
 
     server.listen(PORT, () => {
-      console.log(`✓ Payload CMS server running on http://localhost:${PORT}`)
-      console.log(`  Admin: http://localhost:${PORT}/admin`)
+      console.warn(`✓ Payload CMS server running on http://localhost:${PORT}`)
+      console.warn(`  Admin: http://localhost:${PORT}/admin`)
     })
   } catch (error) {
     console.error('❌ Failed to start Payload CMS:', error instanceof Error ? error.message : error)
