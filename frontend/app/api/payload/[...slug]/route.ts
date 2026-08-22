@@ -1,40 +1,65 @@
 export const runtime = 'nodejs'
 
-// Payload CMS runs on port 3001 when started via npm run cms
-// The frontend (Next.js) runs on port 3000
-// This route proxies requests from /api/payload/* to Payload CMS
-const PAYLOAD_URL = process.env.PAYLOAD_CMS_URL || 'http://localhost:3001'
+import { getPayload } from 'payload'
+import config from '@/cms/payload.config'
+
+let payloadInstance: any = null
+
+async function getPayloadInstance() {
+  if (!payloadInstance) {
+    payloadInstance = await getPayload({ config })
+  }
+  return payloadInstance
+}
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
   try {
     const { slug } = await params
-    const path = slug.join('/')
+    const collection = slug[0]
+    const id = slug[1]
+
+    if (!collection) {
+      return new Response(JSON.stringify({ error: 'No collection specified' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const payload = await getPayloadInstance()
     const url = new URL(request.url)
-    const queryString = url.search
+    const searchParams = Object.fromEntries(url.searchParams)
 
-    const response = await fetch(`${PAYLOAD_URL}/api/${path}${queryString}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(request.headers.get('authorization') && {
-          authorization: request.headers.get('authorization')!,
-        }),
-      },
-    })
+    if (id) {
+      // Get single document
+      const doc = await payload.findByID({
+        collection,
+        id,
+      })
+      return new Response(JSON.stringify(doc), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    } else {
+      // Get collection with filters
+      const options: any = {}
+      if (searchParams.limit) options.limit = parseInt(searchParams.limit)
+      if (searchParams.page) options.page = parseInt(searchParams.page)
+      if (searchParams.sort) options.sort = searchParams.sort
 
-    const data = await response.json()
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: { 'Content-Type': 'application/json' },
-    })
+      const result = await payload.find({ collection, ...options })
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
   } catch (error) {
-    console.error('Payload proxy error:', error)
+    console.error('Payload API error:', error instanceof Error ? error.message : error)
     return new Response(
       JSON.stringify({
-        error: 'Failed to fetch from Payload CMS',
-        message: 'Make sure Payload is running: npm run cms',
+        error: 'Failed to fetch from Payload',
+        message: error instanceof Error ? error.message : 'Unknown error',
       }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     )
   }
 }
@@ -42,33 +67,109 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
 export async function POST(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
   try {
     const { slug } = await params
-    const path = slug.join('/')
-    const body = await request.text()
+    const collection = slug[0]
 
-    const response = await fetch(`${PAYLOAD_URL}/api/${path}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(request.headers.get('authorization') && {
-          authorization: request.headers.get('authorization')!,
-        }),
-      },
-      body,
+    if (!collection) {
+      return new Response(JSON.stringify({ error: 'No collection specified' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const body = await request.json()
+    const payload = await getPayloadInstance()
+
+    const result = await payload.create({
+      collection,
+      data: body,
     })
 
-    const data = await response.json()
-    return new Response(JSON.stringify(data), {
-      status: response.status,
+    return new Response(JSON.stringify(result), {
+      status: 201,
       headers: { 'Content-Type': 'application/json' },
     })
   } catch (error) {
-    console.error('Payload proxy error:', error)
+    console.error('Payload API error:', error instanceof Error ? error.message : error)
     return new Response(
       JSON.stringify({
-        error: 'Failed to create in Payload CMS',
-        message: 'Make sure Payload is running: npm run cms',
+        error: 'Failed to create in Payload',
+        message: error instanceof Error ? error.message : 'Unknown error',
       }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+}
+
+export async function PATCH(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+  try {
+    const { slug } = await params
+    const collection = slug[0]
+    const id = slug[1]
+
+    if (!collection || !id) {
+      return new Response(JSON.stringify({ error: 'Collection and ID required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const body = await request.json()
+    const payload = await getPayloadInstance()
+
+    const result = await payload.update({
+      collection,
+      id,
+      data: body,
+    })
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  } catch (error) {
+    console.error('Payload API error:', error instanceof Error ? error.message : error)
+    return new Response(
+      JSON.stringify({
+        error: 'Failed to update in Payload',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+}
+
+export async function DELETE(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+  try {
+    const { slug } = await params
+    const collection = slug[0]
+    const id = slug[1]
+
+    if (!collection || !id) {
+      return new Response(JSON.stringify({ error: 'Collection and ID required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const payload = await getPayloadInstance()
+
+    await payload.delete({
+      collection,
+      id,
+    })
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  } catch (error) {
+    console.error('Payload API error:', error instanceof Error ? error.message : error)
+    return new Response(
+      JSON.stringify({
+        error: 'Failed to delete in Payload',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     )
   }
 }
