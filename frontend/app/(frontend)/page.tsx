@@ -3,7 +3,9 @@ import { getPageSections } from '@/lib/cms-fetch'
 import { getDefaultSections } from '@/lib/default-sections'
 import { SectionRenderer } from '@/components/marketing/SectionRenderer'
 import { DeviceFrame } from '@/components/marketing/DeviceFrame'
-import { env } from '@/lib/env'
+
+// Render on-demand since CMS may not be available during build
+export const dynamic = 'force-dynamic'
 
 export const metadata = buildMetadata({
   title: 'QRS',
@@ -12,7 +14,6 @@ export const metadata = buildMetadata({
 })
 
 export default async function HomePage() {
-  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
   // Fetch sections from CMS, fall back to defaults
   let sections = await getPageSections('home')

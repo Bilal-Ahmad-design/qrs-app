@@ -3,6 +3,9 @@ import { getPageSections } from '@/lib/cms-fetch'
 import { getDefaultSections } from '@/lib/default-sections'
 import { SectionRenderer } from '@/components/marketing/SectionRenderer'
 
+// Render on-demand since CMS may not be available during build
+export const dynamic = 'force-dynamic'
+
 export const metadata = buildMetadata({
   title: 'Validation & Verification',
   description: 'Independent validation and verification of QRS quantitative models.',

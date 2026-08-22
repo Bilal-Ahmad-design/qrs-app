@@ -3,6 +3,9 @@ import { getPageSections } from '@/lib/cms-fetch'
 import { getDefaultSections } from '@/lib/default-sections'
 import { SectionRenderer } from '@/components/marketing/SectionRenderer'
 
+// Render on-demand since CMS may not be available during build
+export const dynamic = 'force-dynamic'
+
 export const metadata = buildMetadata({
   title: 'Built to be Verified',
   description: 'Cryptographically signed results with independent verification capabilities. Every calculation includes reproducibility certificates.',
