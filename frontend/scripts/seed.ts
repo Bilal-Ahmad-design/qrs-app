@@ -1,4 +1,6 @@
-import payload from 'payload'
+import 'dotenv/config'
+import { getPayload } from 'payload'
+import config from '../cms/payload.config'
 
 const SEED_DATA = {
   users: [
@@ -75,7 +77,7 @@ const SEED_DATA = {
 }
 
 async function seed() {
-  await payload.init()
+  const payload = await getPayload({ config })
 
   console.log('🌱 Seeding database...')
 
