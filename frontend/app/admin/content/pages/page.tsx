@@ -1,7 +1,11 @@
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable'
+import { requirePermission } from '@/lib/auth/authorization'
 import { Badge } from '@/components/admin/Badge'
 import { fetchPages, type PayloadPage } from '@/lib/admin/fetch-collections'
 import { Plus } from 'lucide-react'
+
+// Admin data is authenticated and must be fetched at request time.
+export const dynamic = 'force-dynamic'
 
 const columns: DataTableColumn[] = [
   { key: 'title', label: 'Title', width: '250px' },
@@ -27,6 +31,7 @@ function formatDate(dateString: string): string {
 }
 
 export default async function PagesPage() {
+  await requirePermission('content:update')
   const { docs: pages, totalDocs } = await fetchPages()
 
   const tableRows = pages.map((page: PayloadPage) => ({

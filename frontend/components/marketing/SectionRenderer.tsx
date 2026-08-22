@@ -6,7 +6,7 @@ import { ProductEvidence } from '@/components/marketing/ProductEvidence'
 import { RegulatoryGrid } from '@/components/marketing/RegulatoryGrid'
 import { SecurityComplianceSection } from '@/components/marketing/SecurityComplianceSection'
 import { SecurityFeaturesGrid } from '@/components/marketing/SecurityFeaturesGrid'
-import { env } from '@/lib/env'
+import { getCMSAssetUrl } from '@/lib/env'
 
 interface SectionItem {
   title?: string
@@ -64,24 +64,21 @@ export function SectionRenderer({
   section,
   children,
 }: SectionRendererProps) {
-  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
   const bgClass = bgStyles[section.backgroundStyle || 'light']
   const textClass = textStyles[section.backgroundStyle || 'light']
 
   // Helper to get image URLs - serve local media from frontend, CMS uploads from backend
   const getImageUrl = (url?: string) => {
     if (!url) return undefined
-    if (url.startsWith('http')) return url
     if (url.startsWith('/media/')) return url // Local media files served from frontend
-    return `${cmsUrl}${url}` // CMS uploads from backend
+    return getCMSAssetUrl(url) // CMS uploads from backend
   }
 
   // Helper to get video URLs - serve local media from frontend, CMS uploads from backend
   const getVideoUrl = (url?: string) => {
     if (!url) return undefined
-    if (url.startsWith('http')) return url
     if (url.startsWith('/media/')) return url // Local media files served from frontend
-    return `${cmsUrl}${url}` // CMS uploads from backend
+    return getCMSAssetUrl(url) // CMS uploads from backend
   }
 
   switch (section.sectionType) {

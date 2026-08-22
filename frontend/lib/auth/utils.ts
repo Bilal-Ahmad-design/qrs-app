@@ -1,7 +1,4 @@
-import { cookies } from 'next/headers'
-import { jwtVerify } from 'jose'
-
-const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key')
+import { getSession } from '@/lib/auth/session'
 
 export interface AuthUser {
   id: string
@@ -15,27 +12,8 @@ export interface AuthUser {
  * Reads from httpOnly secure cookie
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  try {
-    const cookieStore = await cookies()
-    const sessionToken = cookieStore.get('payload-session')?.value
-
-    if (!sessionToken) {
-      return null
-    }
-
-    // Verify JWT token from Payload
-    // Note: In production, this should verify with Payload's configured JWT secret
-    try {
-      const verified = await jwtVerify(sessionToken, SECRET)
-      return verified.payload as unknown as AuthUser
-    } catch (error) {
-      // Token invalid or expired
-      return null
-    }
-  } catch (error) {
-    console.error('Failed to get current user:', error)
-    return null
-  }
+  const session = await getSession()
+  return session?.user || null
 }
 
 /**

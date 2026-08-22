@@ -1,72 +1,49 @@
-export const runtime = 'nodejs'
+import { NextResponse } from 'next/server'
+import { requirePermission } from '@/lib/auth/authorization'
+import { getCMSApiUrl } from '@/lib/cms-url'
 
-// Proxy requests to Payload CMS running on port 3001
-const PAYLOAD_URL = 'http://localhost:3001'
+const protectedCollections: Record<string, string> = {
+  users: 'users:update',
+  'form-submissions': 'forms:update',
+  'audit-logs': 'audit:read',
+}
 
-export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+async function authorize(path: string, method: string) {
+  const collection = path.split('/')[0]
+  const permission = protectedCollections[collection] || (method === 'GET' ? undefined : 'content:update')
+  if (permission) await requirePermission(permission)
+}
+
+async function proxy(request: Request, params: Promise<{ slug: string[] }>) {
   try {
     const { slug } = await params
     const path = slug.join('/')
-    const url = new URL(request.url)
-    const queryString = url.search
+    await authorize(path, request.method)
 
-    const response = await fetch(`${PAYLOAD_URL}/api/payload/${path}${queryString}`, {
-      method: 'GET',
+    const requestUrl = new URL(request.url)
+    const response = await fetch(getCMSApiUrl(`/api/payload/${path}${requestUrl.search}`), {
+      method: request.method,
       headers: {
-        'Content-Type': 'application/json',
-        ...(request.headers.get('authorization') && {
-          authorization: request.headers.get('authorization')!,
-        }),
+        'Content-Type': request.headers.get('content-type') || 'application/json',
+        ...(request.headers.get('authorization') ? { authorization: request.headers.get('authorization')! } : {}),
       },
+      body: request.method === 'GET' ? undefined : await request.text(),
     })
 
-    const data = await response.json()
-    return new Response(JSON.stringify(data), {
+    return new NextResponse(response.body, {
       status: response.status,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': response.headers.get('content-type') || 'application/json' },
     })
   } catch (error) {
-    console.error('Payload proxy error:', error instanceof Error ? error.message : error)
-    return new Response(
-      JSON.stringify({
-        error: 'Payload CMS not responding',
-        message: 'Make sure Payload is running: npm run cms:server',
-      }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
-    )
+    const status = error instanceof Error && error.message === 'Forbidden' ? 403 : 502
+    return NextResponse.json({ error: status === 403 ? 'Forbidden' : 'CMS request failed' }, { status })
   }
 }
 
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+  return proxy(request, params)
+}
+
 export async function POST(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
-  try {
-    const { slug } = await params
-    const path = slug.join('/')
-    const body = await request.text()
-
-    const response = await fetch(`${PAYLOAD_URL}/api/payload/${path}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(request.headers.get('authorization') && {
-          authorization: request.headers.get('authorization')!,
-        }),
-      },
-      body,
-    })
-
-    const data = await response.json()
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  } catch (error) {
-    console.error('Payload proxy error:', error instanceof Error ? error.message : error)
-    return new Response(
-      JSON.stringify({
-        error: 'Payload CMS not responding',
-        message: 'Make sure Payload is running: npm run cms:server',
-      }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
-    )
-  }
+  return proxy(request, params)
 }

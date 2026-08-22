@@ -1,59 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { jwtVerify } from 'jose'
 
-// Routes that require authentication
 const PROTECTED_ROUTES = ['/admin']
 
-// Routes that are public (no auth required)
-const PUBLIC_ROUTES = [
-  '/',
-  '/login',
-  '/signup',
-  '/setup',
-  '/api/auth/login',
-  '/api/auth/signup',
-  '/api/auth/logout',
-  '/api/auth/me',
-  '/api/auth/forgot-password',
-  '/api/auth/reset-password',
-]
-
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-
-  // Check if route is public
-  const isPublicRoute = PUBLIC_ROUTES.some(route => pathname === route || pathname.startsWith(route))
-
-  if (isPublicRoute) {
+  if (!PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
     return NextResponse.next()
   }
 
-  // Check if route requires authentication
-  const requiresAuth = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
+  const token = request.cookies.get('payload-session')?.value
+  const secret = process.env.SESSION_SECRET || (process.env.NODE_ENV !== 'production' ? 'development-only-session-secret' : '')
 
-  if (!requiresAuth) {
-    return NextResponse.next()
+  if (token && secret) {
+    try {
+      const { payload } = await jwtVerify(token, new TextEncoder().encode(secret), { algorithms: ['HS256'] })
+      if (payload.user) return NextResponse.next()
+    } catch {
+      // Redirect below for expired or forged sessions.
+    }
   }
 
-  // Get the session cookie
-  const cookie = request.cookies.get('payload-session')
-  const hasSession = !!cookie?.value
-
-  // If no session and trying to access protected route, redirect to login
-  if (!hasSession) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(url)
-  }
-
-  // Session exists, allow request to proceed
-  // Detailed verification happens in API routes where we have Node.js crypto access
-  return NextResponse.next()
+  const url = request.nextUrl.clone()
+  url.pathname = '/login'
+  url.searchParams.set('redirect', pathname)
+  return NextResponse.redirect(url)
 }
 
-export const config = {
-  matcher: [
-    // Match all routes except static files and images
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.webp).*)',
-  ],
-}
+export const config = { matcher: ['/admin/:path*'] }
