@@ -3,6 +3,7 @@ import { getPageSections } from '@/lib/cms-fetch'
 import { getDefaultSections } from '@/lib/default-sections'
 import { SectionRenderer } from '@/components/marketing/SectionRenderer'
 import { DeviceFrame } from '@/components/marketing/DeviceFrame'
+import { env } from '@/lib/env'
 
 // Render on-demand since CMS may not be available during build
 export const dynamic = 'force-dynamic'
@@ -14,6 +15,18 @@ export const metadata = buildMetadata({
 })
 
 export default async function HomePage() {
+  const cmsUrl = env.NEXT_PUBLIC_CMS_URL
+
+  // Helper to get image URL - strip localhost and use relative paths
+  const getImageUrl = (url?: string) => {
+    if (!url) return undefined
+    if (url.includes('localhost:3001')) {
+      return url.replace('http://localhost:3001', '')
+    }
+    if (url.startsWith('/')) return url
+    if (url.startsWith('http')) return url
+    return cmsUrl ? `${cmsUrl}${url}` : `/${url}`
+  }
 
   // Fetch sections from CMS, fall back to defaults
   let sections = await getPageSections('home')
@@ -33,7 +46,7 @@ export default async function HomePage() {
           {/* Hero section gets DeviceFrame with uploaded image */}
           {section.sectionType === 'hero' && (
             <DeviceFrame
-              imageSrc={section.imageUrl ? `${cmsUrl}${section.imageUrl}` : undefined}
+              imageSrc={getImageUrl(section.imageUrl)}
               imageAlt={section.title}
             />
           )}
