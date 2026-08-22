@@ -12,7 +12,7 @@ export const metadata = buildMetadata({
 })
 
 export default async function HomePage() {
-  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+  const cmsUrl = env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3001'
 
   // Fetch sections from CMS, fall back to defaults
   let sections = await getPageSections('home')

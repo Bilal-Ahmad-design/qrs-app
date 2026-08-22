@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
+const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000'
 
 const nextConfig = {
   reactStrictMode: true,

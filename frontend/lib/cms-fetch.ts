@@ -3,10 +3,14 @@
  * All requests go through /api/payload proxy route handler
  */
 
-// Helper to get CMS URL - uses absolute URL for server-side, relative for client-side
+// Use the deployed CMS endpoint for server-side build and render requests.
 const getCMSURL = () => {
-  // Always use absolute URL in server components (no window check needed)
-  // process.env.NEXT_PUBLIC_CMS_URL is set to http://localhost:3000 in .env.local
+  const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || process.env.NEXT_PUBLIC_PAYLOAD_URL
+
+  if (cmsUrl) {
+    return cmsUrl.replace(/\/$/, '')
+  }
+
   return 'http://localhost:3000'
 }
 
