@@ -69,42 +69,6 @@ export const defaultHomeSections: DefaultSection[] = [
     published: true,
   },
   {
-    id: 'home-features',
-    title: 'Home Features',
-    heading: 'Enterprise-Grade Capabilities',
-    description: 'Built for institutional investors and risk managers',
-    sectionType: 'feature-grid',
-    backgroundStyle: 'light',
-    order: 1.2,
-    published: true,
-    items: [
-      {
-        icon: 'zap',
-        title: 'Lightning Fast',
-        description: 'Run models in seconds, not hours',
-        status: 'validated',
-      },
-      {
-        icon: 'lock',
-        title: 'Enterprise Security',
-        description: 'SOC 2 Type II compliant infrastructure',
-        status: 'validated',
-      },
-      {
-        icon: 'bar-chart-3',
-        title: 'Advanced Analytics',
-        description: 'Deep insights into catastrophe risk',
-        status: 'validated',
-      },
-      {
-        icon: 'globe',
-        title: 'Global Coverage',
-        description: 'Models for perils worldwide',
-        status: 'validated',
-      },
-    ],
-  },
-  {
     id: 'illustrative-models',
     title: 'Illustrative Models',
     heading: 'ILLUSTRATIVE',
@@ -562,7 +526,7 @@ export const defaultTrustSections: DefaultSection[] = [
     id: 'security',
     title: 'Security & Compliance',
     heading: 'Security & Compliance',
-    sectionType: 'security-compliance',
+    sectionType: 'feature-grid',
     backgroundStyle: 'light',
     items: [
       {
@@ -578,22 +542,6 @@ export const defaultTrustSections: DefaultSection[] = [
     ],
     order: 1,
     published: true,
-  },
-  {
-    id: 'security-features',
-    title: 'Security Features',
-    heading: 'Industry-Leading Security',
-    description: 'Multiple layers of protection for your data',
-    sectionType: 'feature-grid',
-    backgroundStyle: 'light',
-    order: 2,
-    published: true,
-    items: [
-      { icon: 'lock', title: 'SOC 2 Type II', description: 'Independently audited and certified', status: 'validated' },
-      { icon: 'shield', title: 'Encryption', description: 'End-to-end encryption for all data', status: 'validated' },
-      { icon: 'search', title: 'Compliance', description: 'GDPR, HIPAA, and other standards', status: 'validated' },
-      { icon: 'eye', title: 'Monitoring', description: '24/7 security monitoring', status: 'validated' },
-    ],
   },
 ]
 
