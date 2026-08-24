@@ -105,7 +105,7 @@ export function SectionRenderer({
           {/* Background Video (muted, looping, no controls) */}
           {section.videoUrl && (
             <video
-              className="absolute inset-0 w-full h-full object-fill"
+              className="absolute inset-0 w-full h-full object-cover"
               autoPlay
               muted
               loop
@@ -121,7 +121,7 @@ export function SectionRenderer({
             <img
               src={getImageUrl(section.imageUrl)}
               alt={section.title}
-              className="absolute inset-0 w-full h-full object-fill"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           )}
 
@@ -246,7 +246,7 @@ export function SectionRenderer({
                   <img
                     src={getImageUrl(section.imageUrl)}
                     alt={section.title}
-                    className="w-full h-auto object-fill"
+                    className="w-full h-auto object-cover"
                   />
                 </div>
               )}

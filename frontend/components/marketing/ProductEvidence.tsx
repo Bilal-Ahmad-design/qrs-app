@@ -54,7 +54,7 @@ export function ProductEvidence({ items, title, description }: ProductEvidencePr
               <img
                 src={getImageUrl(selectedItem.imageUrl)}
                 alt={selectedItem.title || 'Product screenshot'}
-                className="w-full h-full object-fill"
+                className="w-full h-full object-cover"
               />
               {/* Overlay for placeholder images */}
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />

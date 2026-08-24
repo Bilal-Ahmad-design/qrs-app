@@ -72,7 +72,7 @@ export default function MediaGrid({ type, columns = 3 }: MediaGridProps) {
               <img
                 src={file.url}
                 alt={file.filename}
-                className="w-full h-full object-fill"
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src = '/qrs-wordmark.webp'
                 }}

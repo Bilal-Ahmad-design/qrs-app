@@ -53,7 +53,7 @@ export function ProductShowcase({
                 src={posterUrl}
                 alt="Video poster"
                 fill
-                className="object-fill"
+                className="object-cover"
               />
             )}
             {!posterUrl && imageUrl && (
@@ -61,7 +61,7 @@ export function ProductShowcase({
                 src={imageUrl}
                 alt="Product showcase"
                 fill
-                className="object-fill"
+                className="object-cover"
               />
             )}
 
@@ -90,7 +90,7 @@ export function ProductShowcase({
               autoPlay
               controls
               poster={posterUrl || imageUrl}
-              className="w-full h-full object-fill"
+              className="w-full h-full object-cover"
               onEnded={() => setIsPlaying(false)}
             >
               <source src={videoUrl} type="video/mp4" />
@@ -103,7 +103,7 @@ export function ProductShowcase({
               src={imageUrl}
               alt="Product showcase"
               fill
-              className="object-fill"
+              className="object-cover"
             />
           </div>
         )}
