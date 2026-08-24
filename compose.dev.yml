@@ -1,0 +1,110 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: qrs-postgres-dev
+    environment:
+      POSTGRES_USER: qrsdev
+      POSTGRES_PASSWORD: qrsdev_password
+      POSTGRES_DB: qrs_dev
+      # Enable SSL for production-like behavior
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      # Persistent data volume
+      - qrs-postgres-data:/var/lib/postgresql/data
+      # Optional: mount init script for database setup
+      # - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qrsdev -d qrs_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - qrs-network
+    restart: unless-stopped
+
+  # QRS Application (Next.js + Integrated Payload CMS)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Build args (if needed for optimization)
+      args:
+        NODE_ENV: development
+    container_name: qrs-app-dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Node environment
+      NODE_ENV: development
+
+      # Database configuration
+      DATABASE_URL: postgresql://qrsdev:qrsdev_password@postgres:5432/qrs_dev
+      DATABASE_URL_UNPOOLED: postgresql://qrsdev:qrsdev_password@postgres:5432/qrs_dev
+
+      # Site URLs (http since local development)
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_CMS_URL: http://localhost:3000
+      NEXT_PUBLIC_CMS_API_URL: http://localhost:3000
+
+      # Secrets (DEVELOPMENT ONLY - these are insecure)
+      # Generate secure values for production!
+      PAYLOAD_SECRET: dev-secret-change-in-production
+      JWT_SECRET: dev-jwt-secret-change-in-production
+      SESSION_SECRET: dev-session-secret-change-in-production
+
+      # Logging
+      DEBUG: ''
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount media directory for live file sync
+      - ./frontend/public/media:/app/public/media
+
+      # Optional: mount source for development (requires rebuilding on changes)
+      # - ./frontend:/app/frontend
+    networks:
+      - qrs-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    # Uncomment to view logs in real-time
+    # stdin_open: true
+    # tty: true
+
+  # Optional: Adminer for database management (useful for development)
+  adminer:
+    image: adminer:latest
+    container_name: qrs-adminer-dev
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - qrs-network
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    restart: unless-stopped
+    profiles:
+      # Run with: docker-compose -f compose.dev.yml --profile tools up
+      - tools
+
+networks:
+  qrs-network:
+    driver: bridge
+    name: qrs-dev-network
+
+volumes:
+  qrs-postgres-data:
+    name: qrs-postgres-dev-data
+    driver: local

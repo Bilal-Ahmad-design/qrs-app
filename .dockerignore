@@ -1,0 +1,94 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+.github
+
+# Dependencies
+node_modules
+npm-debug.log
+npm-error.log
+yarn-error.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build artifacts
+.next
+.turbo
+dist
+build
+out
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-workspace
+.sublime-project
+*.code-workspace
+
+# Testing and coverage
+coverage
+.nyc_output
+.vitest-cache
+vitest.config.ts
+playwright.config.ts
+
+# Documentation and logs
+docs
+DOCS
+README.md
+DOCKER_AUDIT.md
+*.md
+logs
+*.log
+
+# Docker and container files
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# CI/CD
+.github/workflows
+.circleci
+.gitlab-ci.yml
+.travis.yml
+
+# Temporary and cache files
+.cache
+tmp
+temp
+*.tmp
+.turbo
+.vercel
+
+# Project-specific
+PAYLOAD_BACKUP*
+scripts/
+cms/seed*.ts
+cms/server.ts
+dev.js
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+.eslint-cache
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+*.pem
+.vercel
