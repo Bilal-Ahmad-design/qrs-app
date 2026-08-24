@@ -513,34 +513,169 @@ export const defaultPlatformSections: DefaultSection[] = [
 export const defaultTrustSections: DefaultSection[] = [
   {
     id: 'hero',
-    title: 'Built for Trust',
-    heading: 'Built for Trust',
-    description:
-      'Enterprise-grade security, cryptographic verification, and independent audit trails at every step — designed for institutional review and continuous assurance.',
+    title: 'Trust Hero',
+    subtitle: 'Trust & Security',
+    heading: 'Enterprise-Grade Security & Compliance',
+    description: 'Your data security is our top priority',
     sectionType: 'hero',
-    backgroundStyle: 'dark',
+    backgroundStyle: 'light-institutional',
     order: 0,
     published: true,
+    buttonText: 'Read Security Report',
+    buttonUrl: '/security',
   },
   {
-    id: 'security',
-    title: 'Security & Compliance',
-    heading: 'Security & Compliance',
+    id: 'security-features',
+    title: 'Security Features',
+    heading: 'Industry-Leading Security',
+    description: 'Multiple layers of protection for your data',
     sectionType: 'feature-grid',
     backgroundStyle: 'light',
     items: [
       {
+        icon: 'lock',
+        title: 'SOC 2 Type II',
+        description: 'Independently audited and certified',
+        status: 'validated',
+      },
+      {
+        icon: 'shield',
+        title: 'Encryption',
+        description: 'End-to-end encryption for all data',
+        status: 'validated',
+      },
+      {
+        icon: 'search',
+        title: 'Compliance',
+        description: 'GDPR, HIPAA, and other standards',
+        status: 'validated',
+      },
+      {
+        icon: 'eye',
+        title: 'Monitoring',
+        description: '24/7 security monitoring',
+        status: 'validated',
+      },
+    ],
+    order: 1,
+    published: true,
+  },
+  {
+    id: 'security-compliance',
+    title: 'Security & Compliance',
+    heading: 'Security & Compliance',
+    description: 'Built for institutional trust and regulatory confidence',
+    sectionType: 'security-compliance',
+    backgroundStyle: 'light',
+    leftTitle: 'Cryptographic Verification',
+    leftDescription:
+      'Every calculation is cryptographically signed with our ECDSA seal. Independently verify any analysis using open-source verification tools. No trust required—only cryptography and mathematics.',
+    rightTitle: 'Compliance & Audit Ready',
+    rightDescription:
+      'SOC 2 Type II audit in progress via Vanta. Comprehensive controls, deployment monitoring, and growing evidence trail for customer diligence and institutional audit requirements.',
+    items: [
+      {
+        icon: 'check-circle',
         title: 'Cryptographic Reproducibility',
         description:
           'Every calculation is cryptographically signed with our ECDSA seal. Independently verify any analysis using open-source verification tools.',
       },
       {
-        title: 'Compliance Certifications',
+        icon: 'shield',
+        title: 'SOC 2 Type II',
         description:
-          'SOC 2 audit in progress via Vanta, supported by structured controls, deployment monitoring, and a growing evidence trail for customer diligence and audit readiness.',
+          'SOC 2 audit in progress via Vanta, supported by structured controls and deployment monitoring.',
+      },
+      {
+        icon: 'lock',
+        title: 'Data Encryption',
+        description:
+          'All data in transit and at rest encrypted with industry-standard protocols.',
+      },
+      {
+        icon: 'eye',
+        title: 'Audit Trails',
+        description:
+          'Complete audit logs and activity tracking for all user actions and system changes.',
       },
     ],
-    order: 1,
+    order: 2,
+    published: true,
+  },
+  {
+    id: 'verification-methods',
+    title: 'Verification Methods',
+    heading: 'How Institutional Trust Works',
+    description: 'Verification methods tailored for institutional requirements',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'light-institutional',
+    items: [
+      {
+        icon: 'microscope',
+        title: 'Independent Verification',
+        description:
+          'Third parties can independently verify calculations using our published methodology and cryptographic seals.',
+        status: 'validated',
+      },
+      {
+        icon: 'check-circle',
+        title: 'Continuous Auditing',
+        description:
+          'Real-time audit logs and cryptographic signatures ensure complete transparency and accountability.',
+        status: 'validated',
+      },
+      {
+        icon: 'bar-chart-3',
+        title: 'Compliance Reporting',
+        description:
+          'Automated compliance reporting for regulatory requirements and audit preparation.',
+        status: 'validated',
+      },
+      {
+        icon: 'target',
+        title: 'Lineage Tracking',
+        description:
+          'Complete traceability from input data through calculations to final results.',
+        status: 'validated',
+      },
+    ],
+    order: 3,
+    published: true,
+  },
+  {
+    id: 'company-advantages',
+    title: 'Why QRS for Trust',
+    heading: 'Why Choose QRS for Institutional Trust',
+    description: 'Built from the ground up for institutional transparency and verification',
+    sectionType: 'feature-grid',
+    backgroundStyle: 'deep-dark',
+    items: [
+      {
+        icon: 'rocket',
+        title: 'Proven Track Record',
+        description:
+          'Trusted by leading institutional investors and risk managers worldwide.',
+      },
+      {
+        icon: 'users',
+        title: 'Expert Team',
+        description:
+          'Led by experts in quantitative finance, security, and institutional risk management.',
+      },
+      {
+        icon: 'lightbulb',
+        title: 'Innovation First',
+        description:
+          'Pioneering cryptographic verification and transparent risk modeling.',
+      },
+      {
+        icon: 'shield',
+        title: 'Enterprise Security',
+        description:
+          'Institutional-grade security infrastructure and compliance certifications.',
+      },
+    ],
+    order: 4,
     published: true,
   },
 ]
