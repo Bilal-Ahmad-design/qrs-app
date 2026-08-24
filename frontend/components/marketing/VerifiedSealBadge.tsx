@@ -21,11 +21,11 @@ export function VerifiedSealBadge({
     <div className="relative inline-block">
       <button
         onClick={() => setShowPopover(!showPopover)}
-        className="inline-flex items-center gap-space-4 px-space-6 py-space-4 rounded-lg border-2 border-teal-500 bg-teal-100 hover:bg-teal-150 transition-all duration-300 hover:border-teal-600 group"
+        className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-lg border-2 border-teal-500 bg-gradient-to-r from-teal-50 to-teal-100 hover:from-teal-100 hover:to-teal-150 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 transition-all duration-300 hover:border-teal-600 group cursor-pointer"
       >
         <CheckCircle2 size={20} className="text-teal-700 group-hover:text-teal-800 transition-colors flex-shrink-0" />
-        <div className="flex flex-col items-start gap-1">
-          <span className="text-sm font-bold text-teal-900 leading-tight">Lineage verified</span>
+        <div className="flex flex-col items-start gap-0.5 sm:gap-1">
+          <span className="text-sm sm:text-base font-bold text-teal-900 leading-tight">Lineage verified</span>
           <span className="font-mono text-xs text-teal-700 group-hover:text-teal-800 font-medium transition-colors">{truncatedHash}</span>
         </div>
       </button>
@@ -62,12 +62,12 @@ export function VerifiedSealBadge({
             </p>
 
             <a
-              href={verifierUrl}
+              href="https://qrsrisk.com/trust/seal-verification/verify"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-teal-600/50 hover:bg-teal-500/60 border border-teal-400/80 hover:border-teal-300 text-white hover:text-teal-50 font-bold transition-all duration-300 w-full justify-center"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 border border-teal-400/80 hover:border-teal-300 text-white hover:text-teal-50 font-bold transition-all duration-300 w-full shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50"
             >
-              Verify with qrs-replay
+              Verify with QRS-Reply
               <span>→</span>
             </a>
           </div>
