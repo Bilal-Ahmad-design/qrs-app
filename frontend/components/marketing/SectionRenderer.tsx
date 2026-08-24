@@ -99,9 +99,10 @@ export function SectionRenderer({
     case 'hero': {
       const isLightBg = section.backgroundStyle === 'light-institutional' || section.backgroundStyle === 'light'
       const bgClass = isLightBg ? 'bg-light-bg-primary' : 'bg-ink-900'
+      const hasMedia = section.videoUrl || section.imageUrl
 
       return (
-        <section className={`relative overflow-hidden py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center ${bgClass}`}>
+        <section className={`relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center ${bgClass}`}>
           {/* Background Video (muted, looping, no controls) */}
           {section.videoUrl && (
             <video
@@ -125,18 +126,20 @@ export function SectionRenderer({
             />
           )}
 
-          {/* Overlay for text readability - different colors based on page theme */}
-          {(section.videoUrl || section.imageUrl) && (
-            <div className={`absolute inset-0 ${
-              isLightBg
-                ? 'bg-gradient-to-b from-black/35 via-black/40 to-black/35'
-                : 'bg-gradient-to-b from-ink-900/60 via-ink-900/70 to-ink-900/60'
-            }`}></div>
-          )}
+          {/* Overlay for text readability - always show, different colors based on page theme and media */}
+          <div className={`absolute inset-0 ${
+            hasMedia
+              ? isLightBg
+                ? 'bg-gradient-to-b from-black/40 via-black/45 to-black/40'
+                : 'bg-gradient-to-b from-ink-900/65 via-ink-900/75 to-ink-900/65'
+              : isLightBg
+              ? 'bg-gradient-to-b from-light-accent-primary/15 via-light-accent-light/10 to-light-accent-primary/15'
+              : 'bg-gradient-to-b from-ink-800/30 via-ink-900/40 to-ink-800/30'
+          }`}></div>
 
           {/* Content overlay */}
           <div className="relative z-10 w-full">
-            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
               <div className="text-center">
                 {section.subtitle && (
                   <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-light-accent-light/20 border border-light-accent-primary/40">
@@ -189,14 +192,14 @@ export function SectionRenderer({
 
     case 'feature-grid':
       return (
-        <section className={`${bgClass} py-28`}>
-          <div className="max-w-screen-xl mx-auto px-6">
+        <section className={`${bgClass} py-12 sm:py-16 md:py-20 lg:py-28`}>
+          <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
             {section.title && (
-              <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-24 text-center ${textClass}`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-12 md:mb-16 lg:mb-24 text-center ${textClass}`}>
                 {section.title}
               </h2>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
               <FeatureGridCards items={section.items || []} backgroundStyle={section.backgroundStyle} />
             </div>
           </div>
@@ -205,9 +208,9 @@ export function SectionRenderer({
 
     case 'text-image':
       return (
-        <section className={`${bgClass} py-28`}>
-          <div className="max-w-screen-xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-28 items-center">
+        <section className={`${bgClass} py-12 sm:py-16 md:py-20 lg:py-28`}>
+          <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 lg:gap-20 xl:gap-28 items-center">
               <div>
                 {section.heading && (
                   <h2
@@ -255,8 +258,8 @@ export function SectionRenderer({
 
     case 'cta':
       return (
-        <section className={`${bgClass} py-28`}>
-          <div className="max-w-4xl mx-auto px-6 text-center">
+        <section className={`${bgClass} py-12 sm:py-16 md:py-20 lg:py-28`}>
+          <div className="max-w-4xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 text-center">
             {section.heading && (
               <h2
                 className={`text-3xl sm:text-4xl lg:text-6xl font-bold mb-8 ${textClass}`}
@@ -293,14 +296,14 @@ export function SectionRenderer({
 
     case 'stats':
       return (
-        <section className={`${bgClass} py-28`}>
-          <div className="max-w-screen-xl mx-auto px-6">
+        <section className={`${bgClass} py-12 sm:py-16 md:py-20 lg:py-28`}>
+          <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
             {section.title && (
-              <h2 className={`text-2xl sm:text-3xl lg:text-5xl font-bold mb-24 text-center ${textClass}`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-12 md:mb-16 lg:mb-24 text-center ${textClass}`}>
                 {section.title}
               </h2>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
               {section.items?.map((item) => (
                 <div key={item.title} className="text-center">
                   {item.value && (
@@ -382,16 +385,16 @@ export function SectionRenderer({
 
     default:
       return (
-        <section className={`${bgClass} py-28`}>
-          <div className="max-w-screen-xl mx-auto px-6">
+        <section className={`${bgClass} py-12 sm:py-16 md:py-20 lg:py-28`}>
+          <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
             {section.heading && (
-              <h2 className={`text-3xl lg:text-4xl font-semibold mb-8 ${textClass}`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold mb-4 sm:mb-6 md:mb-8 ${textClass}`}>
                 {section.heading}
               </h2>
             )}
             {section.description && (
               <div
-                className={`text-lg leading-relaxed ${
+                className={`text-sm sm:text-base md:text-lg leading-relaxed ${
                   section.backgroundStyle === 'dark' ||
                   section.backgroundStyle === 'deep-dark'
                     ? 'text-cream-100'
