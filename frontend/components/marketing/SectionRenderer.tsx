@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 import { Button } from '@/components/ui/Button'
-import { DataCard } from '@/components/marketing/DataCard'
 import { FeatureGridCards } from '@/components/marketing/FeatureGridCards'
 import { WorkflowSteps } from '@/components/marketing/WorkflowSteps'
 import { ProductEvidence } from '@/components/marketing/ProductEvidence'
@@ -33,7 +32,7 @@ interface PageSection {
   buttonUrl?: string
   secondaryButtonText?: string
   secondaryButtonUrl?: string
-  content?: Record<string, any>
+  content?: Record<string, unknown>
   leftTitle?: string
   leftDescription?: string
   rightTitle?: string
