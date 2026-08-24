@@ -60,10 +60,13 @@ qrs-app/ (Single Unified Next.js App)
 
 Key Features:
 ✅ Single deployment unit on Vercel
-✅ Public marketing site (no auth)
-✅ Protected admin dashboard (JWT auth)
-✅ Integrated Payload CMS
+✅ Public marketing site (24 routes, no auth)
+✅ Protected admin dashboard (JWT auth, RBAC)
+✅ Integrated Payload CMS with fallback defaults
 ✅ PostgreSQL shared database
+✅ Monochrome SVG icon system (no emojis)
+✅ Full responsive design (mobile-first)
+✅ Trust page with 5 sections + verification portal
 ✅ Comprehensive security & audit logging
 ```
 
@@ -496,12 +499,18 @@ frontend/
 │   └── not-found.tsx               # 404 page
 │
 ├── components/
-│   ├── marketing/                  # Marketing components (28 active)
-│   │   ├── ProductShowcase.tsx
-│   │   ├── VerificationFlow.tsx
-│   │   ├── RiskEngineShowcase.tsx
+│   ├── icons/                     # SVG icon components (monochrome)
+│   │   ├── ValidatedIcon.tsx      # Status: Validated (checkmark)
+│   │   ├── IllustrativeIcon.tsx   # Status: Illustrative (process)
+│   │   └── RoadmapIcon.tsx        # Status: Roadmap (forward arrow)
+│   │
+│   ├── marketing/                 # Marketing components (28 active)
+│   │   ├── SectionRenderer.tsx    # Renders all section types (hero, grid, compliance, etc)
+│   │   ├── FeatureGridCards.tsx   # Feature grid with SVG icons
+│   │   ├── SecurityComplianceSection.tsx  # 2-column security/compliance detail
+│   │   ├── VerifiedSealBadge.tsx  # Cryptographic verification badge
 │   │   ├── SecurityFeaturesGrid.tsx
-│   │   ├── SecurityComplianceSection.tsx
+│   │   ├── ProductShowcase.tsx
 │   │   └── ... (more components)
 │   │
 │   ├── layout/                     # Layout components
@@ -543,6 +552,73 @@ frontend/
 ```
 
 ---
+
+## Icon System Architecture
+
+### SVG Icon Components (Monochrome)
+
+```
+Status Indicators (No Emojis):
+├─ ValidatedIcon
+│  ├─ Component: checkmark SVG
+│  ├─ Color: teal-700 (light), teal-400 (dark)
+│  └─ Usage: Data card status badges
+│
+├─ IllustrativeIcon
+│  ├─ Component: process/analysis SVG
+│  ├─ Color: teal-700 (light), teal-400 (dark)
+│  └─ Usage: Model status indicators
+│
+└─ RoadmapIcon
+   ├─ Component: forward arrow SVG
+   ├─ Color: teal-700 (light), teal-400 (dark)
+   └─ Usage: Future roadmap items
+
+Lucide React Icons:
+├─ Used throughout: lock, shield, check-circle, eye, microscope, etc
+├─ Size: Responsive (16px-40px based on context)
+├─ Color: Contextual (teal-400/600 based on background)
+└─ Stroke: 1.5-2.5px for clean appearance
+```
+
+### Trust Page Section Structure (5 sections)
+
+```
+Order 0: Hero Section
+├─ Background: light-institutional
+├─ Content: "Enterprise-Grade Security & Compliance"
+└─ CTA: "Read Security Report" button
+
+Order 1: Security Features Grid
+├─ Type: feature-grid
+├─ Background: light
+├─ Items: 4 cards (SOC 2, Encryption, Compliance, Monitoring)
+├─ Icons: Lucide (lock, shield, search, eye)
+└─ Status: All marked as "validated"
+
+Order 2: Security & Compliance Section
+├─ Type: security-compliance (custom 2-column layout)
+├─ Left: Cryptographic Verification info + VerifiedSealBadge
+├─ Right: Compliance Certifications with items
+├─ Features:
+│  ├─ Lineage verified badge with cryptographic seal
+│  ├─ Link to QRS verification portal
+│  └─ Certification items with SVG icons
+
+Order 3: Verification Methods Grid
+├─ Type: feature-grid
+├─ Background: light-institutional
+├─ Items: 4 cards (Independent Verification, Auditing, etc)
+├─ Icons: Lucide (microscope, check-circle, bar-chart-3, target)
+└─ Status: All marked as "validated"
+
+Order 4: Company Advantages Section
+├─ Type: feature-grid
+├─ Background: deep-dark (institutional)
+├─ Items: 4 cards (Track Record, Expertise, Innovation, Security)
+├─ Icons: Lucide (rocket, users, lightbulb, shield)
+└─ No status badges
+```
 
 ## Component Architecture
 
@@ -691,6 +767,46 @@ base-uri:      'self'
 ```
 
 ---
+
+## Responsive Design System
+
+### Breakpoint Strategy
+
+```
+Mobile First Approach:
+├─ Base (< 640px): 1 column, py-12, px-4
+├─ sm (≥ 640px): 2 columns, py-16, px-5
+├─ md (≥ 768px): 2-3 columns, py-20, px-6
+├─ lg (≥ 1024px): 3-4 columns, py-28, px-8
+├─ xl (≥ 1280px): Full 4-column layout
+└─ 2xl (≥ 1536px): Max-width constrained
+
+Padding System:
+├─ Vertical: py-12 sm:py-16 md:py-20 lg:py-28
+├─ Horizontal: px-4 sm:px-5 md:px-6 lg:px-8
+└─ Gap: gap-4 sm:gap-6 md:gap-8 lg:gap-10
+
+Typography Scaling:
+├─ Headings: text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+├─ Body: text-sm sm:text-base md:text-lg
+└─ Small: text-xs sm:text-sm
+```
+
+### Section Overlay Colors
+
+```
+Hero Section:
+├─ With media (light): bg-gradient-to-b from-black/40 via-black/45 to-black/40
+├─ With media (dark): bg-gradient-to-b from-ink-900/65 via-ink-900/75 to-ink-900/65
+├─ Without media (light): from-light-accent-primary/15 via-light-accent-light/10 to-light-accent-primary/15
+└─ Without media (dark): from-ink-800/30 via-ink-900/40 to-ink-800/30
+
+Grid Layouts:
+├─ Feature grid: grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+├─ Stats: grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
+├─ 2-Column: grid-cols-1 md:grid-cols-2
+└─ Items grid: grid-cols-2 sm:grid-cols-2 lg:grid-cols-3
+```
 
 ## Performance Optimization
 
