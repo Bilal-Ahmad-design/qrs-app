@@ -1,4 +1,7 @@
 import type { ReactNode } from 'react';
+import { ValidatedIcon } from '@/components/icons/ValidatedIcon';
+import { IllustrativeIcon } from '@/components/icons/IllustrativeIcon';
+import { RoadmapIcon } from '@/components/icons/RoadmapIcon';
 
 interface DataCardProps {
   variant: 'light' | 'dark';
@@ -10,16 +13,22 @@ interface DataCardProps {
 const statusStyles = {
   validated: {
     badge: 'bg-teal-100 text-teal-700',
-    label: '✅ Validated',
+    label: 'Validated',
   },
   illustrative: {
     badge: 'bg-amber-100 text-amber-700',
-    label: '🔄 Illustrative',
+    label: 'Illustrative',
   },
   roadmap: {
     badge: 'bg-gray-200 text-gray-700',
-    label: '🛣️ Roadmap',
+    label: 'Roadmap',
   },
+};
+
+const statusIcons: Record<string, React.ReactNode> = {
+  validated: <ValidatedIcon />,
+  illustrative: <IllustrativeIcon />,
+  roadmap: <RoadmapIcon />,
 };
 
 export function DataCard({ variant, children, className = '', status }: DataCardProps) {
@@ -37,7 +46,8 @@ export function DataCard({ variant, children, className = '', status }: DataCard
       className={`${baseClasses} ${variantClasses[variant]} ${className}`}
     >
       {status && (
-        <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 ${statusStyles[status].badge}`}>
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-4 ${statusStyles[status].badge}`}>
+          {statusIcons[status]}
           {statusStyles[status].label}
         </div>
       )}

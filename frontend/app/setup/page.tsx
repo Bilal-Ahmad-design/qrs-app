@@ -13,7 +13,7 @@ export default function SetupPage() {
 
         <div className="bg-ink-800 rounded-lg p-8 border border-teal-700 border-opacity-20">
           <div className="mb-8">
-            <h2 className="text-xl font-outfit font-bold text-cream-50 mb-4">✅ Ready to Log In</h2>
+            <h2 className="text-xl font-outfit font-bold text-cream-50 mb-4">Ready to Log In</h2>
             <p className="text-cream-50 text-opacity-80 font-poppins mb-6">
               These test credentials are pre-configured and ready to use. Choose a role below and log in to the admin dashboard.
             </p>

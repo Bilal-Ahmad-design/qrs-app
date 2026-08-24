@@ -1,3 +1,4 @@
+/* global process */
 /** @type {import('next').NextConfig} */
 
 const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'
@@ -24,7 +25,7 @@ const nextConfig = {
         destination: redirect.destinationPath,
         permanent: redirect.type === '301',
       }))
-    } catch (error) {
+    } catch {
       console.warn('Failed to load redirects from CMS, using empty list')
       return []
     }

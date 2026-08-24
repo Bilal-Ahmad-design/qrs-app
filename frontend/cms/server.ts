@@ -16,7 +16,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const PORT = 3001
 const PAYLOAD_DEV_PORT = 3002
 
-console.warn(`📦 Starting Payload CMS via CLI on port ${PAYLOAD_DEV_PORT}...`)
+console.warn(`Starting Payload CMS via CLI on port ${PAYLOAD_DEV_PORT}...`)
 
 // Start Payload dev server via CLI from frontend directory (where payload.config.ts is)
 const payloadProc = spawn('npx', ['payload', 'dev'], {
@@ -27,7 +27,7 @@ const payloadProc = spawn('npx', ['payload', 'dev'], {
 
 // Wait for Payload to start, then start our proxy
 setTimeout(() => {
-  console.warn(`🔄 Starting proxy server on port ${PORT}...`)
+  console.warn(`Starting proxy server on port ${PORT}...`)
 
   const proxyServer = http.createServer(async (req, res) => {
     try {

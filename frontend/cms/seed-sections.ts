@@ -537,7 +537,7 @@ async function seedSections() {
       }
     }
 
-    console.warn('[Seed] ✅ Seeding complete!')
+    console.warn('[Seed] Seeding complete!')
     process.exit(0)
   } catch (error) {
     console.error('[Seed] ❌ Error:', error)

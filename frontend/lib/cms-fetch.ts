@@ -7,12 +7,16 @@
 const getCMSURL = () => {
   // Use environment variable, fallback to relative path for same-origin requests
   // In production on Vercel, this allows NEXT_PUBLIC_CMS_URL to be configured dynamically
-  // If not set, defaults to same origin (port 3000 for local, Vercel domain for production)
   if (process.env.NEXT_PUBLIC_CMS_URL) {
     return process.env.NEXT_PUBLIC_CMS_URL
   }
-  // Fallback: same origin (works for local and production)
-  return typeof window !== 'undefined' ? window.location.origin : ''
+  // Server-side: use relative path (Next.js will serve through /api/payload proxy)
+  // Browser-side: use window.location.origin for same-origin requests
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  // Default: empty string for relative path resolution
+  return ''
 }
 
 interface CMSPage {
