@@ -131,7 +131,7 @@ async function seed() {
       }
     }
 
-    console.log('✅ Seeding complete!')
+    console.log('Seeding complete!')
   } catch (error) {
     console.error('❌ Seeding failed:', error)
     process.exit(1)

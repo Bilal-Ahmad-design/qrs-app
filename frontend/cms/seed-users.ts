@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 
 async function seed() {
   try {
-    console.log('🔄 Connecting to database...')
+    console.log('Connecting to database...')
     const payload = await getPayload({ config })
     console.log('✓ Connected to Payload')
 
@@ -59,7 +59,7 @@ async function seed() {
       }
     }
 
-    console.log('✅ Seed complete!')
+    console.log('Seed complete!')
     process.exit(0)
   } catch (error) {
     console.error('❌ Seed failed:', error instanceof Error ? error.message : error)

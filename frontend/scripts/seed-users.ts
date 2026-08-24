@@ -61,7 +61,7 @@ async function seedUsers() {
 
       if (response.ok) {
         const created = await response.json()
-        console.log(`✅ Created: ${user.email} (${user.role})`)
+        console.log(`Created: ${user.email} (${user.role})`)
       } else {
         const error = await response.json()
         if (error.message?.includes('unique')) {
@@ -75,7 +75,7 @@ async function seedUsers() {
     }
   }
 
-  console.log('\n✅ Seed complete!')
+  console.log('\nSeed complete!')
   console.log('\n📝 Test Credentials:')
   console.log('────────────────────────────────────────')
   testUsers.forEach(user => {
