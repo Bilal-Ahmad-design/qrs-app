@@ -17,16 +17,15 @@ interface FeatureGridCardsProps {
 }
 
 export function FeatureGridCards({ items, backgroundStyle }: FeatureGridCardsProps) {
+  const isDark = backgroundStyle === 'dark' || backgroundStyle === 'deep-dark'
+  const linkColor = isDark ? 'text-teal-400' : 'text-teal-600'
+
   return (
     <>
-      {items?.map((item) => (
+      {items?.map((item, index) => (
         <DataCard
-          key={item.title}
-          variant={
-            backgroundStyle === 'dark' || backgroundStyle === 'deep-dark'
-              ? 'dark'
-              : 'light'
-          }
+          key={`${item.title}-${index}`}
+          variant={isDark ? 'dark' : 'light'}
           status={item.status}
         >
           {item.icon && (
@@ -34,11 +33,7 @@ export function FeatureGridCards({ items, backgroundStyle }: FeatureGridCardsPro
               <IconRenderer
                 iconName={item.icon}
                 size={40}
-                className={
-                  backgroundStyle === 'dark' || backgroundStyle === 'deep-dark'
-                    ? 'text-teal-400'
-                    : 'text-teal-600'
-                }
+                className={isDark ? 'text-teal-400' : 'text-teal-600'}
               />
             </div>
           )}
@@ -53,7 +48,7 @@ export function FeatureGridCards({ items, backgroundStyle }: FeatureGridCardsPro
           {item.link && (
             <a
               href={item.link}
-              className="text-teal-600 font-semibold inline-flex items-center mt-4 group hover:translate-x-1 transition-transform"
+              className={`${linkColor} font-semibold inline-flex items-center mt-4 group hover:translate-x-1 transition-transform`}
             >
               Learn more →
             </a>

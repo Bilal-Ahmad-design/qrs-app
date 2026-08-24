@@ -53,9 +53,32 @@ const iconMap: Record<string, any> = {
 export function IconRenderer({ iconName, size = 32, className = '', strokeWidth = 1.5 }: IconRendererProps) {
   if (!iconName) return null
 
-  const IconComponent = iconMap[iconName.toLowerCase()]
+  const normalizedName = iconName.toLowerCase()
+  const IconComponent = iconMap[normalizedName]
+
   if (!IconComponent) {
-    return null
+    // Fallback for unmapped icons - show placeholder with help text
+    return (
+      <div
+        className={className}
+        title={`Icon not found: ${iconName}`}
+        style={{ width: size, height: size, opacity: 0.4 }}
+      >
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4M12 8h.01" />
+        </svg>
+      </div>
+    )
   }
 
   return (
