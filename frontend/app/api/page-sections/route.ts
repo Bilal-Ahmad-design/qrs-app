@@ -1,29 +1,48 @@
 export const runtime = 'nodejs'
 
+import { getPayload } from 'payload'
+import config from '@/cms/payload.config'
+
+let payload: Awaited<ReturnType<typeof getPayload>> | null = null
+
+async function getPayloadInstance() {
+  if (!payload) {
+    payload = await getPayload({ config })
+  }
+  return payload
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const page = url.searchParams.get('page') || 'home'
-  const limit = url.searchParams.get('limit') || '100'
+  const limit = Math.min(parseInt(url.searchParams.get('limit') || '100'), 1000)
+  const pageNum = Math.max(1, parseInt(url.searchParams.get('page') || '1'))
 
   try {
-    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || '/api/payload'
-    const apiUrl = `${payloadUrl}/page-sections?page=1&limit=${limit}&where[page][equals]=${page}&where[published][equals]=true&sort=-order`
+    const payloadInstance = await getPayloadInstance()
 
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      cache: 'no-store',
+    const result = await payloadInstance.find({
+      collection: 'page-sections',
+      limit,
+      page: pageNum,
+      where: {
+        and: [
+          {
+            page: {
+              equals: page,
+            },
+          },
+          {
+            published: {
+              equals: true,
+            },
+          },
+        ],
+      },
+      sort: 'order',
     })
 
-    if (!response.ok) {
-      return Response.json(
-        { error: 'Failed to fetch sections from CMS' },
-        { status: response.status }
-      )
-    }
-
-    const data = await response.json()
-    return Response.json(data)
+    return Response.json(result)
   } catch (error) {
     console.error('Page sections error:', error)
     return Response.json(

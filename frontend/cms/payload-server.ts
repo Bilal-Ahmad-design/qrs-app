@@ -2,22 +2,23 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 import config from './payload.config'
 
-let payloadInstance: ReturnType<typeof getPayload> | null = null
+let payloadInstance: Awaited<ReturnType<typeof getPayload>> | null = null
+
+async function getPayloadInstance() {
+  if (!payloadInstance) {
+    console.log('[Payload] Initializing CMS...')
+    payloadInstance = await getPayload({ config })
+    console.log('[Payload] ✓ Ready')
+  }
+  return payloadInstance
+}
 
 export async function initializePayload() {
-  if (!payloadInstance) {
-    console.log('[Payload] Initializing...')
-    payloadInstance = await getPayload({ config })
-    console.log('[Payload] Initialized')
-  }
+  const payload = await getPayloadInstance()
 
-  const payload = await payloadInstance
-
-  // Return a handler function that processes requests
   return async (request: Request): Promise<Response> => {
     const url = new URL(request.url)
     const path = url.pathname.replace('/api/payload', '') || '/'
-    const searchParams = url.search
 
     try {
       const method = request.method.toUpperCase()
@@ -26,7 +27,7 @@ export async function initializePayload() {
       // Parse the path to determine collection and ID
       const parts = path.split('/').filter(Boolean)
 
-      // Map collection names to slugs (handle both plural and singular)
+      // Map collection names to slugs
       const collectionMap: Record<string, string> = {
         'page-sections': 'page-sections',
         'pages': 'pages',
@@ -68,8 +69,8 @@ export async function initializePayload() {
           })
         } else {
           // Get collection with filtering and pagination
-          const limit = parseInt(String(url.searchParams.get('limit') || '100'))
-          const page = parseInt(String(url.searchParams.get('page') || '1'))
+          const limit = Math.min(parseInt(String(url.searchParams.get('limit') || '100')), 1000)
+          const page = Math.max(1, parseInt(String(url.searchParams.get('page') || '1')))
 
           const docs = await payload.find({
             collection: collectionSlug,
@@ -122,7 +123,7 @@ export async function initializePayload() {
         })
       }
     } catch (error: any) {
-      console.error('[Payload] Error:', error.message)
+      console.error('[Payload] Error:', error.message || error)
       return new Response(JSON.stringify({ error: error.message || 'Server error' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
