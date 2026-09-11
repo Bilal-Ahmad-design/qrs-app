@@ -36,16 +36,30 @@ export default function CollectionPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const res = await fetch(`/api/payload/${slug}?limit=50&page=1`)
+
+        // Add 10 second timeout
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000)
+
+        const res = await fetch(`/api/payload/${slug}?limit=50&page=1`, {
+          signal: controller.signal,
+        })
+
+        clearTimeout(timeoutId)
 
         if (!res.ok) {
-          throw new Error(`Failed to fetch ${slug}`)
+          throw new Error(`API error: ${res.status}`)
         }
 
         const data = await res.json()
         setItems(data.docs || [])
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load collection')
+        const message = err instanceof Error ? err.message : 'Failed to load collection'
+        if (message.includes('abort')) {
+          setError('API request timed out - database may be slow')
+        } else {
+          setError(message)
+        }
       } finally {
         setLoading(false)
       }

@@ -4,10 +4,20 @@ import { initializePayload } from '@/cms/payload-server'
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
   try {
+    console.log('[API] GET request to:', request.url)
+    const start = Date.now()
+
     const handler = await initializePayload()
-    return await handler(request)
+    console.log('[API] Payload initialized in', Date.now() - start, 'ms')
+
+    const response = await handler(request)
+    console.log('[API] Response ready in', Date.now() - start, 'ms')
+
+    return response
   } catch (error) {
-    console.error('Payload error:', error instanceof Error ? error.message : error)
+    console.error('[API] Payload error:', error instanceof Error ? error.message : error)
+    console.error('[API] Full error:', error)
+
     return new Response(
       JSON.stringify({
         error: 'Payload CMS error',
