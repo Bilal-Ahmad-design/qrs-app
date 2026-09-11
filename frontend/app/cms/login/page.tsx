@@ -20,7 +20,8 @@ export default function CMSLoginPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/cms-auth/login', {
+      // Use the fast, proven auth endpoint
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -40,8 +41,7 @@ export default function CMSLoginPage() {
         localStorage.removeItem('remembered-cms-email')
       }
 
-      localStorage.setItem('payload-token', data.token)
-      localStorage.setItem('payload-user', JSON.stringify(data.user))
+      // Redirect to CMS admin dashboard
       router.push('/cms/admin')
     } catch (err) {
       setError('An error occurred. Please try again.')
