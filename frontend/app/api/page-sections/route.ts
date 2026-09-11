@@ -1,16 +1,6 @@
 export const runtime = 'nodejs'
 
-import { getPayload } from 'payload'
-import config from '@/cms/payload.config'
-
-let payload: Awaited<ReturnType<typeof getPayload>> | null = null
-
-async function getPayloadInstance() {
-  if (!payload) {
-    payload = await getPayload({ config })
-  }
-  return payload
-}
+import { getPayloadSingleton } from '@/cms/singleton'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -19,7 +9,7 @@ export async function GET(request: Request) {
   const pageNum = Math.max(1, parseInt(url.searchParams.get('page') || '1'))
 
   try {
-    const payloadInstance = await getPayloadInstance()
+    const payloadInstance = await getPayloadSingleton()
 
     const result = await payloadInstance.find({
       collection: 'page-sections',

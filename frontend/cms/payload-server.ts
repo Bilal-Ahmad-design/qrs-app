@@ -1,20 +1,8 @@
 import 'dotenv/config'
-import { getPayload } from 'payload'
-import config from './payload.config'
-
-let payloadInstance: Awaited<ReturnType<typeof getPayload>> | null = null
-
-async function getPayloadInstance() {
-  if (!payloadInstance) {
-    console.log('[Payload] Initializing CMS...')
-    payloadInstance = await getPayload({ config })
-    console.log('[Payload] ✓ Ready')
-  }
-  return payloadInstance
-}
+import { getPayloadSingleton } from './singleton'
 
 export async function initializePayload() {
-  const payload = await getPayloadInstance()
+  const payload = await getPayloadSingleton()
 
   return async (request: Request): Promise<Response> => {
     const url = new URL(request.url)
