@@ -128,7 +128,7 @@ const mockData = {
       id: '2',
       page: 'home',
       sectionType: 'feature-grid',
-      title: 'Home Features',
+      title: 'Features',
       heading: 'Enterprise-Grade Capabilities',
       description: 'Built for institutional investors and risk managers',
       backgroundStyle: 'light',
@@ -420,7 +420,7 @@ const server = http.createServer((req, res) => {
     if (req.method === 'GET') {
       // Get single document
       if (id) {
-        const doc = (collectionData as any[]).find((d) => d.id === id)
+        const doc = (collectionData as Array<Record<string, unknown>>).find((d) => d.id === id)
         if (doc) {
           res.writeHead(200, { 'Content-Type': 'application/json' })
           res.end(JSON.stringify(doc))
@@ -438,7 +438,7 @@ const server = http.createServer((req, res) => {
       const limit = parseInt(searchParams.get('limit') || '10')
       const skip = (page - 1) * limit
 
-      let filtered = [...(collectionData as any[])]
+      let filtered = [...(collectionData as Array<Record<string, unknown>>)]
 
       // Filter by published status if requested
       if (searchParams.has('published')) {
@@ -494,18 +494,18 @@ const server = http.createServer((req, res) => {
       req.on('end', () => {
         try {
           const data = JSON.parse(body)
-          const newId = String((collectionData as any[]).length + 1)
+          const newId = String((collectionData as Array<Record<string, unknown>>).length + 1)
           const newDoc = {
             id: newId,
             ...data,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }
-          ;(collectionData as any[]).push(newDoc)
+          ;(collectionData as Array<Record<string, unknown>>).push(newDoc as Record<string, unknown>)
 
           res.writeHead(201, { 'Content-Type': 'application/json' })
           res.end(JSON.stringify(newDoc))
-        } catch (error) {
+        } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' })
           res.end(JSON.stringify({ error: 'Invalid JSON' }))
         }
@@ -524,14 +524,14 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.warn(`running on http://localhost:${PORT}`)
-  console.warn(`📊 Mock Data Server - Real database credentials pending`)
-  console.warn(`✓ Available collections:`)
+  console.warn(`Mock Data Server - Real database credentials pending`)
+  console.warn(`Available collections:`)
   Object.keys(mockData).forEach((col) => {
-    console.warn(`  - ${col} (${(mockData as any)[col].length} items)`)
+    console.warn(`  - ${col} (${(mockData as Record<string, Array<Record<string, unknown>>>)[col].length} items)`)
   })
 })
 
 process.on('SIGINT', () => {
-  console.log('\n⏹️  Shutting down...')
+  console.warn('\nShutting down...')
   server.close(() => process.exit(0))
 })

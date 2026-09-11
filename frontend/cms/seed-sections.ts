@@ -33,7 +33,7 @@ const sections = [
   {
     page: 'home',
     sectionType: 'feature-grid',
-    title: 'Home Features',
+    title: 'Features',
     heading: 'Enterprise-Grade Capabilities',
     description: 'Built for institutional investors and risk managers',
     backgroundStyle: 'light',
