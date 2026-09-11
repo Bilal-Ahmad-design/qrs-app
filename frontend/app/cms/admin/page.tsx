@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface User {
+  id: string
   email: string
   fullname?: string
   role: string
@@ -16,28 +17,22 @@ export default function CMSAdminPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuth = () => {
       try {
-        const token = localStorage.getItem('payload-token')
-        if (!token) {
+        // Check if user data exists in localStorage (saved at login)
+        const userJson = localStorage.getItem('payload-user')
+
+        if (!userJson) {
           router.push('/cms/login')
           return
         }
 
-        const res = await fetch('/api/payload/users/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-
-        if (!res.ok) {
-          localStorage.removeItem('payload-token')
-          router.push('/cms/login')
-          return
-        }
-
-        const userData = await res.json()
+        const userData = JSON.parse(userJson)
         setUser(userData)
       } catch (err) {
         console.error('Auth check failed:', err)
+        localStorage.removeItem('payload-token')
+        localStorage.removeItem('payload-user')
         router.push('/cms/login')
       } finally {
         setLoading(false)

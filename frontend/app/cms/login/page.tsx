@@ -41,6 +41,9 @@ export default function CMSLoginPage() {
         localStorage.removeItem('remembered-cms-email')
       }
 
+      // Save user data for admin dashboard (no need for token since we use session)
+      localStorage.setItem('payload-user', JSON.stringify(data.user))
+
       // Redirect to CMS admin dashboard
       router.push('/cms/admin')
     } catch (err) {
