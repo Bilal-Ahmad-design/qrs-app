@@ -44,16 +44,16 @@ export function CookieConsentBanner() {
     <>
       {/* Banner (shown only on first visit) */}
       {!hasConsented && (
-        <div className="fixed bottom-0 left-0 right-0 bg-ink-800 border-t border-teal-700 p-space-6 z-50">
+        <div className="fixed bottom-0 left-0 right-0 bg-ink-800 border-t border-teal-700 p-6 z-50">
           <div className="max-w-screen-xl mx-auto">
-            <p className="text-body text-white mb-space-4">
+            <p className="text-body text-white mb-4">
               We use cookies to enhance your experience. By continuing to browse,
               you consent to our use of cookies.{' '}
               <a href="/cookies/" className="text-teal-500 hover:text-teal-600 underline">
                 Learn more
               </a>
             </p>
-            <div className="flex gap-space-3 flex-wrap">
+            <div className="flex gap-3 flex-wrap">
               <Button variant="primary" onClick={handleAcceptAll}>
                 Accept All
               </Button>
@@ -70,9 +70,9 @@ export function CookieConsentBanner() {
 
       {/* Preferences Modal */}
       {preferencesOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-space-4">
-          <div className="bg-ink-800 border border-teal-700 rounded-md max-w-md w-full p-space-6">
-            <div className="flex justify-between items-start mb-space-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-ink-800 border border-teal-700 rounded-md max-w-md w-full p-6">
+            <div className="flex justify-between items-start mb-4">
               <h2 className="font-display text-h3 text-white">
                 Cookie Preferences
               </h2>
@@ -84,7 +84,7 @@ export function CookieConsentBanner() {
               </button>
             </div>
 
-            <div className="space-y-space-4 mb-space-6">
+            <div className="space-y-4 mb-6">
               {/* Essential (always on) */}
               <div className="flex items-center">
                 <input
@@ -94,7 +94,7 @@ export function CookieConsentBanner() {
                   disabled
                   className="w-4 h-4"
                 />
-                <label htmlFor="essential" className="ml-space-3 text-white">
+                <label htmlFor="essential" className="ml-3 text-white">
                   <span className="font-semibold block">Essential Cookies</span>
                   <span className="text-small text-teal-700">
                     Always enabled for security
@@ -116,7 +116,7 @@ export function CookieConsentBanner() {
                   }
                   className="w-4 h-4"
                 />
-                <label htmlFor="analytics" className="ml-space-3 text-white">
+                <label htmlFor="analytics" className="ml-3 text-white">
                   <span className="font-semibold block">Analytics</span>
                   <span className="text-small text-teal-700">
                     Help us improve your experience
@@ -138,7 +138,7 @@ export function CookieConsentBanner() {
                   }
                   className="w-4 h-4"
                 />
-                <label htmlFor="marketing" className="ml-space-3 text-white">
+                <label htmlFor="marketing" className="ml-3 text-white">
                   <span className="font-semibold block">Marketing</span>
                   <span className="text-small text-teal-700">
                     Personalized content and offers
@@ -147,7 +147,7 @@ export function CookieConsentBanner() {
               </div>
             </div>
 
-            <div className="flex gap-space-3">
+            <div className="flex gap-3">
               <Button
                 variant="primary"
                 onClick={() => {

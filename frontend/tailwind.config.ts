@@ -85,7 +85,7 @@ export default {
         'h2': ['1.75rem', { lineHeight: '2.25rem', fontWeight: '700' }],
         'h1': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
         'display': ['2rem', { lineHeight: '2.5rem', fontWeight: '900' }],
-        'kpi': ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
+        'kpi': ['2.25rem', { lineHeight: '1', fontWeight: '700' }],
       },
       borderRadius: {
         'pill': '9999px',
@@ -108,11 +108,13 @@ export default {
         '32': '8rem',
       },
       transitionDuration: {
-        'base': '200ms',
-        'slow': '500ms',
+        'fast': '120ms',
+        'base': '240ms',
+        'slow': '480ms',
       },
       transitionTimingFunction: {
         'standard': 'cubic-bezier(0.2, 0, 0, 1)',
+        'emphasis': 'cubic-bezier(0.3, 0, 0.8, 0.15)',
       },
       boxShadow: {
         'glow': '0 0 20px rgba(20, 184, 166, 0.3)',
