@@ -100,11 +100,11 @@ export function SectionRenderer({
         <section
           className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center"
           style={{
-            background: 'rgba(165, 255, 249, 0.25)',
+            background: 'rgba(157, 183, 181, 0.13)',
+            borderRadius: '16px',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(165, 255, 249, 0.68)',
-            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
           }}
         >
           {/* Content */}
