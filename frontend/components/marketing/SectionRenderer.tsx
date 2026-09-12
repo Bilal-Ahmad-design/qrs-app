@@ -96,64 +96,40 @@ export function SectionRenderer({
 
   switch (section.sectionType) {
     case 'hero': {
-      const isLightBg = section.backgroundStyle === 'light-institutional' || section.backgroundStyle === 'light'
-      const bgClass = isLightBg ? 'bg-light-bg-primary' : 'bg-ink-900'
-      const hasMedia = section.videoUrl || section.imageUrl
-
       return (
-        <section className={`relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center ${bgClass}`}>
-          {/* Background Video (muted, looping, no controls) */}
-          {section.videoUrl && (
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={getImageUrl(section.imageUrl)}
-            >
-              <source src={getVideoUrl(section.videoUrl)} type="video/mp4" />
-            </video>
-          )}
+        <section className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center bg-gradient-to-b from-white via-slate-50 to-slate-100">
+          {/* Solid glass effect background */}
+          <div className="absolute inset-0">
+            {/* Glass frosted effect layer */}
+            <div className="absolute inset-0 opacity-40" style={{
+              backgroundImage: 'radial-gradient(circle at 20% 40%, rgba(91, 186, 181, 0.08) 0%, transparent 50%)',
+            }} />
 
-          {/* Background Image (fallback if no video or behind video) */}
-          {section.imageUrl && !section.videoUrl && (
-            <img
-              src={getImageUrl(section.imageUrl)}
-              alt={section.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
+            {/* Subtle glass reflection */}
+            <div className="absolute inset-0 opacity-20" style={{
+              backgroundImage: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%)',
+              pointerEvents: 'none',
+            }} />
+          </div>
 
-          {/* Overlay for text readability - always show, different colors based on page theme and media */}
-          <div className={`absolute inset-0 ${
-            hasMedia
-              ? isLightBg
-                ? 'bg-gradient-to-b from-black/40 via-black/45 to-black/40'
-                : 'bg-gradient-to-b from-ink-900/65 via-ink-900/75 to-ink-900/65'
-              : isLightBg
-              ? 'bg-gradient-to-b from-light-accent-primary/15 via-light-accent-light/10 to-light-accent-primary/15'
-              : 'bg-gradient-to-b from-ink-800/30 via-ink-900/40 to-ink-800/30'
-          }`}></div>
-
-          {/* Content overlay */}
+          {/* Content */}
           <div className="relative z-10 w-full">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
               <div className="text-center">
                 {section.subtitle && (
-                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-light-accent-light/20 border border-light-accent-primary/40">
-                    <span className="text-xs sm:text-sm font-semibold text-light-accent-light">
+                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-teal-500/15 border border-teal-500/30">
+                    <span className="text-xs sm:text-sm font-semibold text-teal-700">
                       {section.subtitle}
                     </span>
                   </div>
                 )}
                 <h1
-                  className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white"
+                  className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-slate-900"
                   dangerouslySetInnerHTML={{ __html: section.heading || section.title }}
                 />
                 {section.description && (
                   <p
-                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 sm:mb-12 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed text-white"
+                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 sm:mb-12 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed text-slate-600"
                     dangerouslySetInnerHTML={{
                       __html: section.description,
                     }}
@@ -174,7 +150,7 @@ export function SectionRenderer({
                       <Button
                         href={section.secondaryButtonUrl || '#'}
                         variant="secondary"
-                        className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg text-white border-light-accent-primary/40"
+                        className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg border-teal-500/40"
                       >
                         {section.secondaryButtonText}
                       </Button>
