@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/admin']
+const PROTECTED_ROUTES = ['/admin', '/cms/admin']
 
 // Routes that are public (no auth required)
 const PUBLIC_ROUTES = [
@@ -9,6 +9,7 @@ const PUBLIC_ROUTES = [
   '/login',
   '/signup',
   '/setup',
+  '/cms/login',
   '/api/auth/login',
   '/api/auth/signup',
   '/api/auth/logout',
@@ -38,10 +39,11 @@ export function middleware(request: NextRequest) {
   const cookie = request.cookies.get('payload-session')
   const hasSession = !!cookie?.value
 
-  // If no session and trying to access protected route, redirect to login
+  // If no session and trying to access protected route, redirect to appropriate login
   if (!hasSession) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    // Redirect CMS routes to CMS login, others to main login
+    url.pathname = pathname.startsWith('/cms') ? '/cms/login' : '/login'
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
   }
