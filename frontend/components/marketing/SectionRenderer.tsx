@@ -97,28 +97,23 @@ export function SectionRenderer({
   switch (section.sectionType) {
     case 'hero': {
       return (
-        <section className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          {/* Solid glass effect background */}
-          <div className="absolute inset-0">
-            {/* Glass frosted effect layer */}
-            <div className="absolute inset-0 opacity-40" style={{
-              backgroundImage: 'radial-gradient(circle at 20% 40%, rgba(91, 186, 181, 0.08) 0%, transparent 50%)',
-            }} />
-
-            {/* Subtle glass reflection */}
-            <div className="absolute inset-0 opacity-20" style={{
-              backgroundImage: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%)',
-              pointerEvents: 'none',
-            }} />
-          </div>
-
+        <section
+          className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center"
+          style={{
+            background: 'rgba(165, 255, 249, 0.25)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(165, 255, 249, 0.68)',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+          }}
+        >
           {/* Content */}
           <div className="relative z-10 w-full">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
               <div className="text-center">
                 {section.subtitle && (
-                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-teal-500/15 border border-teal-500/30">
-                    <span className="text-xs sm:text-sm font-semibold text-teal-700">
+                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700">
                       {section.subtitle}
                     </span>
                   </div>
@@ -129,7 +124,7 @@ export function SectionRenderer({
                 />
                 {section.description && (
                   <p
-                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 sm:mb-12 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed text-slate-600"
+                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 sm:mb-12 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed text-slate-700"
                     dangerouslySetInnerHTML={{
                       __html: section.description,
                     }}
@@ -150,7 +145,7 @@ export function SectionRenderer({
                       <Button
                         href={section.secondaryButtonUrl || '#'}
                         variant="secondary"
-                        className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg border-teal-500/40"
+                        className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg"
                       >
                         {section.secondaryButtonText}
                       </Button>
