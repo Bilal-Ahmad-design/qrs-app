@@ -9,7 +9,6 @@ export const Media: CollectionConfig = {
     group: 'Content',
   },
   upload: {
-    staticURL: '/media',
     staticDir: 'media',
     imageSizes: [
       {
