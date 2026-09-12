@@ -49,7 +49,7 @@ export const auditAfterChangeHook =
       const changes = createDiff(previousDoc || {}, doc || {})
 
       const auditData: AuditLogData = {
-        user: req.user.id,
+        user: String(req.user.id),
         userEmail: req.user.email,
         collectionName,
         documentId: doc.id,
@@ -76,7 +76,7 @@ export const auditAfterDeleteHook =
 
     try {
       const auditData: AuditLogData = {
-        user: req.user.id,
+        user: String(req.user.id),
         userEmail: req.user.email,
         collectionName,
         documentId: doc.id,
