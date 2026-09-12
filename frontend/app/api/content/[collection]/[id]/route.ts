@@ -7,7 +7,7 @@ const COLLECTION_ENDPOINTS: Record<string, string> = {
 }
 
 export async function PATCH(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
   try {
@@ -20,7 +20,7 @@ export async function PATCH(
       )
     }
 
-    const data = await req.json()
+    const data = await request.json()
     const endpoint = COLLECTION_ENDPOINTS[collection]
 
     const response = await fetch(
@@ -52,7 +52,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
   try {
