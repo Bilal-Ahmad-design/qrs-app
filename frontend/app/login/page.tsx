@@ -39,7 +39,12 @@ export default function LoginPage() {
       } else {
         localStorage.removeItem('remembered-email')
       }
-      router.push('/admin/dashboard')
+
+      // Save user data for admin dashboard
+      localStorage.setItem('payload-user', JSON.stringify(data.user))
+
+      // Redirect to CMS admin dashboard
+      router.push('/cms/admin')
     } catch (err) {
       setError('An error occurred. Please try again.')
       setLoading(false)
