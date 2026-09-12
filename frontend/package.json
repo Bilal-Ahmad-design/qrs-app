@@ -13,7 +13,7 @@
     "cms:server": "tsx cms/server.ts",
     "seed:users": "tsx cms/seed-users.ts",
     "seed:sections": "tsx cms/seed-sections.ts",
-    "seed:users": "tsx scripts/seed-users.ts",
+    "create:admin": "tsx cms/create-admin.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
