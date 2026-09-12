@@ -11,5 +11,3 @@ coverage
 *.md
 !README.md
 qrs-cms
-frontend/cms
-frontend/cms/**
