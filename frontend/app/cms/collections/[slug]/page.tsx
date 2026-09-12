@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 interface CollectionItem {
-  id: string
+  id?: string | number
   [key: string]: any
 }
 
@@ -17,6 +17,10 @@ export default function CollectionPage() {
   const [items, setItems] = useState<CollectionItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showForm, setShowForm] = useState(false)
+  const [editingItem, setEditingItem] = useState<CollectionItem | null>(null)
+  const [formData, setFormData] = useState<CollectionItem>({})
+  const [submitting, setSubmitting] = useState(false)
 
   const collectionNames: Record<string, string> = {
     'page-sections': 'Page Sections',
@@ -32,67 +36,87 @@ export default function CollectionPage() {
 
   const collectionName = collectionNames[slug] || slug
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
+  // Fetch collection data
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+      setError(null)
 
-        // Check API health first
-        console.log('[Collection] Checking API health...')
-        const healthRes = await fetch('/api/health')
-        const health = await healthRes.json()
-        console.log('[Collection] Health check:', health)
+      const healthRes = await fetch('/api/health')
+      const health = await healthRes.json()
 
-        if (!health.database?.ok) {
-          throw new Error(`Database unavailable: ${health.database?.message || 'Unknown issue'}`)
-        }
-
-        // Try Payload API with 5 second timeout
-        console.log('[Collection] Fetching from Payload API...')
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 5000)
-
-        try {
-          const res = await fetch(`/api/payload/${slug}?limit=50&page=1`, {
-            signal: controller.signal,
-          })
-
-          clearTimeout(timeoutId)
-
-          if (res.ok) {
-            const data = await res.json()
-            setItems(data.docs || [])
-            return
-          }
-        } catch (payloadErr) {
-          clearTimeout(timeoutId)
-          console.log('[Collection] Payload API failed, trying direct database query...')
-        }
-
-        // Fallback: Use direct database query endpoint
-        const dbRes = await fetch(`/api/db-query?collection=${slug}&limit=50&page=1`)
-        if (!dbRes.ok) {
-          throw new Error(`Database query failed: ${dbRes.status}`)
-        }
-
-        const dbData = await dbRes.json()
-        setItems(dbData.docs || [])
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Failed to load collection'
-        setError(message)
-      } finally {
-        setLoading(false)
+      if (!health.database?.ok) {
+        throw new Error(`Database unavailable: ${health.database?.message}`)
       }
-    }
 
+      const dbRes = await fetch(`/api/db-crud?collection=${slug}&limit=100&page=1`)
+      if (!dbRes.ok) throw new Error(`Failed to load collection`)
+
+      const dbData = await dbRes.json()
+      setItems(dbData.docs || [])
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to load collection'
+      setError(message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchData()
   }, [slug])
 
-  const handleDelete = async (id: string) => {
+  // Handle form submission (create or update)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (Object.keys(formData).length === 0) {
+      alert('Please fill in at least one field')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const method = editingItem ? 'PUT' : 'POST'
+      const url = editingItem
+        ? `/api/db-crud?collection=${slug}&id=${editingItem.id}`
+        : `/api/db-crud?collection=${slug}`
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (!res.ok) {
+        const errData = await res.json()
+        throw new Error(errData.error || 'Failed to save')
+      }
+
+      const savedItem = await res.json()
+
+      if (editingItem) {
+        setItems(items.map(item => item.id === editingItem.id ? savedItem : item))
+      } else {
+        setItems([savedItem, ...items])
+      }
+
+      alert(`Item ${editingItem ? 'updated' : 'created'} successfully`)
+      setShowForm(false)
+      setEditingItem(null)
+      setFormData({})
+    } catch (err) {
+      alert(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  // Handle delete
+  const handleDelete = async (id: string | number) => {
     if (!confirm('Are you sure you want to delete this item?')) return
 
     try {
-      const res = await fetch(`/api/payload/${slug}/${id}`, {
+      const res = await fetch(`/api/db-crud?collection=${slug}&id=${id}`, {
         method: 'DELETE',
       })
 
@@ -101,8 +125,16 @@ export default function CollectionPage() {
       setItems(items.filter(item => item.id !== id))
       alert('Item deleted successfully')
     } catch (err) {
-      alert(`Error deleting item: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      alert(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
     }
+  }
+
+  // Open edit form
+  const openEditForm = (item: CollectionItem) => {
+    setEditingItem(item)
+    setFormData({ ...item })
+    setShowForm(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -116,17 +148,94 @@ export default function CollectionPage() {
               {items.length} item{items.length !== 1 ? 's' : ''}
             </p>
           </div>
-          <Link
-            href="/cms/admin"
-            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 rounded-lg text-sm font-medium transition"
-          >
-            ← Back to Dashboard
-          </Link>
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                setEditingItem(null)
+                setFormData({})
+                setShowForm(!showForm)
+              }}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition"
+            >
+              {showForm ? '✕ Cancel' : '+ Add New'}
+            </button>
+            <Link
+              href="/cms/admin"
+              className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 rounded-lg text-sm font-medium transition"
+            >
+              ← Back to Dashboard
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* Form Section */}
+        {showForm && (
+          <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">
+              {editingItem ? `Edit ${collectionName}` : `Create New ${collectionName.slice(0, -1)}`}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {items.length > 0 &&
+                  Object.keys(items[0])
+                    .filter(key => !key.startsWith('_') && key !== 'id' && key !== 'createdAt' && key !== 'updatedAt')
+                    .map(key => (
+                      <div key={key}>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          {key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1')}
+                        </label>
+                        {key.includes('description') || key.includes('content') ? (
+                          <textarea
+                            value={formData[key] || ''}
+                            onChange={e => setFormData({ ...formData, [key]: e.target.value })}
+                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows={3}
+                          />
+                        ) : key.includes('published') || key.includes('active') ? (
+                          <input
+                            type="checkbox"
+                            checked={formData[key] || false}
+                            onChange={e => setFormData({ ...formData, [key]: e.target.checked })}
+                            className="rounded border-slate-300"
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={formData[key] || ''}
+                            onChange={e => setFormData({ ...formData, [key]: e.target.value })}
+                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        )}
+                      </div>
+                    ))}
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 text-white rounded-lg text-sm font-medium transition"
+                >
+                  {submitting ? 'Saving...' : 'Save'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForm(false)
+                    setEditingItem(null)
+                    setFormData({})
+                  }}
+                  className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 rounded-lg text-sm font-medium transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
         {loading ? (
           <div className="text-center py-12">
             <p className="text-slate-600">Loading...</p>
@@ -234,7 +343,13 @@ export default function CollectionPage() {
                             {typeof value === 'object' ? JSON.stringify(value).slice(0, 50) : String(value).slice(0, 50)}
                           </td>
                         ))}
-                      <td className="px-6 py-4 text-sm">
+                      <td className="px-6 py-4 text-sm space-x-2 flex">
+                        <button
+                          onClick={() => openEditForm(item)}
+                          className="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded text-xs font-medium transition"
+                        >
+                          Edit
+                        </button>
                         <button
                           onClick={() => handleDelete(item.id)}
                           className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-xs font-medium transition"
