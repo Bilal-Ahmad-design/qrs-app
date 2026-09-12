@@ -55,7 +55,6 @@ export const auditAfterChangeHook =
         documentId: doc.id,
         action: previousDoc ? "update" : "create",
         changes: changes ?? undefined,
-        ipAddress: req.ip,
         userAgent: req.headers?.get?.("user-agent") || undefined,
         timestamp: new Date(),
       }
@@ -82,7 +81,6 @@ export const auditAfterDeleteHook =
         documentId: doc.id,
         action: "delete",
         changes: { deletedDoc: doc },
-        ipAddress: req.ip,
         userAgent: req.headers?.get?.("user-agent") || undefined,
         timestamp: new Date(),
       }
