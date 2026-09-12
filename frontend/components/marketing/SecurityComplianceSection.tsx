@@ -67,7 +67,7 @@ export function SecurityComplianceSection({
               <div className="inline-block mb-3 sm:mb-4">
                 <VerifiedSealBadge
                   signatureHash="a1b2c3d4e5f6g7h8"
-                  verifierUrl="https://github.com/qrsrisk/replay-verifier"
+                  verifierUrl="https://qrsrisk.com/trust/seal-verification/verify"
                   fullSignature="3045022100a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0 02207a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p3q4r5s6t7"
                 />
               </div>
@@ -128,5 +128,5 @@ export function SecurityComplianceSection({
         </div>
       </div>
     </section>
-  )
+  );
 }

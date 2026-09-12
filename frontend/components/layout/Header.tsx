@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
-import { NAV_LINKS } from '@/lib/constants';
-import { MobileNav } from './MobileNav';
+import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { NAV_LINKS } from "@/lib/constants";
+import { MobileNav } from "./MobileNav";
 
 export function Header() {
   return (
@@ -28,7 +28,13 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
-          <Button variant="primary" className="hidden sm:inline-block text-sm sm:text-base">Request Demo</Button>
+          <Button
+            href="/contact"
+            variant="primary"
+            className="hidden sm:inline-block text-sm sm:text-base"
+          >
+            Request Demo
+          </Button>
           <MobileNav />
         </div>
       </nav>

@@ -81,18 +81,6 @@ export function SectionRenderer({
     return cmsUrl ? `${cmsUrl}${url}` : `/${url}` // CMS uploads or relative
   }
 
-  // Helper to get video URLs - strip localhost URLs and use relative paths for production
-  const getVideoUrl = (url?: string) => {
-    if (!url) return undefined
-    // Strip localhost:3001 prefix for production
-    if (url.includes('localhost:3001')) {
-      return url.replace('http://localhost:3001', '')
-    }
-    if (url.startsWith('/media/')) return url // Local media files
-    if (url.startsWith('/')) return url // Already relative path
-    if (url.startsWith('http')) return url // External URL (e.g., CDN)
-    return cmsUrl ? `${cmsUrl}${url}` : `/${url}` // CMS uploads or relative
-  }
 
   switch (section.sectionType) {
     case 'hero': {
@@ -101,8 +89,6 @@ export function SectionRenderer({
           className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-28 min-h-[500px] lg:min-h-[600px] flex items-center justify-center"
           style={{
             background: 'rgba(157, 183, 181, 0.13)',
-            borderRadius: '16px',
-            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
           }}
@@ -112,7 +98,7 @@ export function SectionRenderer({
             <div className="max-w-screen-xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
               <div className="text-center">
                 {section.subtitle && (
-                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md">
+                  <div className="mb-4 sm:mb-6 inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-slate-50 border border-white/70 backdrop-blur-md">
                     <span className="text-xs sm:text-sm font-semibold text-slate-700">
                       {section.subtitle}
                     </span>

@@ -11,7 +11,7 @@ export default function ContactPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-light-bg-primary to-cream-50 py-32 lg:py-48">
+      <section className="bg-gradient-to-br from-light-bg-primary to-cream-50 py-32 lg:py-40">
         <div className="mx-auto max-w-screen-xl px-6">
           <div className="max-w-3xl">
             <h1 className="mb-6 text-5xl sm:text-6xl lg:text-7xl font-bold text-ink-900 leading-tight">
