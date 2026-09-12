@@ -4,9 +4,9 @@ import { initializePayload } from '@/cms/payload-server'
 import { checkDatabaseHealth } from '@/cms/db-health'
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string[] }> }) {
+  const start = Date.now()
   try {
     console.log('[API] GET request to:', request.url)
-    const start = Date.now()
 
     // Check database health first
     console.log('[API] Checking database connectivity...')

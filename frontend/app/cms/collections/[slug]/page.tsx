@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 interface CollectionItem {
-  id?: string | number
+  id: string | number
   [key: string]: any
 }
 
@@ -19,7 +19,7 @@ export default function CollectionPage() {
   const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [editingItem, setEditingItem] = useState<CollectionItem | null>(null)
-  const [formData, setFormData] = useState<CollectionItem>({})
+  const [formData, setFormData] = useState<Partial<CollectionItem>>({})
   const [submitting, setSubmitting] = useState(false)
 
   const collectionNames: Record<string, string> = {
