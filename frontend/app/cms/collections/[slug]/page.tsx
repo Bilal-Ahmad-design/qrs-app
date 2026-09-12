@@ -37,29 +37,49 @@ export default function CollectionPage() {
       try {
         setLoading(true)
 
-        // Add 10 second timeout
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 10000)
+        // Check API health first
+        console.log('[Collection] Checking API health...')
+        const healthRes = await fetch('/api/health')
+        const health = await healthRes.json()
+        console.log('[Collection] Health check:', health)
 
-        const res = await fetch(`/api/payload/${slug}?limit=50&page=1`, {
-          signal: controller.signal,
-        })
-
-        clearTimeout(timeoutId)
-
-        if (!res.ok) {
-          throw new Error(`API error: ${res.status}`)
+        if (!health.database?.ok) {
+          throw new Error(`Database unavailable: ${health.database?.message || 'Unknown issue'}`)
         }
 
-        const data = await res.json()
-        setItems(data.docs || [])
+        // Try Payload API with 5 second timeout
+        console.log('[Collection] Fetching from Payload API...')
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 5000)
+
+        try {
+          const res = await fetch(`/api/payload/${slug}?limit=50&page=1`, {
+            signal: controller.signal,
+          })
+
+          clearTimeout(timeoutId)
+
+          if (res.ok) {
+            const data = await res.json()
+            setItems(data.docs || [])
+            return
+          }
+        } catch (payloadErr) {
+          clearTimeout(timeoutId)
+          console.log('[Collection] Payload API failed, trying direct database query...')
+        }
+
+        // Fallback: Use direct database query endpoint
+        const dbRes = await fetch(`/api/db-query?collection=${slug}&limit=50&page=1`)
+        if (!dbRes.ok) {
+          throw new Error(`Database query failed: ${dbRes.status}`)
+        }
+
+        const dbData = await dbRes.json()
+        setItems(dbData.docs || [])
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Failed to load collection'
-        if (message.includes('abort')) {
-          setError('API request timed out - database may be slow')
-        } else {
-          setError(message)
-        }
+        setError(message)
       } finally {
         setLoading(false)
       }
@@ -112,9 +132,68 @@ export default function CollectionPage() {
             <p className="text-slate-600">Loading...</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
-            <p className="font-medium">Error loading collection</p>
-            <p className="text-sm mt-1">{error}</p>
+          <div className="space-y-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-blue-900 mb-4">Use REST API to Manage {collectionName}</h2>
+              <p className="text-blue-800 mb-6">
+                The web interface is experiencing performance issues. For now, use the REST API below to manage your content. This is actually faster!
+              </p>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-medium text-blue-900 mb-2">📥 Get all items</h3>
+                  <code className="block bg-slate-900 text-slate-100 p-4 rounded text-sm overflow-x-auto mb-2">
+                    GET /api/payload/{slug}?limit=50&page=1
+                  </code>
+                  <code className="block bg-slate-100 text-slate-900 p-4 rounded overflow-x-auto font-mono text-xs">
+                    curl "http://localhost:3000/api/payload/{slug}?limit=50&page=1"
+                  </code>
+                </div>
+
+                <div>
+                  <h3 className="font-medium text-blue-900 mb-2">➕ Create item</h3>
+                  <code className="block bg-slate-900 text-slate-100 p-4 rounded text-sm overflow-x-auto mb-2">
+                    POST /api/payload/{slug}
+                  </code>
+                  <code className="block bg-slate-100 text-slate-900 p-4 rounded overflow-x-auto font-mono text-xs">
+                    curl -X POST http://localhost:3000/api/payload/{slug} &#92;<br/>
+                    &nbsp;&nbsp;-H "Content-Type: application/json" &#92;<br/>
+                    &nbsp;&nbsp;-d '{"{"}...data...{"}"}'
+                  </code>
+                </div>
+
+                <div>
+                  <h3 className="font-medium text-blue-900 mb-2">✏️ Update item</h3>
+                  <code className="block bg-slate-900 text-slate-100 p-4 rounded text-sm overflow-x-auto mb-2">
+                    PUT /api/payload/{slug}/[id]
+                  </code>
+                  <code className="block bg-slate-100 text-slate-900 p-4 rounded overflow-x-auto font-mono text-xs">
+                    curl -X PUT http://localhost:3000/api/payload/{slug}/[id] &#92;<br/>
+                    &nbsp;&nbsp;-H "Content-Type: application/json" &#92;<br/>
+                    &nbsp;&nbsp;-d '{"{"}...updated data...{"}"}'
+                  </code>
+                </div>
+
+                <div>
+                  <h3 className="font-medium text-blue-900 mb-2">🗑️ Delete item</h3>
+                  <code className="block bg-slate-900 text-slate-100 p-4 rounded text-sm overflow-x-auto mb-2">
+                    DELETE /api/payload/{slug}/[id]
+                  </code>
+                  <code className="block bg-slate-100 text-slate-900 p-4 rounded overflow-x-auto font-mono text-xs">
+                    curl -X DELETE http://localhost:3000/api/payload/{slug}/[id]
+                  </code>
+                </div>
+              </div>
+
+              <div className="mt-8 flex gap-4">
+                <Link
+                  href="/cms/admin"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition"
+                >
+                  ← Back to Dashboard
+                </Link>
+              </div>
+            </div>
           </div>
         ) : items.length === 0 ? (
           <div className="bg-white rounded-lg border border-slate-200 p-8 text-center">
