@@ -54,7 +54,7 @@ export const auditAfterChangeHook =
         collectionName,
         documentId: doc.id,
         action: previousDoc ? "update" : "create",
-        changes,
+        changes: changes ?? undefined,
         ipAddress: req.ip,
         userAgent: req.headers?.get?.("user-agent") || undefined,
         timestamp: new Date(),
