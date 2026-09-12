@@ -28,6 +28,17 @@ export default async function HomePage() {
     return cmsUrl ? `${cmsUrl}${url}` : `/${url}`
   }
 
+  // Helper to get video URL - strip localhost and use relative paths
+  const getVideoUrl = (url?: string) => {
+    if (!url) return undefined
+    if (url.includes('localhost:3001')) {
+      return url.replace('http://localhost:3001', '')
+    }
+    if (url.startsWith('/')) return url
+    if (url.startsWith('http')) return url
+    return cmsUrl ? `${cmsUrl}${url}` : `/${url}`
+  }
+
   // Fetch sections from CMS, fall back to defaults
   let sections = await getPageSections('home')
   if (!sections || sections.length === 0) {
@@ -43,9 +54,10 @@ export default async function HomePage() {
     <main className="bg-light-bg-primary">
       {sections.map((section: any) => (
         <SectionRenderer key={section.id} section={section}>
-          {/* Hero section gets DeviceFrame with uploaded image */}
+          {/* Hero section gets DeviceFrame with video or image */}
           {section.sectionType === 'hero' && (
             <DeviceFrame
+              videoSrc={getVideoUrl(section.videoUrl)}
               imageSrc={getImageUrl(section.imageUrl)}
               imageAlt={section.title}
             />
