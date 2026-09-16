@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/admin', '/cms/admin']
+const PROTECTED_ROUTES = ['/admin', '/cms/admin', '/cms/dashboard']
 
 // Routes that are public (no auth required)
 const PUBLIC_ROUTES = [
@@ -16,6 +16,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/me',
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
+  '/api/payload',
 ]
 
 export function middleware(request: NextRequest) {
