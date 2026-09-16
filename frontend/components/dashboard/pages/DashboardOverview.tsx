@@ -34,33 +34,25 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
         return
       }
 
-      // Fetch only totals, not full data - much faster
-      const [usersRes, pagesRes, sectionsRes, submissionsRes, logsRes] = await Promise.all([
-        fetch('/api/payload/users?limit=1'),
-        fetch('/api/payload/pages?limit=1'),
-        fetch('/api/payload/page-sections?limit=1'),
-        fetch('/api/payload/form-submissions?limit=1'),
-        fetch('/api/payload/audit-logs?limit=5&sort=-timestamp'),
-      ])
+      // Single endpoint fetch - combines all 5 requests into 1
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 8000)
 
-      if (!usersRes.ok || !pagesRes.ok || !sectionsRes.ok || !submissionsRes.ok || !logsRes.ok) {
-        throw new Error('Failed to fetch stats')
-      }
+      const res = await fetch('/api/dashboard/stats', {
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
 
-      const [usersData, pagesData, sectionsData, submissionsData, logsData] = await Promise.all([
-        usersRes.json(),
-        pagesRes.json(),
-        sectionsRes.json(),
-        submissionsRes.json(),
-        logsRes.json(),
-      ])
+      if (!res.ok) throw new Error('Failed to fetch stats')
+
+      const data = await res.json()
 
       const newStats = {
-        totalUsers: usersData.totalDocs || 0,
-        totalPages: pagesData.totalDocs || 0,
-        totalSections: sectionsData.totalDocs || 0,
-        totalSubmissions: submissionsData.totalDocs || 0,
-        recentLogs: (logsData.docs || []).slice(0, 5),
+        totalUsers: data.totalUsers || 0,
+        totalPages: data.totalPages || 0,
+        totalSections: data.totalSections || 0,
+        totalSubmissions: data.totalSubmissions || 0,
+        recentLogs: data.recentLogs || [],
       }
 
       cachedStats = newStats
