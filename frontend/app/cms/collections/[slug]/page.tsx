@@ -236,8 +236,20 @@ export default function CollectionPage() {
       {/* Content */}
       {loading ? (
         <DashboardCard title="Loading...">
-          <div className="space-y-3">
-            {Array(5).fill(0).map((_, i) => <TableRowSkeleton key={i} />)}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-cream-100">
+                  <th className="text-left py-4 px-4 text-xs font-semibold text-ink-800 uppercase tracking-wide">Loading...</th>
+                  <th className="text-left py-4 px-4 text-xs font-semibold text-ink-800 uppercase tracking-wide">...</th>
+                  <th className="text-left py-4 px-4 text-xs font-semibold text-ink-800 uppercase tracking-wide">...</th>
+                  <th className="text-left py-4 px-4 text-xs font-semibold text-ink-800 uppercase tracking-wide">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array(5).fill(0).map((_, i) => <TableRowSkeleton key={i} />)}
+              </tbody>
+            </table>
           </div>
         </DashboardCard>
       ) : items.length === 0 ? (
