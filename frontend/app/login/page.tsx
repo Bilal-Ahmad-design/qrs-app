@@ -52,32 +52,32 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-ink-800 via-ink-800 to-ink-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-slate-800 rounded-lg shadow-xl p-8 border border-slate-700">
+        <div className="bg-ink-700 rounded-md shadow-xl p-8 border border-teal-700">
           <div className="mb-8 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-lg mb-4 mx-auto">
-              <span className="text-xl font-bold text-white">QRS</span>
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-teal-500 rounded-md mb-4 mx-auto">
+              <span className="text-xl font-bold text-ink-900 font-display">QRS</span>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">QRS Admin</h1>
-            <p className="text-slate-400">Sign in to your account</p>
+            <h1 className="text-3xl font-bold text-white mb-2 font-display">QRS Admin</h1>
+            <p className="text-teal-700">Sign in to your account</p>
           </div>
 
           {isDev && (
-            <div className="mb-6 p-4 bg-teal-500/10 border border-teal-500/50 rounded text-teal-300 text-sm">
+            <div className="mb-6 p-4 bg-teal-500/10 border border-teal-700 rounded-sm text-teal-300 text-sm">
               <strong>Dev Credentials:</strong> jordan@qrs.example.com / Password123!
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded text-red-400 text-sm">
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-sm text-red-400 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Email Address
               </label>
               <input
@@ -86,12 +86,12 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@example.com"
                 required
-                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-400 focus:outline-none focus:border-teal-500 transition-colors"
+                className="w-full px-4 py-2 bg-ink-800 border border-teal-700 rounded-sm text-white placeholder-teal-700/50 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Password
               </label>
               <div className="relative">
@@ -101,12 +101,12 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-2 pr-10 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-400 focus:outline-none focus:border-teal-500 transition-colors"
+                  className="w-full px-4 py-2 pr-10 bg-ink-800 border border-teal-700 rounded-sm text-white placeholder-teal-700/50 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-teal-400 transition-colors cursor-pointer p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-700 hover:text-teal-500 transition-colors cursor-pointer p-1"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? (
@@ -130,9 +130,9 @@ export default function LoginPage() {
                 id="remember-me"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded border border-slate-600 bg-slate-700 cursor-pointer accent-teal-500"
+                className="w-4 h-4 rounded-sm border border-teal-700 bg-ink-800 cursor-pointer accent-teal-500"
               />
-              <label htmlFor="remember-me" className="ml-2 text-sm text-slate-300 cursor-pointer hover:text-slate-200 transition-colors">
+              <label htmlFor="remember-me" className="ml-2 text-sm text-white cursor-pointer hover:text-teal-500 transition-colors">
                 Remember me
               </label>
             </div>
@@ -140,17 +140,18 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold rounded hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full px-4 py-2 bg-teal-500 hover:bg-teal-600 text-ink-900 font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-base"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-slate-400">
-            Don't have an account?{' '}
-            <Link href="/signup" className="text-teal-400 hover:text-teal-300">
-              Sign up
-            </Link>
+          <div className="mt-6 pt-6 border-t border-teal-700">
+            <div className="text-center">
+              <Link href="/" className="text-sm text-teal-500 hover:text-teal-400 font-medium">
+                ← Back to Site
+              </Link>
+            </div>
           </div>
         </div>
       </div>
