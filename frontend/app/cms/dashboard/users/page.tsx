@@ -15,7 +15,7 @@ export default function UsersPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 10000)
+        const timeoutId = setTimeout(() => controller.abort(), 30000)
 
         const res = await fetch('/api/payload/users?limit=25&page=1', {
           signal: controller.signal,

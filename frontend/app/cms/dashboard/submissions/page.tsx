@@ -15,7 +15,7 @@ export default function SubmissionsPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 10000)
+        const timeoutId = setTimeout(() => controller.abort(), 30000)
 
         const res = await fetch('/api/payload/form-submissions?limit=25&sort=-submittedAt&page=1', {
           signal: controller.signal,

@@ -57,7 +57,7 @@ export default function CollectionPage() {
 
       // Use AbortController for timeout
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout for Payload // 10 second timeout
 
       const res = await fetch(`/api/payload/${slug}?limit=25&page=${pageNum}`, {
         signal: controller.signal,

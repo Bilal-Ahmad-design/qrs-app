@@ -36,7 +36,7 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
 
       // Single endpoint fetch - combines all 5 requests into 1
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 8000)
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout for Payload
 
       const res = await fetch('/api/dashboard/stats', {
         signal: controller.signal,

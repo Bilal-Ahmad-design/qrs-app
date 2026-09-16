@@ -14,7 +14,7 @@ export default function AuditLogsPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 10000)
+        const timeoutId = setTimeout(() => controller.abort(), 30000)
 
         const res = await fetch('/api/payload/audit-logs?limit=25&sort=-timestamp&page=1', {
           signal: controller.signal,
