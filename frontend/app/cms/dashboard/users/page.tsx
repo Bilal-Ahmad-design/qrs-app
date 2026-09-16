@@ -13,7 +13,15 @@ export default function UsersPage() {
     const fetchUsers = async () => {
       try {
         setError(null)
-        const res = await fetch('/api/payload/users?limit=50')
+
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000)
+
+        const res = await fetch('/api/payload/users?limit=25&page=1', {
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+
         if (!res.ok) throw new Error('Failed to fetch users')
         const data = await res.json()
         setUsers(data.docs || [])

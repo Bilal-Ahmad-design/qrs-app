@@ -1,12 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { MetricCard } from '../MetricCard'
 import { DashboardCard } from '../DashboardCard'
 
 interface DashboardOverviewProps {
   user: any
 }
+
+// Cache stats for 5 minutes
+const CACHE_DURATION = 5 * 60 * 1000
+let cachedStats: any = null
+let cacheTime = 0
 
 export function DashboardOverview({ user }: DashboardOverviewProps) {
   const [stats, setStats] = useState({
@@ -18,38 +23,58 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
   })
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        // Fetch real data from Payload
-        const [usersRes, pagesRes, sectionsRes, submissionsRes, logsRes] = await Promise.all([
-          fetch('/api/payload/users?limit=1&page=1'),
-          fetch('/api/payload/pages?limit=1&page=1'),
-          fetch('/api/payload/page-sections?limit=1&page=1'),
-          fetch('/api/payload/form-submissions?limit=1&page=1'),
-          fetch('/api/payload/audit-logs?limit=10&sort=-timestamp'),
-        ])
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true)
 
-        const usersData = await usersRes.json()
-        const pagesData = await pagesRes.json()
-        const sectionsData = await sectionsRes.json()
-        const submissionsData = await submissionsRes.json()
-        const logsData = await logsRes.json()
-
-        setStats({
-          totalUsers: usersData.totalDocs || 0,
-          totalPages: pagesData.totalDocs || 0,
-          totalSections: sectionsData.totalDocs || 0,
-          totalSubmissions: submissionsData.totalDocs || 0,
-          recentLogs: (logsData.docs || []).slice(0, 5),
-        })
-      } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err)
-      } finally {
+      // Check cache first
+      if (cachedStats && Date.now() - cacheTime < CACHE_DURATION) {
+        setStats(cachedStats)
         setLoading(false)
+        return
       }
-    }
 
+      // Fetch only totals, not full data - much faster
+      const [usersRes, pagesRes, sectionsRes, submissionsRes, logsRes] = await Promise.all([
+        fetch('/api/payload/users?limit=1'),
+        fetch('/api/payload/pages?limit=1'),
+        fetch('/api/payload/page-sections?limit=1'),
+        fetch('/api/payload/form-submissions?limit=1'),
+        fetch('/api/payload/audit-logs?limit=5&sort=-timestamp'),
+      ])
+
+      if (!usersRes.ok || !pagesRes.ok || !sectionsRes.ok || !submissionsRes.ok || !logsRes.ok) {
+        throw new Error('Failed to fetch stats')
+      }
+
+      const [usersData, pagesData, sectionsData, submissionsData, logsData] = await Promise.all([
+        usersRes.json(),
+        pagesRes.json(),
+        sectionsRes.json(),
+        submissionsRes.json(),
+        logsRes.json(),
+      ])
+
+      const newStats = {
+        totalUsers: usersData.totalDocs || 0,
+        totalPages: pagesData.totalDocs || 0,
+        totalSections: sectionsData.totalDocs || 0,
+        totalSubmissions: submissionsData.totalDocs || 0,
+        recentLogs: (logsData.docs || []).slice(0, 5),
+      }
+
+      cachedStats = newStats
+      cacheTime = Date.now()
+      setStats(newStats)
+    } catch (err) {
+      console.error('Failed to fetch dashboard stats:', err)
+      // Keep showing previous stats even if error
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
     fetchStats()
   }, [])
 

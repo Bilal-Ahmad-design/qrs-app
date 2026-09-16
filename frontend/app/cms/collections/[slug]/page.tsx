@@ -55,7 +55,16 @@ export default function CollectionPage() {
       setLoading(true)
       setError(null)
 
-      const res = await fetch(`/api/payload/${slug}?limit=50&page=${pageNum}`)
+      // Use AbortController for timeout
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
+      const res = await fetch(`/api/payload/${slug}?limit=25&page=${pageNum}`, {
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+
       if (!res.ok) throw new Error(`Failed to load ${collectionName}`)
 
       const data = await res.json()
@@ -63,7 +72,11 @@ export default function CollectionPage() {
       setTotalPages(data.totalPages || 1)
       setPage(pageNum)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load collection')
+      if (err instanceof Error && err.name === 'AbortError') {
+        setError('Request timed out. The server took too long to respond.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to load collection')
+      }
     } finally {
       setLoading(false)
     }

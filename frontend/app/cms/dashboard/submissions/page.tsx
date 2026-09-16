@@ -13,7 +13,15 @@ export default function SubmissionsPage() {
     const fetchSubmissions = async () => {
       try {
         setError(null)
-        const res = await fetch('/api/payload/form-submissions?limit=100&sort=-submittedAt')
+
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000)
+
+        const res = await fetch('/api/payload/form-submissions?limit=25&sort=-submittedAt&page=1', {
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+
         if (!res.ok) throw new Error('Failed to fetch submissions')
         const data = await res.json()
         setSubmissions(data.docs || [])

@@ -12,7 +12,15 @@ export default function AuditLogsPage() {
     const fetchLogs = async () => {
       try {
         setError(null)
-        const res = await fetch('/api/payload/audit-logs?limit=100&sort=-timestamp')
+
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000)
+
+        const res = await fetch('/api/payload/audit-logs?limit=25&sort=-timestamp&page=1', {
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+
         if (!res.ok) throw new Error('Failed to fetch audit logs')
         const data = await res.json()
         setLogs(data.docs || [])
