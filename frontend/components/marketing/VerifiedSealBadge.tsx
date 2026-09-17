@@ -7,26 +7,36 @@ interface VerifiedSealBadgeProps {
   signatureHash: string;
   verifierUrl: string;
   fullSignature?: string;
+  variant?: 'dark' | 'light';
 }
 
 export function VerifiedSealBadge({
   signatureHash,
   verifierUrl,
   fullSignature,
+  variant = 'light',
 }: VerifiedSealBadgeProps) {
   const [showPopover, setShowPopover] = useState(false);
   const truncatedHash = signatureHash.slice(0, 16) + '...';
+
+  const isDark = variant === 'dark';
+  const badgeClass = isDark
+    ? 'border-teal-500 bg-ink-700 hover:bg-ink-600 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40'
+    : 'border-teal-600 bg-white hover:bg-cream-50 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40';
+
+  const textClass = isDark ? 'text-white' : 'text-ink-900';
+  const iconClass = isDark ? 'text-teal-400' : 'text-teal-600';
 
   return (
     <div className="relative inline-block">
       <button
         onClick={() => setShowPopover(!showPopover)}
-        className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-lg border-2 border-teal-500 bg-gradient-to-r from-teal-50 to-teal-100 hover:from-teal-100 hover:to-teal-150 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 transition-all duration-300 hover:border-teal-600 group cursor-pointer"
+        className={`inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-lg border-2 transition-all duration-base hover:border-teal-500 group cursor-pointer ${badgeClass}`}
       >
-        <CheckCircle2 size={20} className="text-teal-700 group-hover:text-teal-800 transition-colors flex-shrink-0" />
+        <CheckCircle2 size={20} className={`${iconClass} group-hover:opacity-80 transition-opacity flex-shrink-0`} />
         <div className="flex flex-col items-start gap-0.5 sm:gap-1">
-          <span className="text-sm sm:text-base font-bold text-teal-900 leading-tight">Lineage verified</span>
-          <span className="font-mono text-xs text-teal-700 group-hover:text-teal-800 font-medium transition-colors">{truncatedHash}</span>
+          <span className={`text-sm sm:text-base font-bold ${textClass} leading-tight`}>Lineage verified</span>
+          <span className={`font-mono text-xs ${isDark ? 'text-teal-300' : 'text-teal-700'} group-hover:opacity-80 font-medium transition-opacity`}>{truncatedHash}</span>
         </div>
       </button>
 
