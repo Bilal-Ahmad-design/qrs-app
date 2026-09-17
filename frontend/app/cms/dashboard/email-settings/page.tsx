@@ -15,13 +15,17 @@ export default function EmailSettingsPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 90000)
+        const timeoutId = setTimeout(() => controller.abort(), 120000)
 
-        const res = await fetch('/api/payload/email-settings?limit=50&page=1&sort=-createdAt', {
-          signal: controller.signal,
-          cache: 'default',
-        })
-        clearTimeout(timeoutId)
+        let res
+        try {
+          res = await fetch('/api/payload/email-settings?limit=50&page=1&sort=-createdAt', {
+            signal: controller.signal,
+            cache: 'default',
+          })
+        } finally {
+          clearTimeout(timeoutId)
+        }
 
         if (!res.ok) throw new Error('Failed to fetch email settings')
         const data = await res.json()

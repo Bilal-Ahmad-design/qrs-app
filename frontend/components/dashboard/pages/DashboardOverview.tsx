@@ -36,12 +36,17 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
 
       // Single endpoint fetch - combines all 5 requests into 1
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout for Payload
+      const timeoutId = setTimeout(() => controller.abort(), 120000) // 120 second timeout for Payload startup
 
-      const res = await fetch('/api/dashboard/stats', {
-        signal: controller.signal,
-      })
-      clearTimeout(timeoutId)
+      let res
+      try {
+        res = await fetch('/api/dashboard/stats', {
+          signal: controller.signal,
+          cache: 'default',
+        })
+      } finally {
+        clearTimeout(timeoutId)
+      }
 
       if (!res.ok) throw new Error('Failed to fetch stats')
 
