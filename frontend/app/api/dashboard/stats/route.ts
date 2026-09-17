@@ -1,4 +1,5 @@
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic' // Don't pre-generate during build
 export const revalidate = 300 // Cache for 5 minutes
 
 export async function GET() {
