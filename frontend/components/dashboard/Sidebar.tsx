@@ -44,10 +44,10 @@ const navSections = [
     items: [
       { label: 'Users', href: '/cms/dashboard/users', icon: '👥' },
       { label: 'Audit Logs', href: '/cms/dashboard/audit-logs', icon: '🔍' },
-      { label: 'Redirects', href: '/cms/collections/redirects', icon: '🔗' },
-      { label: 'Regulatory Compliance', href: '/cms/collections/regulatory-compliance', icon: '⚖️' },
-      { label: 'Platform Capabilities', href: '/cms/collections/platform-capability', icon: '⚙️' },
-      { label: 'Email Settings', href: '/cms/collections/email-settings', icon: '📧' },
+      { label: 'Redirects', href: '/cms/dashboard/redirects', icon: '🔗' },
+      { label: 'Regulatory Compliance', href: '/cms/dashboard/regulatory-compliance', icon: '⚖️' },
+      { label: 'Platform Capabilities', href: '/cms/dashboard/platform-capabilities', icon: '⚙️' },
+      { label: 'Email Settings', href: '/cms/dashboard/email-settings', icon: '📧' },
     ],
   },
 ]
