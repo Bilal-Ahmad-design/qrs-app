@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  Lock,
-  Shield,
-  BookOpen,
-  Database,
-  AlertTriangle,
-  CheckCircle2,
-} from 'lucide-react'
+import { SecurityIcon } from '@/components/icons/SecurityIcons'
 
 interface SecurityFeature {
   title?: string
@@ -68,14 +61,14 @@ export function SecurityFeaturesGrid({
     'deep-dark': 'text-white text-teal-100',
   }
 
-  const iconMap: Record<string, any> = {
-    'Data Encryption': Lock,
-    'Access Control': Shield,
-    'Audit Logging': BookOpen,
-    'Infrastructure Isolation': Database,
-    'DDoS Protection': AlertTriangle,
-    'Compliance Monitoring': CheckCircle2,
-  }
+  const validIconTypes = [
+    'Data Encryption',
+    'Access Control',
+    'Audit Logging',
+    'Infrastructure Isolation',
+    'DDoS Protection',
+    'Compliance Monitoring',
+  ]
 
   // Use CMS data exclusively - no fallback defaults
   const displayItems = items && items.length > 0 ? items : []
@@ -108,19 +101,19 @@ export function SecurityFeaturesGrid({
         {/* Security Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {displayItems.map((item, index) => {
-            const IconComponent = item.title ? iconMap[item.title] : null
+            const isValidIcon = item.title && validIconTypes.includes(item.title)
             return (
               <div
                 key={index}
-                className={`group p-8 rounded-xl border ${cardClass} transition-all duration-300`}
+                className={`group p-8 rounded-xl border ${cardClass} transition-all duration-base`}
               >
                 <div className="flex flex-col gap-4">
-                  {IconComponent && (
+                  {isValidIcon && (
                     <div className="flex-shrink-0">
-                      <IconComponent
+                      <SecurityIcon
+                        type={item.title as keyof typeof import('@/components/icons/SecurityIcons').SecurityIcons}
                         size={32}
-                        className={`text-teal-500 group-hover:text-teal-400 transition-colors`}
-                        strokeWidth={1.5}
+                        className="text-teal-500 group-hover:text-teal-400 transition-colors"
                       />
                     </div>
                   )}
