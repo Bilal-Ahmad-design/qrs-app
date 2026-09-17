@@ -18,7 +18,7 @@ const navSections = [
   {
     title: 'Content',
     items: [
-      { label: 'Pages', href: '/cms/collections/pages', icon: '📄' },
+      { label: 'Pages', href: '/cms/dashboard/pages', icon: '📄' },
       { label: 'Page Sections', href: '/cms/collections/page-sections', icon: '📐' },
       { label: 'Blog', href: '/cms/collections/blog', icon: '📝' },
       { label: 'Solutions', href: '/cms/collections/solutions', icon: '💡' },
