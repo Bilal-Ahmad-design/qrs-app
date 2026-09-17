@@ -19,11 +19,11 @@ const navSections = [
     title: 'Content',
     items: [
       { label: 'Pages', href: '/cms/dashboard/pages', icon: '📄' },
-      { label: 'Page Sections', href: '/cms/collections/page-sections', icon: '📐' },
-      { label: 'Blog', href: '/cms/collections/blog', icon: '📝' },
-      { label: 'Solutions', href: '/cms/collections/solutions', icon: '💡' },
-      { label: 'Product Showcase', href: '/cms/collections/product-showcase', icon: '🎯' },
-      { label: 'Documentation', href: '/cms/collections/documentation', icon: '📚' },
+      { label: 'Page Sections', href: '/cms/dashboard/page-sections', icon: '📐' },
+      { label: 'Blog', href: '/cms/dashboard/blog', icon: '📝' },
+      { label: 'Solutions', href: '/cms/dashboard/solutions', icon: '💡' },
+      { label: 'Product Showcase', href: '/cms/dashboard/product-showcase', icon: '🎯' },
+      { label: 'Documentation', href: '/cms/dashboard/documentation', icon: '📚' },
     ],
   },
   {
