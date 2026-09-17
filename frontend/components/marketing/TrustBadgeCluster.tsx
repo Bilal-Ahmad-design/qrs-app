@@ -1,76 +1,66 @@
-import {
-  ShieldCheck,
-  Lock,
-  FileCheck,
-  Fingerprint,
-  KeyRound,
-} from 'lucide-react';
+import { TrustBadgeIcon } from '@/components/icons/TrustBadgeIcons';
 
-export function TrustBadgeCluster() {
+interface TrustBadgeClusterProps {
+  variant?: 'dark' | 'light';
+}
+
+export function TrustBadgeCluster({ variant = 'light' }: TrustBadgeClusterProps) {
+  const isDark = variant === 'dark';
+
   const badges = [
     {
-      icon: ShieldCheck,
-      label: 'SOC 2 in progress',
-      description: 'Vanta continuous monitoring',
+      type: 'SOC2' as const,
+      label: 'SOC 2',
     },
     {
-      icon: Lock,
-      label: 'Vouch-insured',
-      description: 'Cyber liability coverage',
+      type: 'Vouch' as const,
+      label: 'Vouch',
     },
     {
-      icon: FileCheck,
-      label: 'GDPR / CCPA',
-      description: 'Privacy compliant',
+      type: 'GDPR' as const,
+      label: 'GDPR',
     },
     {
-      icon: Fingerprint,
+      type: 'RFC9116' as const,
       label: 'RFC 9116',
-      description: 'security.txt published',
     },
     {
-      icon: KeyRound,
-      label: 'Cryptographic seal',
-      description: 'Reproducibility verified',
+      type: 'CryptographicSeal' as const,
+      label: 'Seal',
       highlight: true,
     },
   ];
 
+  const badgeClass = isDark
+    ? 'border-teal-500/60 bg-teal-500/10 hover:bg-teal-500/15'
+    : 'border-teal-500/40 bg-teal-500/5 hover:bg-teal-500/10';
+
+  const highlightClass = isDark
+    ? 'border-teal-400 bg-teal-500/20 hover:bg-teal-500/30'
+    : 'border-teal-500 bg-teal-500/15 hover:bg-teal-500/25';
+
+  const textClass = isDark ? 'text-white' : 'text-ink-800';
+  const iconClass = isDark ? 'text-teal-400' : 'text-teal-600';
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-      {badges.map((badge) => {
-        const Icon = badge.icon;
-        return (
-          <div
-            key={badge.label}
-            className={`group flex flex-col items-start gap-4 px-6 py-8 rounded-xl border backdrop-blur-sm transition-all duration-300 ${
-              badge.highlight
-                ? 'border-teal-400/60 bg-gradient-to-br from-teal-500/20 to-teal-600/15 hover:border-teal-400 hover:bg-teal-500/25 shadow-lg shadow-teal-500/25'
-                : 'border-teal-500/40 bg-gradient-to-br from-teal-600/10 to-teal-700/5 hover:border-teal-400/60 hover:bg-teal-600/15 hover:shadow-lg hover:shadow-teal-500/15'
-            }`}
-          >
-            <Icon
-              size={badge.highlight ? 36 : 32}
-              className={`transition-colors ${
-                badge.highlight ? 'text-teal-300' : 'text-teal-400 group-hover:text-teal-300'
-              }`}
-              strokeWidth={1.5}
-            />
-            <div className="flex-1">
-              <p className={`font-bold text-sm leading-tight mb-2 ${
-                badge.highlight ? 'text-teal-900' : 'text-gray-900 dark:text-white'
-              }`}>
-                {badge.label}
-              </p>
-              <p className={`text-xs leading-relaxed font-medium ${
-                badge.highlight ? 'text-teal-800' : 'text-gray-700 dark:text-teal-100/70'
-              }`}>
-                {badge.description}
-              </p>
-            </div>
-          </div>
-        );
-      })}
+    <div className="flex flex-wrap justify-center items-center gap-4 lg:gap-6">
+      {badges.map((badge) => (
+        <div
+          key={badge.label}
+          className={`flex items-center gap-3 px-4 lg:px-6 py-3 lg:py-4 rounded-lg border transition-all duration-base ${
+            badge.highlight ? highlightClass : badgeClass
+          }`}
+        >
+          <TrustBadgeIcon
+            type={badge.type}
+            size={badge.highlight ? 28 : 24}
+            className={`flex-shrink-0 transition-opacity ${iconClass}`}
+          />
+          <span className={`text-sm lg:text-base font-medium leading-tight ${textClass}`}>
+            {badge.label}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
