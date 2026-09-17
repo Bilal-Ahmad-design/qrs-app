@@ -29,7 +29,7 @@ const navSections = [
   {
     title: 'Media & Files',
     items: [
-      { label: 'Media Library', href: '/cms/collections/media', icon: '🖼️' },
+      { label: 'Media Library', href: '/cms/dashboard/media-library', icon: '🖼️' },
     ],
   },
   {
