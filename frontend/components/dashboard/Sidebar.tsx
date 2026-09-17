@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { DashboardIcon } from '@/components/icons/DashboardIcons'
 
 interface SidebarProps {
   isOpen: boolean
@@ -11,43 +12,43 @@ const navSections = [
   {
     title: 'Dashboard',
     items: [
-      { label: 'Overview', href: '/cms/dashboard', icon: '📊' },
-      { label: 'Analytics', href: '/cms/dashboard/analytics', icon: '📈' },
+      { label: 'Overview', href: '/cms/dashboard', icon: 'Overview' as const },
+      { label: 'Analytics', href: '/cms/dashboard/analytics', icon: 'Analytics' as const },
     ],
   },
   {
     title: 'Content',
     items: [
-      { label: 'Pages', href: '/cms/dashboard/pages', icon: '📄' },
-      { label: 'Page Sections', href: '/cms/dashboard/page-sections', icon: '📐' },
-      { label: 'Blog', href: '/cms/dashboard/blog', icon: '📝' },
-      { label: 'Solutions', href: '/cms/dashboard/solutions', icon: '💡' },
-      { label: 'Product Showcase', href: '/cms/dashboard/product-showcase', icon: '🎯' },
-      { label: 'Documentation', href: '/cms/dashboard/documentation', icon: '📚' },
+      { label: 'Pages', href: '/cms/dashboard/pages', icon: 'Pages' as const },
+      { label: 'Page Sections', href: '/cms/dashboard/page-sections', icon: 'PageSections' as const },
+      { label: 'Blog', href: '/cms/dashboard/blog', icon: 'Blog' as const },
+      { label: 'Solutions', href: '/cms/dashboard/solutions', icon: 'Solutions' as const },
+      { label: 'Product Showcase', href: '/cms/dashboard/product-showcase', icon: 'ProductShowcase' as const },
+      { label: 'Documentation', href: '/cms/dashboard/documentation', icon: 'Documentation' as const },
     ],
   },
   {
     title: 'Media & Files',
     items: [
-      { label: 'Media Library', href: '/cms/dashboard/media-library', icon: '🖼️' },
+      { label: 'Media Library', href: '/cms/dashboard/media-library', icon: 'MediaLibrary' as const },
     ],
   },
   {
     title: 'Forms & Submissions',
     items: [
-      { label: 'Form Submissions', href: '/cms/dashboard/submissions', icon: '📧' },
-      { label: 'Form Entries', href: '/cms/dashboard/form-entries', icon: '📋' },
+      { label: 'Form Submissions', href: '/cms/dashboard/submissions', icon: 'FormSubmissions' as const },
+      { label: 'Form Entries', href: '/cms/dashboard/form-entries', icon: 'FormEntries' as const },
     ],
   },
   {
     title: 'Compliance & Admin',
     items: [
-      { label: 'Users', href: '/cms/dashboard/users', icon: '👥' },
-      { label: 'Audit Logs', href: '/cms/dashboard/audit-logs', icon: '🔍' },
-      { label: 'Redirects', href: '/cms/dashboard/redirects', icon: '🔗' },
-      { label: 'Regulatory Compliance', href: '/cms/dashboard/regulatory-compliance', icon: '⚖️' },
-      { label: 'Platform Capabilities', href: '/cms/dashboard/platform-capabilities', icon: '⚙️' },
-      { label: 'Email Settings', href: '/cms/dashboard/email-settings', icon: '📧' },
+      { label: 'Users', href: '/cms/dashboard/users', icon: 'Users' as const },
+      { label: 'Audit Logs', href: '/cms/dashboard/audit-logs', icon: 'AuditLogs' as const },
+      { label: 'Redirects', href: '/cms/dashboard/redirects', icon: 'Redirects' as const },
+      { label: 'Regulatory Compliance', href: '/cms/dashboard/regulatory-compliance', icon: 'RegulatoryCompliance' as const },
+      { label: 'Platform Capabilities', href: '/cms/dashboard/platform-capabilities', icon: 'PlatformCapabilities' as const },
+      { label: 'Email Settings', href: '/cms/dashboard/email-settings', icon: 'EmailSettings' as const },
     ],
   },
 ]
@@ -58,13 +59,13 @@ export function Sidebar({ isOpen }: SidebarProps) {
   const NavLink = ({ item, isActive }: { item: any; isActive: boolean }) => (
     <Link
       href={item.href}
-      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-base ${
         isActive
           ? 'bg-teal-600 text-white font-semibold shadow-md'
           : 'text-white/70 hover:text-white hover:bg-ink-700/50'
       }`}
     >
-      <span className="text-base flex-shrink-0">{item.icon}</span>
+      <DashboardIcon type={item.icon} size={20} className="flex-shrink-0" />
       <span className="text-sm font-medium">{item.label}</span>
     </Link>
   )
