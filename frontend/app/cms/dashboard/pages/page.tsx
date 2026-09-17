@@ -21,7 +21,7 @@ export default function PagesManagementPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 90000) // 90s for initial load
+        const timeoutId = setTimeout(() => controller.abort(), 120000) // 90s for initial load
 
         const res = await fetch('/api/payload/pages?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
@@ -49,7 +49,7 @@ export default function PagesManagementPage() {
       setSectionsError(null)
 
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 90000) // 90s for page details
+      const timeoutId = setTimeout(() => controller.abort(), 120000) // 90s for page details
 
       const [pageRes, sectionsRes] = await Promise.all([
         fetch(`/api/payload/pages/${pageId}`, { signal: controller.signal, cache: 'default' }),
