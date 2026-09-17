@@ -10,25 +10,24 @@ export async function GET() {
       ? `https://${process.env.VERCEL_URL}`
       : `http://localhost:${process.env.PORT || 3000}`
 
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 45000) // 45s timeout for all fetches
+
     const [usersRes, pagesRes, sectionsRes, submissionsRes, logsRes] = await Promise.all([
-      fetch(`${baseUrl}/api/payload/users?limit=1`),
-      fetch(`${baseUrl}/api/payload/pages?limit=1`),
-      fetch(`${baseUrl}/api/payload/page-sections?limit=1`),
-      fetch(`${baseUrl}/api/payload/form-submissions?limit=1`),
-      fetch(`${baseUrl}/api/payload/audit-logs?limit=5&sort=-timestamp`),
+      fetch(`${baseUrl}/api/payload/users?limit=1`, { signal: controller.signal }),
+      fetch(`${baseUrl}/api/payload/pages?limit=1`, { signal: controller.signal }),
+      fetch(`${baseUrl}/api/payload/page-sections?limit=1`, { signal: controller.signal }),
+      fetch(`${baseUrl}/api/payload/form-submissions?limit=1`, { signal: controller.signal }),
+      fetch(`${baseUrl}/api/payload/audit-logs?limit=5&sort=-timestamp`, { signal: controller.signal }),
     ])
+    clearTimeout(timeoutId)
 
-    if (!usersRes.ok || !pagesRes.ok || !sectionsRes.ok || !submissionsRes.ok || !logsRes.ok) {
-      throw new Error('One or more Payload requests failed')
-    }
-
-    const [usersData, pagesData, sectionsData, submissionsData, logsData] = await Promise.all([
-      usersRes.json(),
-      pagesRes.json(),
-      sectionsRes.json(),
-      submissionsRes.json(),
-      logsRes.json(),
-    ])
+    // Parse responses with fallback for failed requests
+    const usersData = usersRes.ok ? await usersRes.json() : { totalDocs: 0 }
+    const pagesData = pagesRes.ok ? await pagesRes.json() : { totalDocs: 0 }
+    const sectionsData = sectionsRes.ok ? await sectionsRes.json() : { totalDocs: 0 }
+    const submissionsData = submissionsRes.ok ? await submissionsRes.json() : { totalDocs: 0 }
+    const logsData = logsRes.ok ? await logsRes.json() : { docs: [] }
 
     const elapsed = Date.now() - start
 
