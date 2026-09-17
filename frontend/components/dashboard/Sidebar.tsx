@@ -36,7 +36,7 @@ const navSections = [
     title: 'Forms & Submissions',
     items: [
       { label: 'Form Submissions', href: '/cms/dashboard/submissions', icon: '📧' },
-      { label: 'Form Entries', href: '/cms/collections/form-entries', icon: '📋' },
+      { label: 'Form Entries', href: '/cms/dashboard/form-entries', icon: '📋' },
     ],
   },
   {
