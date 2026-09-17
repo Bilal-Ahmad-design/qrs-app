@@ -15,7 +15,7 @@ export default function UsersPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 120000)
+        const timeoutId = setTimeout(() => controller.abort(), 180000)
 
         let res
         try {

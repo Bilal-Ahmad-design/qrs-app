@@ -36,7 +36,7 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
 
       // Single endpoint fetch - combines all 5 requests into 1
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 120000) // 120 second timeout for Payload startup
+      const timeoutId = setTimeout(() => controller.abort(), 180000) // 180 second timeout for slow Payload requests
 
       let res
       try {
@@ -48,7 +48,11 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
         clearTimeout(timeoutId)
       }
 
-      if (!res.ok) throw new Error('Failed to fetch stats')
+      if (!res.ok) {
+        // Return default empty stats instead of error to keep dashboard functional
+        console.warn('Dashboard stats unavailable, using defaults')
+        return
+      }
 
       const data = await res.json()
 

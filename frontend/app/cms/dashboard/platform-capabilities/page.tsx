@@ -15,7 +15,7 @@ export default function PlatformCapabilitiesPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 120000)
+        const timeoutId = setTimeout(() => controller.abort(), 180000)
 
         const res = await fetch('/api/payload/platform-capability?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,

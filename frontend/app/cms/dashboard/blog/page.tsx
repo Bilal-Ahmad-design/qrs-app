@@ -15,7 +15,7 @@ export default function BlogPage() {
         setError(null)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 120000)
+        const timeoutId = setTimeout(() => controller.abort(), 180000)
 
         const res = await fetch('/api/payload/blog?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
