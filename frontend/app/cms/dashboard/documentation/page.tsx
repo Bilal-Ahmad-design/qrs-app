@@ -19,6 +19,7 @@ export default function DocumentationPage() {
 
         const res = await fetch('/api/payload/documentation?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
+          cache: 'default',
         })
         clearTimeout(timeoutId)
 

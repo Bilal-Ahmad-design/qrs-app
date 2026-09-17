@@ -19,6 +19,7 @@ export default function PageSectionsPage() {
 
         const res = await fetch('/api/payload/page-sections?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
+          cache: 'default',
         })
         clearTimeout(timeoutId)
 

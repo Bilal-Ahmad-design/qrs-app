@@ -19,6 +19,7 @@ export default function SolutionsPage() {
 
         const res = await fetch('/api/payload/solutions?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
+          cache: 'default',
         })
         clearTimeout(timeoutId)
 

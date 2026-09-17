@@ -31,6 +31,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     const response = await handler(request)
     console.log('[API] Response ready in', Date.now() - start, 'ms')
 
+    // Add caching headers for GET requests (list queries)
+    const url = new URL(request.url)
+    const isListQuery = url.searchParams.has('limit') && !url.pathname.includes('/id/')
+
+    if (isListQuery) {
+      response.headers.set('Cache-Control', 'public, max-age=120, s-maxage=120') // Cache for 2 minutes
+    }
+
     return response
   } catch (error) {
     const elapsed = Date.now() - start

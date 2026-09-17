@@ -19,6 +19,7 @@ export default function ProductShowcasePage() {
 
         const res = await fetch('/api/payload/product-showcase?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
+          cache: 'default',
         })
         clearTimeout(timeoutId)
 

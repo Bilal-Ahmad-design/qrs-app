@@ -25,6 +25,7 @@ export default function PagesManagementPage() {
 
         const res = await fetch('/api/payload/pages?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
+          cache: 'default', // Use browser cache for faster subsequent loads
         })
         clearTimeout(timeoutId)
 
@@ -51,9 +52,10 @@ export default function PagesManagementPage() {
       const timeoutId = setTimeout(() => controller.abort(), 90000) // 90s for page details
 
       const [pageRes, sectionsRes] = await Promise.all([
-        fetch(`/api/payload/pages/${pageId}`, { signal: controller.signal }),
+        fetch(`/api/payload/pages/${pageId}`, { signal: controller.signal, cache: 'default' }),
         fetch(`/api/payload/page-sections?where[page][equals]=${pageId}&limit=100`, {
           signal: controller.signal,
+          cache: 'default',
         }),
       ])
       clearTimeout(timeoutId)

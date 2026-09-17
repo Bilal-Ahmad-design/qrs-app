@@ -19,6 +19,7 @@ export default function BlogPage() {
 
         const res = await fetch('/api/payload/blog?limit=50&page=1&sort=-createdAt', {
           signal: controller.signal,
+          cache: 'default',
         })
         clearTimeout(timeoutId)
 
