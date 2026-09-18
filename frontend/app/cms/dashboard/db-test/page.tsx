@@ -9,8 +9,10 @@ export default function DatabaseTestPage() {
     users: null,
     blog: null,
     formSubmissions: null,
+    debug: null,
     loading: true,
     error: null,
+    message: null,
   })
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export default function DatabaseTestPage() {
           ...result,
           loading: false,
           error: null,
+          message: result.message || null,
         })
       } catch (err) {
         const errMsg = err instanceof Error ? err.message : 'Unknown error'
@@ -66,6 +69,20 @@ export default function DatabaseTestPage() {
         <div className="bg-status-error/10 border border-status-error rounded-lg p-4">
           <p className="font-semibold text-status-error">Database Error:</p>
           <p className="text-sm text-status-error mt-2">{data.error}</p>
+          {data.message && <p className="text-xs text-status-error mt-2">{data.message}</p>}
+        </div>
+      )}
+
+      {/* Debug Info */}
+      {data.debug && (
+        <div className="bg-ink-100 border border-ink-200 rounded-lg p-4">
+          <p className="font-semibold text-ink-800 mb-3">Debug Information:</p>
+          <pre className="text-xs text-ink-700 bg-white p-3 rounded border border-ink-200 overflow-auto max-h-64">
+            {JSON.stringify(data.debug, null, 2)}
+          </pre>
+          <p className="text-xs text-teal-700 mt-3">
+            📋 Open browser console (F12 → Console tab) to see detailed server logs
+          </p>
         </div>
       )}
 

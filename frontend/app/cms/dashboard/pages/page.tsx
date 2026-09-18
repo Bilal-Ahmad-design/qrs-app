@@ -23,15 +23,15 @@ export default function PagesManagementPage() {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 180000) // 90s for initial load
 
-        const res = await fetch('/api/payload/pages?limit=50&page=1&sort=-createdAt', {
+        const res = await fetch('/api/db-test', {
           signal: controller.signal,
-          cache: 'default', // Use browser cache for faster subsequent loads
+          cache: 'no-store',
         })
         clearTimeout(timeoutId)
 
         if (!res.ok) throw new Error('Failed to fetch pages')
         const data = await res.json()
-        setPages(data.docs || [])
+        setPages(data.pages?.data || [])
       } catch (err) {
         console.error('Failed to fetch pages:', err)
         setError('Unable to load pages. Please try again.')

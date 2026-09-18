@@ -1,84 +1,79 @@
-import { Pool } from 'pg'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  connectionTimeoutMillis: 5000,
-  idleTimeoutMillis: 30000,
-  max: 5,
-})
+import { Pool, QueryResult } from 'pg'
 
 export const dynamic = 'force-dynamic'
 
+interface TableResult {
+  count: number
+  data: Record<string, unknown>[]
+  columns?: string[]
+  error?: string
+}
+
+interface DbTestResults {
+  [key: string]: TableResult
+}
+
+interface DbField {
+  name: string
+}
+
 export async function GET() {
-  const client = await pool.connect()
-
+  let client
   try {
-    console.log('[DB-TEST] Starting direct PostgreSQL queries...')
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+      connectionTimeoutMillis: 10000,
+      idleTimeoutMillis: 5000,
+    })
 
-    // Query Pages table
-    const pagesResult = await client.query(
-      'SELECT id, title, slug, published, "createdAt" FROM pages ORDER BY "createdAt" DESC LIMIT 20'
-    )
-    console.log('[DB-TEST] Pages query completed:', pagesResult.rowCount, 'rows')
+    client = await pool.connect()
 
-    // Query Page Sections table
-    const sectionsResult = await client.query(
-      'SELECT id, title, "componentType", page, "createdAt" FROM page_sections ORDER BY "createdAt" DESC LIMIT 20'
-    )
-    console.log('[DB-TEST] Sections query completed:', sectionsResult.rowCount, 'rows')
+    const tables = ['users', 'pages', 'blog', 'page_sections']
+    const results: DbTestResults = {}
 
-    // Query Users table
-    const usersResult = await client.query(
-      'SELECT id, email, role, "createdAt" FROM users ORDER BY "createdAt" DESC LIMIT 20'
-    )
-    console.log('[DB-TEST] Users query completed:', usersResult.rowCount, 'rows')
+    for (const table of tables) {
+      try {
+        const countResult: QueryResult<{ count: string }> = await client.query(
+          `SELECT COUNT(*) as count FROM ${table}`
+        )
+        const dataResult: QueryResult<Record<string, unknown>> = await client.query(
+          `SELECT * FROM ${table} LIMIT 5`
+        )
 
-    // Query Blog table
-    const blogResult = await client.query(
-      'SELECT id, title, published, "createdAt" FROM blog ORDER BY "createdAt" DESC LIMIT 20'
-    )
-    console.log('[DB-TEST] Blog query completed:', blogResult.rowCount, 'rows')
-
-    return Response.json(
-      {
-        pages: {
-          count: pagesResult.rowCount || 0,
-          data: pagesResult.rows || [],
-        },
-        sections: {
-          count: sectionsResult.rowCount || 0,
-          data: sectionsResult.rows || [],
-        },
-        users: {
-          count: usersResult.rowCount || 0,
-          data: usersResult.rows || [],
-        },
-        blog: {
-          count: blogResult.rowCount || 0,
-          data: blogResult.rows || [],
-        },
-      },
-      {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Content-Type': 'application/json',
-        },
+        const count = parseInt(countResult.rows[0]?.count || '0', 10)
+        results[table] = {
+          count,
+          data: dataResult.rows,
+          columns: dataResult.fields.map((f: DbField) => f.name),
+        }
+        console.error(`[DB-TEST] ${table}: ${count} records`)
+      } catch (err) {
+        console.error(`[DB-TEST] Error querying ${table}:`, (err as Error).message)
+        results[table] = {
+          count: 0,
+          data: [],
+          error: (err as Error).message,
+        }
       }
-    )
-  } catch (error) {
-    console.error('[DB-TEST] Database error:', error)
+    }
 
-    const errorMessage = error instanceof Error ? error.message : 'Unknown database error'
+    client.release()
+    await pool.end()
+
+    return Response.json(results, {
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
+    })
+  } catch (error) {
+    console.error('[DB-TEST] Fatal error:', error)
+    if (client) client.release()
 
     return Response.json(
       {
-        error: 'Database query failed',
-        message: errorMessage,
-        details: process.env.NODE_ENV === 'development' ? String(error) : undefined,
+        error: 'Database connection failed',
+        message: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
     )
-  } finally {
-    client.release()
   }
 }

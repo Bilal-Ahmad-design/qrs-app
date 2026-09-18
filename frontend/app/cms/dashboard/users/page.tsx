@@ -19,9 +19,9 @@ export default function UsersPage() {
 
         let res
         try {
-          res = await fetch('/api/payload/users?limit=25&page=1', {
+          res = await fetch('/api/db-test', {
             signal: controller.signal,
-            cache: 'default',
+            cache: 'no-store',
           })
         } finally {
           clearTimeout(timeoutId)
@@ -29,7 +29,7 @@ export default function UsersPage() {
 
         if (!res.ok) throw new Error('Failed to fetch users')
         const data = await res.json()
-        setUsers(data.docs || [])
+        setUsers(data.users?.data || [])
       } catch (err) {
         console.error('Failed to fetch users:', err)
         setError('Unable to load users. Please try again.')

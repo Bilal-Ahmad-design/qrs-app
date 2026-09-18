@@ -17,15 +17,15 @@ export default function BlogPage() {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 180000)
 
-        const res = await fetch('/api/payload/blog?limit=50&page=1&sort=-createdAt', {
+        const res = await fetch('/api/db-test', {
           signal: controller.signal,
-          cache: 'default',
+          cache: 'no-store',
         })
         clearTimeout(timeoutId)
 
         if (!res.ok) throw new Error('Failed to fetch blog posts')
         const data = await res.json()
-        setPosts(data.docs || [])
+        setPosts(data.blog?.data || [])
       } catch (err) {
         console.error('Failed to fetch blog posts:', err)
         setError('Unable to load blog posts. Please try again.')

@@ -34,22 +34,20 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
         return
       }
 
-      // Single endpoint fetch - combines all 5 requests into 1
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 180000) // 180 second timeout for slow Payload requests
+      const timeoutId = setTimeout(() => controller.abort(), 30000)
 
       let res
       try {
-        res = await fetch('/api/dashboard/stats', {
+        res = await fetch('/api/db-test', {
           signal: controller.signal,
-          cache: 'default',
+          cache: 'no-store',
         })
       } finally {
         clearTimeout(timeoutId)
       }
 
       if (!res.ok) {
-        // Return default empty stats instead of error to keep dashboard functional
         console.warn('Dashboard stats unavailable, using defaults')
         return
       }
@@ -57,11 +55,11 @@ export function DashboardOverview({ user }: DashboardOverviewProps) {
       const data = await res.json()
 
       const newStats = {
-        totalUsers: data.totalUsers || 0,
-        totalPages: data.totalPages || 0,
-        totalSections: data.totalSections || 0,
-        totalSubmissions: data.totalSubmissions || 0,
-        recentLogs: data.recentLogs || [],
+        totalUsers: data.users?.count || 0,
+        totalPages: data.pages?.count || 0,
+        totalSections: data.page_sections?.count || 0,
+        totalSubmissions: 0,
+        recentLogs: [],
       }
 
       cachedStats = newStats

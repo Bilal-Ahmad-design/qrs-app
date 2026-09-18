@@ -17,15 +17,15 @@ export default function PageSectionsPage() {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 180000)
 
-        const res = await fetch('/api/payload/page-sections?limit=50&page=1&sort=-createdAt', {
+        const res = await fetch('/api/db-test', {
           signal: controller.signal,
-          cache: 'default',
+          cache: 'no-store',
         })
         clearTimeout(timeoutId)
 
         if (!res.ok) throw new Error('Failed to fetch sections')
         const data = await res.json()
-        setSections(data.docs || [])
+        setSections(data.page_sections?.data || [])
       } catch (err) {
         console.error('Failed to fetch sections:', err)
         setError('Unable to load sections. Please try again.')
